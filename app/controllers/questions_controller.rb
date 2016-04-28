@@ -17,4 +17,8 @@ class QuestionsController < ApplicationController
     def set_question
       @question = Question.find(params[:id])
     end
+
+    def question_params
+      params.require(:question).permit(:title, :body)
+    end
 end
