@@ -1,5 +1,7 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show]
+  before_action :load_question, only: [:create]
+
   def index
     @answers = Answer.all
   end
@@ -11,8 +13,20 @@ class AnswersController < ApplicationController
   def show
   end
 
+  def create
+    @answer = @question.answers.new(answer_params)
+    if @answer.save
+      redirect_to question_answer_path(@question, @answer)
+    else
+      render :new
+    end
+  end
+
   private
-    
+    def load_question
+      @question = Question.find(params[:question_id])
+    end
+
     def set_answer
       @answer = Answer.find(params[:id])
     end
