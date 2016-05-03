@@ -1,0 +1,5 @@
+%h3= @question.title
+%p= @question.body
+%br
+- @answers.each do |a|
+  = link_to "#{a.body}", question_answer_path(@question, a)

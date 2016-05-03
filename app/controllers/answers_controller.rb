@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: [:show]
-  before_action :load_question, only: [:create]
+  before_action :load_question, 
+    only: [:create, :show, :new, :index]
 
   def index
     @answers = Answer.all
@@ -16,7 +17,8 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     if @answer.save
-      redirect_to question_answer_path(@question, @answer)
+      redirect_to question_answer_path(@question, @answer),
+        notice: 'Ответ успешно создан'
     else
       render :new
     end

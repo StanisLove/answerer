@@ -16,7 +16,6 @@ feature 'User creates question', %q{
     click_on 'Спросить'
 
     expect(page).to have_content('Вопрос успешно создан')
-    save_and_open_page
     expect(current_path).to eq question_path(new_question)
   end
 end
