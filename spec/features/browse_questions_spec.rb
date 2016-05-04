@@ -9,12 +9,7 @@ feature 'User browse questions', %q{
   given(:questions) { create_list(:question, 2) }
   
   scenario 'User try to browse questions' do
-    questions.each do |q|
-      visit new_question_path
-      fill_in 'Заголовок',  with: q.title
-      fill_in 'Вопрос',     with: q.body
-      click_on 'Спросить'
-    end
+    questions.each { |q| create_question(q) }
 
     visit questions_path
     questions.each do |q|

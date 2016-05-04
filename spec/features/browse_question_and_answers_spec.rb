@@ -10,11 +10,7 @@ feature 'User browse question and answers', %q{
   given(:answers)   { create_list(:answer, 2) }   
 
   scenario 'User try to browse answers the question' do
-    answers.each do |a|
-      visit new_question_answer_path(question)
-      fill_in 'Ответ',  with: a.body
-      click_on 'Отправить ответ'
-    end
+    answers.each { |a| create_answer(question, a) }
 
     visit question_answers_path(question)
     expect(page).to have_content(question.title)
