@@ -16,7 +16,8 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.new(answer_params.merge( 
+                                   user_id: current_user.id))
     if @answer.save
       redirect_to question_answer_path(@question, @answer),
         notice: 'Ответ успешно создан'

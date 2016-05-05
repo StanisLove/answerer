@@ -7,7 +7,7 @@ feature 'User destroy question', %q{
 } do
 
   given(:user)      { create(:user) }
-  given(:question)  { create(:question) }
+  given(:question)  { create(:question, user_id: user.id) }
   given(:other_user){ create(:user) }
 
   scenario 'Author of the question try to delete the question' do
@@ -29,6 +29,6 @@ feature 'User destroy question', %q{
 #    expect(page).to have_content('Ошибка доступа')
 #    expect(current_path).to eq root_path
 #  end
-  scenario 'User try to delete a non-existent question'
-  scenario 'Unregistered user try to delete the question'
+#  scenario 'User try to delete a non-existent question'
+#  scenario 'Unregistered user try to delete the question'
 end
