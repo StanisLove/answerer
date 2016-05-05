@@ -1,7 +1,11 @@
 - @questions.each do |q|
-  %h3= q.title
-  %p= q.body
-  = link_to 'Написать ответ',
-    new_question_answer_path(q.id),
-    class: "question-#{q.id}"
+  %div{class: "question-#{q.id}"}
+    %h3= q.title
+    -if user_signed_in? && (current_user == q.user)
+      = link_to 'Удалить вопрос'
+      |
+      = link_to 'Редактировать вопрос'
+    %p= q.body
+    = link_to 'Написать ответ',
+      new_question_answer_path(q.id)
   %br

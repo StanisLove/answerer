@@ -16,7 +16,9 @@ feature 'User creates answer', %q{
 
     sign_in(other_user)
     visit questions_path
-    page.find("a.question-#{question.id}").click
+    within(:css, "div.question-#{question.id}") do
+      click_on 'Написать ответ'
+    end
     fill_in 'Ответ',  with: answer.body
     click_on 'Отправить ответ'
     expect(page).to have_content('Ответ успешно создан')
