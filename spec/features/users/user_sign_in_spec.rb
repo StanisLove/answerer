@@ -20,5 +20,12 @@ feature 'User sign in', %q{
     expect(page).to have_content 'Invalid Email or password.'
     expect(current_path).to eq new_user_session_path
   end
+
+  scenario 'Signed in user try to sign in' do
+    sign_in(user)
+    visit new_user_session_path
+    expect(page).to have_content 'You are already signed in.'
+    expect(current_path).to eq root_path
+  end
 end
 

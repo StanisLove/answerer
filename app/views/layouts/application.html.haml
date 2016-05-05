@@ -7,8 +7,11 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
-    - notice
-    %p= notice
-    - alert
-    %p= alert
+    %p.notice#notice= notice
+    %p.alert#alert= alert
+    - if user_signed_in?
+      = link_to 'Выйти',
+        destroy_user_session_path, method: :delete
+    - else
+      = link_to 'Войти', new_user_session_path
     = yield
