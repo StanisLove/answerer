@@ -8,9 +8,12 @@ feature 'User browse question and answers', %q{
 
   given(:question)  { create(:question) }
   given(:answers)   { create_list(:answer, 2) }   
+  given(:user)      { create(:user) }
 
   scenario 'User try to browse answers the question' do
-    answers.each { |a| create_answer(question, a) }
+    answers.each do |a| 
+      signed_in_user_create_answer(user, question, a)
+    end
 
     visit question_answers_path(question)
     expect(page).to have_content(question.title)

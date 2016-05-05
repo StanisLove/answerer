@@ -8,10 +8,13 @@ feature 'User creates answer', %q{
 
   given(:question)  { create(:question) }
   given(:answer)    { create(:answer) }
+  given(:user)      { create(:user) }
+  given(:other_user){ create(:user) }
 
-  scenario 'User try to create answer' do
-    create_question(question)
+  scenario 'Authenticated user try to create answer' do
+    signed_in_user_create_question(user, question)
 
+    sign_in(other_user)
     visit questions_path
     page.find("a.question-#{question.id}").click
     fill_in 'Ответ',  with: answer.body
