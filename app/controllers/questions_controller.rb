@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, 
+    only: [:new, :create, :destroy]
   before_action :set_question, only: [:show]
 
   def index
@@ -20,6 +21,12 @@ class QuestionsController < ApplicationController
     else
       render  :new
     end
+  end
+
+  def destroy
+    @question = current_user.questions.find(params[:id])
+    @question.destroy
+    redirect_to questions_path
   end
 
   private

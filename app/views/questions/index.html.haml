@@ -2,7 +2,7 @@
   %div{class: "question-#{q.id}"}
     %h3= q.title
     -if user_signed_in? && (current_user == q.user)
-      = link_to 'Удалить вопрос'
+      = link_to 'Удалить вопрос', q, method: :delete
       |
       = link_to 'Редактировать вопрос'
     %p= q.body
