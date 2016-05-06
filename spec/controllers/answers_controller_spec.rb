@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  let!(:question) { create(:question) }
 
   describe 'GET #index' do
     let(:answers) { create_list(:answer, 2) }
@@ -69,6 +69,23 @@ RSpec.describe AnswersController, type: :controller do
         post  :create, question_id: question, answer: attributes_for(:invalid_answer)
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    sign_in_user
+    let!(:answer) { create(:answer,
+                           user_id: @user.id) }
+    
+    it 'deletes the answer from DB' do
+      expect{
+        delete :destroy, id: answer, question_id: question
+      }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to index view' do
+      delete :destroy, id: answer, question_id: question
+      expect(response).to redirect_to question_answers_path(question)
     end
   end
 end

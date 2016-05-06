@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_answer, only: [:show]
   before_action :load_question, 
-    only: [:create, :show, :new, :index]
+    only: [:create, :show, :new, :index, :destroy]
 
   def index
     @answers = Answer.all
@@ -24,6 +24,12 @@ class AnswersController < ApplicationController
     else
       render :new
     end
+  end
+
+  def destroy
+    @answer = current_user.answers.find(params[:id])
+    @answer.destroy
+    redirect_to question_answers_path(@question)
   end
 
   private
