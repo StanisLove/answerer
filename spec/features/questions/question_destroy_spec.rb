@@ -7,28 +7,27 @@ feature 'User destroy question', %q{
 } do
 
   given(:user)      { create(:user) }
-  given(:question)  { create(:question, user_id: user.id) }
+  given(:question)  { build(:question) }
   given(:other_user){ create(:user) }
 
   scenario 'Author of the question try to delete the question' do
     signed_in_user_create_question(user, question)
     sign_in(user)
     visit questions_path
-    within(:css, "div.question-#{question.id}") do
-      click_on "Удалить вопрос"
-    end
+    click_on 'Удалить вопрос'
     expect(page).to_not have_content(question.title)
     expect(page).to_not have_content(question.body)
-    expect(current_page).to eq questions_path
+    expect(current_path).to eq questions_path
   end
 
-#  scenario "User try to delete someone's question" do
-#    signed_in_user_create_question(user, question)
-#    sign_in(other_user)
-#    page.driver.submit :delete, question_path(question), {}
-#    expect(page).to have_content('Ошибка доступа')
-#    expect(current_path).to eq root_path
-#  end
-#  scenario 'User try to delete a non-existent question'
-#  scenario 'Unregistered user try to delete the question'
+  scenario "User try to delete someone's question" do
+    signed_in_user_create_question(user, question)
+    visit questions_path
+    expect(page).to have_content(question.title)
+    expect(page).to_not have_content('Удалить вопрос')
+    sign_in(other_user)
+    visit questions_path
+    expect(page).to have_content(question.title)
+    expect(page).to_not have_content('Удалить вопрос')
+  end
 end
