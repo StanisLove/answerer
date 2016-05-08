@@ -1,7 +1,7 @@
 - @questions.each do |q|
   %div{class: "question-#{q.id}"}
     %h3= q.title
-    -if user_signed_in? && (current_user == q.user)
+    -if user_signed_in? && (current_user.id == q.user_id)
       = link_to 'Удалить вопрос', q, method: :delete
       |
       = link_to 'Редактировать вопрос'
