@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+RSpec::Matchers.define_negated_matcher  :not_change, :change
+
 RSpec.describe AnswersController, type: :controller do
   let!(:question) { create(:question) }
 
@@ -49,7 +51,8 @@ RSpec.describe AnswersController, type: :controller do
       it 'saves new answer into DB' do
         expect{
           post  :create, question_id: question, answer: attributes_for(:answer)
-        }.to change(question.answers, :count).by(1)
+        }.to  change(question.answers,  :count).by(1)
+              .and change(@user.answers,:count).by(1) 
       end
       
       it 'redirects to show view' do
@@ -62,7 +65,8 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not save the new answer into DB' do
         expect{
           post  :create, question_id: question, answer: attributes_for(:invalid_answer)
-        }.to_not change(question.answers, :count)
+        }.to  not_change(question.answers,  :count)
+              .and not_change(@user.answers,:count)
       end
 
       it 're-renders new view' do

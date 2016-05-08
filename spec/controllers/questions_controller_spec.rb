@@ -47,7 +47,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'saves the new question into DB' do
         expect{
           post  :create, question: attributes_for(:question)
-        }.to change(Question, :count).by(1)
+        }.to change(@user.questions, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -60,7 +60,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not save the new question into DB' do
         expect{
           post  :create, question: attributes_for(:invalid_question)
-        }.to_not change(Question, :count)
+        }.to_not change(@user.questions, :count)
       end
 
       it 're-renders new view' do
