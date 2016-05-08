@@ -6,7 +6,7 @@ feature 'User creates question', %q{
   I want to be able to create question
 } do
 
-  given(:question)  { create(:question) }
+  given!(:question) { create(:question) }
   given(:user)      { create(:user) }
 
   scenario %q{
@@ -14,7 +14,10 @@ feature 'User creates question', %q{
     try to create question
   } do
     sign_in(user)
-    create_question(question)
+    visit new_question_path
+    fill_in 'Заголовок',  with: question.title
+    fill_in 'Вопрос',     with: question.body
+    click_on 'Спросить'
     expect(page).to have_content('Вопрос успешно создан')
   end
 

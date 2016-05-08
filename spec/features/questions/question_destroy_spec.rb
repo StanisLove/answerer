@@ -7,12 +7,11 @@ feature 'User destroy question', %q{
 } do
 
   given(:user)      { create(:user) }
-  given(:question)  { build(:question) }
   given(:other_user){ create(:user) }
+  given!(:question) { create(:question) }
 
   scenario 'Author of the question try to delete the question' do
-    signed_in_user_create_question(user, question)
-    sign_in(user)
+    sign_in(question.user)
     visit questions_path
     click_on 'Удалить вопрос'
     expect(page).to_not have_content(question.title)
@@ -21,7 +20,6 @@ feature 'User destroy question', %q{
   end
 
   scenario "User try to delete someone's question" do
-    signed_in_user_create_question(user, question)
     visit questions_path
     expect(page).to have_content(question.title)
     expect(page).to_not have_content('Удалить вопрос')

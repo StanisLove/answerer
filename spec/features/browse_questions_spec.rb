@@ -6,14 +6,10 @@ feature 'User browse questions', %q{
   I want to be able to browse questions
 } do
 
-  given(:questions) { create_list(:question, 2) }
+  given!(:questions){ create_list(:question, 2) }
   given(:user)      { create(:user) }
   
   scenario 'User try to browse questions' do
-    questions.each do |q| 
-      signed_in_user_create_question(user, q)
-    end
-
     visit questions_path
     questions.each do |q|
       expect(page).to have_content(q.title)
