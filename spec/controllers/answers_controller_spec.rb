@@ -1,7 +1,9 @@
 require 'rails_helper'
 
+RSpec::Matchers.define_negated_matcher  :not_change, :change
+
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  let!(:question) { create(:question) }
 
   describe 'GET #index' do
     let(:answers) { create_list(:answer, 2) }
@@ -17,6 +19,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
+    sign_in_user
     before { get  :new, question_id: question }
 
     it 'assigns new Answer to @answer' do
@@ -42,16 +45,19 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'with valid attributes' do
       it 'saves new answer into DB' do
         expect{
           post  :create, question_id: question, answer: attributes_for(:answer)
-        }.to change(question.answers, :count).by(1)
+        }.to  change(question.answers,  :count).by(1)
+              .and change(@user.answers,:count).by(1) 
       end
       
       it 'redirects to show view' do
         post :create, question_id: question, answer: attributes_for(:answer)
-        expect(response).to redirect_to question_answer_path(assigns(:question), assigns(:answer))
+        expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
@@ -59,13 +65,30 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not save the new answer into DB' do
         expect{
           post  :create, question_id: question, answer: attributes_for(:invalid_answer)
-        }.to_not change(question.answers, :count)
+        }.to  not_change(Answer,  :count)
       end
 
       it 're-renders new view' do
         post  :create, question_id: question, answer: attributes_for(:invalid_answer)
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    sign_in_user
+    let!(:answer) { create(:answer,
+                           user_id: @user.id) }
+    
+    it 'deletes the answer from DB' do
+      expect{
+        delete :destroy, id: answer, question_id: question
+      }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to index view' do
+      delete :destroy, id: answer, question_id: question
+      expect(response).to redirect_to question_answers_path(question)
     end
   end
 end

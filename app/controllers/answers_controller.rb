@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_answer, only: [:show]
-  before_action :load_question, only: [:create]
+  before_action :load_question, 
+    only: [:create, :show, :new, :index, :destroy]
 
   def index
     @answers = Answer.all
@@ -14,12 +16,20 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.new(answer_params.merge( 
+                                   user_id: current_user.id))
     if @answer.save
-      redirect_to question_answer_path(@question, @answer)
+      redirect_to question_path(@question),
+        notice: 'Ответ успешно создан'
     else
       render :new
     end
+  end
+
+  def destroy
+    @answer = current_user.answers.find(params[:id])
+    @answer.destroy
+    redirect_to question_answers_path(@question)
   end
 
   private

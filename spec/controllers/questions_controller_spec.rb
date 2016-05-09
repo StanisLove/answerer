@@ -15,6 +15,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    sign_in_user
     before { get  :new }
 
     it 'assigns a new Question to @question' do
@@ -40,11 +41,13 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'with valid attributes' do
       it 'saves the new question into DB' do
         expect{
           post  :create, question: attributes_for(:question)
-        }.to change(Question, :count).by(1)
+        }.to change(@user.questions, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -64,6 +67,22 @@ RSpec.describe QuestionsController, type: :controller do
         post  :create, question: attributes_for(:invalid_question)
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    sign_in_user
+    let!(:question) { create(:question, user_id: @user.id) }
+
+    it 'deletes the question from DB'do
+      expect{
+        delete :destroy, id: question
+      }.to change(@user.questions, :count).by(-1)
+    end
+
+    it 'redirects to index view' do
+      delete :destroy, id: question
+      expect(response).to redirect_to questions_path
     end
   end
 end
