@@ -40,12 +40,14 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'spring-commands-rspec'
 end
 
 group :test do
   gem 'shoulda-matchers', require: false
   gem 'capybara'
   gem 'launchy'
+  gem 'fuubar'
 end
 
 group :development do

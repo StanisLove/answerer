@@ -57,7 +57,7 @@ RSpec.describe AnswersController, type: :controller do
       
       it 'redirects to show view' do
         post :create, question_id: question, answer: attributes_for(:answer)
-        expect(response).to redirect_to question_answer_path(assigns(:question), assigns(:answer))
+        expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
@@ -65,8 +65,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not save the new answer into DB' do
         expect{
           post  :create, question_id: question, answer: attributes_for(:invalid_answer)
-        }.to  not_change(question.answers,  :count)
-              .and not_change(@user.answers,:count)
+        }.to  not_change(Answer,  :count)
       end
 
       it 're-renders new view' do

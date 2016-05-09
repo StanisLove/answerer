@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params.merge( 
                                    user_id: current_user.id))
     if @answer.save
-      redirect_to question_answer_path(@question, @answer),
+      redirect_to question_path(@question),
         notice: 'Ответ успешно создан'
     else
       render :new
