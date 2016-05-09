@@ -16,20 +16,14 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.new(answer_params.merge( 
-                                   user_id: current_user.id))
-    if @answer.save
-      redirect_to question_path(@question),
-        notice: 'Ответ успешно создан'
-    else
-      render :new
-    end
+    @answer = @question.answers.create(answer_params.merge(user_id: current_user.id))
+    flash.now[:notice] = 'Ответ успешно создан'
   end
 
   def destroy
     @answer = current_user.answers.find(params[:id])
     @answer.destroy
-    redirect_to question_answers_path(@question)
+    redirect_to question_answers_path(@question) # надо поменять
   end
 
   private

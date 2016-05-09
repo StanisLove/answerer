@@ -45,9 +45,11 @@ end
 
 group :test do
   gem 'shoulda-matchers', require: false
+  gem 'fuubar'
   gem 'capybara'
   gem 'launchy'
-  gem 'fuubar'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 group :development do

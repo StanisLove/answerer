@@ -10,7 +10,7 @@ feature 'User creates answer', %q{
   given(:answer)    { build(:answer) }
   given(:other_user){ create(:user) }
 
-  scenario 'Authenticated user try to create answer' do
+  scenario 'Authenticated user try to create answer', js: true do
     sign_in(other_user)
     visit question_path(question)
     fill_in 'Новый ответ',  with: answer.body
