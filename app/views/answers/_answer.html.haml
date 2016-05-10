@@ -1,0 +1,8 @@
+%div{class: "answer-#{@answer.id}"}
+  %h3 Ответ
+  - if user_signed_in? && (current_user.id == @answer.user_id)
+    = link_to 'Удалить ответ',
+      question_answer_path(@question, @answer), method: :delete
+    |
+    = link_to 'Редактировать ответ'
+  %p= @answer.body
