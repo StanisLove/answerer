@@ -11,6 +11,7 @@
 = form_for [@question, @answer], remote: true do |f|
   .field
     = f.label :body, 'Новый ответ'
+    .answer-errors
     = f.text_area :body
   .actions
     = f.submit 'Отправить ответ'

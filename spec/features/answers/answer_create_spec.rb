@@ -20,4 +20,11 @@ feature 'User creates answer', %q{
     expect(page).to have_content("#{question.body}")
     expect(page).to have_content("#{answer.body}")
   end
+
+  scenario 'User try to create invalid answer', js: true do
+    sign_in(other_user)
+    visit question_path(question)
+    click_on 'Отправить ответ'
+    expect(page).to have_content("Body can't be blank")
+  end
 end
