@@ -1,19 +1,16 @@
 %h1 Вопрос
+= link_to 'Cписок вопросов', questions_path
 
 %h3= "#{@question.title}"
 
 %p= "#{@question.body}"
 
-- @question.answers.each do |a|
-  %div{class: "answer-#{a.id}"}
-    %h3 Ответ
-    - if user_signed_in? && (current_user.id == a.user_id)
-      = link_to 'Удалить ответ',
-        question_answer_path(@question, a), method: :delete
-      |
-      = link_to 'Редактировать ответ'
-    %p= a.body
-  %br
+.answers
+  = render 'answers'
 
-
-= link_to 'Cписок вопросов', questions_path
+= form_for [@question, @answer], remote: true do |f|
+  .field
+    = f.label :body, 'Новый ответ'
+    = f.text_area :body
+  .actions
+    = f.submit 'Отправить ответ'
