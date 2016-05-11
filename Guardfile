@@ -47,7 +47,6 @@ group 'specs' do
   guard 'spring', bundler: true do
     watch('Gemfile.lock')
     watch(%r{^config/})
-    watch(%r{^spec/(support|factories)/})
     watch(%r{^spec/factory.rb})
   end
 end
