@@ -43,8 +43,8 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'capybara'
   gem 'launchy'
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
+  gem 'capybara-webkit'
 end
 
 group :test do

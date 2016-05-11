@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'features_helper'
 
 feature 'User sign out', %q{
   In order to be able to protect the account

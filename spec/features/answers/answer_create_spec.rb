@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'features_helper'
 
 feature 'User creates answer', %q{
   In order to help to solve the problem

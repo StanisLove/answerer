@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'features_helper'
 
 feature 'User browse question and answers', %q{
   In order to find correct answer

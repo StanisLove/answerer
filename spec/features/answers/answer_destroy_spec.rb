@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'features_helper'
 
 feature 'User destroys answer', %q{
 In order to delete unnecessary answer

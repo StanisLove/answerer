@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'features_helper'
 
 feature 'User destroy question', %q{
   In order to delete unnecessary question
