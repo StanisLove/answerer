@@ -10,6 +10,7 @@ feature 'Answer editing', %q{
   given(:other_user) { create(:user) }
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question, user: user) }
+  given!(:other_answer) { create(:answer, question: question, user: user) }
 
   scenario 'Unauthenticated user try to edit answer' do
     visit question_path(question)
@@ -29,18 +30,22 @@ feature 'Answer editing', %q{
     end
 
     scenario 'try to edit his answer', js: true do
-      click_on 'Редактировать ответ'
       within "#answer-#{answer.id}" do
+        click_on 'Редактировать ответ'
         fill_in 'Ответ', with: 'edited answer'
         find('input[type="submit"]').click
         expect(page).to have_content('edited answer')
         expect(page).to_not have_content answer.body
         expect(page).to_not have_selector 'textarea'
+
+        click_on 'Редактировать ответ'
+        fill_in 'Ответ', with: 'ho ho ho'
       end
     end
+    
   end
 
-  scenario "try to edit someone's answer" do
+  scenario "User try to edit someone's answer" do
     sign_in(other_user)
     visit question_path(question)
     expect(page).not_to have_content('Редактировать ответ')
