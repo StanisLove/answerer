@@ -13,5 +13,5 @@
           = f.label :body, 'Ответ'
           = f.text_area :body
         .actions
-          = f.submit 'Сохранить'
+          = f.submit 'Сохранить', data: { answer_id: answer.id }
     %br

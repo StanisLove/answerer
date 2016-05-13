@@ -37,9 +37,10 @@ feature 'Answer editing', %q{
         expect(page).to have_content('edited answer')
         expect(page).to_not have_content answer.body
         expect(page).to_not have_selector 'textarea'
+        expect(find_link('Редактировать ответ').visible?).to eq true
 
         click_on 'Редактировать ответ'
-        fill_in 'Ответ', with: 'ho ho ho'
+        fill_in 'Ответ', with: 'edit again'
       end
     end
     
