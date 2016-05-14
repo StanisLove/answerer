@@ -76,18 +76,46 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
-    let!(:answer) { create(:answer, user_id: @user.id) }
-    
-    it 'deletes the answer from DB' do
-      expect{
-        delete :destroy, id: answer, question_id: question
-      }.to change(Answer, :count).by(-1)
+    let!(:other_answer) { create(:answer) }
+
+    context 'Signed in user' do
+      sign_in_user
+      let!(:answer) { create(:answer, user_id: @user.id) }
+      
+      it 'deletes the own answer from DB...' do
+        expect{
+          delete :destroy, id: answer, question_id: question, format: :js
+        }.to change(Answer, :count).by(-1)
+      end
+
+      it '...and renders template destroy' do
+        delete :destroy, id: answer, question_id: question, format: :js
+        expect(response).to render_template :destroy
+      end
+
+      it "not deletes someone's answer from DB..." do
+        expect{
+          delete :destroy, id: other_answer, question_id: question, format: :js
+        }.to_not change(Answer, :count) 
+      end
+      
+      it '... and redirect to root path' do
+        delete :destroy, id: other_answer, question_id: question, format: :js
+        expect(response).to redirect_to root_path
+      end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, id: answer, question_id: question
-      expect(response).to redirect_to question_path(question)
+    context 'Not signed in user' do
+      it "not deletes someone's answer from DB..." do
+        expect{
+          delete :destroy, id: other_answer, question_id: question, format: :js
+        }.to_not change(Answer, :count) 
+      end
+      
+      it '...and gets 401' do
+        delete :destroy, id: other_answer, question_id: question, format: :js
+        expect(response.status).to eq 401 
+      end
     end
   end
 
