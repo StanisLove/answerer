@@ -7,6 +7,7 @@
           question_answer_path(@question, answer), method: :delete
         |
         = link_to 'Редактировать ответ', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+      .answer-errors
       %p= answer.body
       = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
         .field

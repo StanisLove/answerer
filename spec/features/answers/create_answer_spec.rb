@@ -26,5 +26,9 @@ feature 'User creates answer', %q{
     visit question_path(question)
     click_on 'Отправить ответ'
     expect(page).to have_content("Body can't be blank")
+
+    fill_in 'Новый ответ', with: answer.body
+    click_on 'Отправить ответ'
+    expect(page).to_not have_content("Body can't be blank")
   end
 end

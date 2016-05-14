@@ -8,7 +8,7 @@ ready = ->
     answer_id = $(this).data('answerId')
     $('form#edit-answer-' + answer_id).show();
 
-  $('input[type="submit"]').click ->
+  $('.edit_answer input[type="submit"]').click ->
     answer_id = $(this).data('answerId')
     $('form#edit-answer-' + answer_id).hide();
     $('#answer-' + answer_id + ' > .edit-answer-link').show();
