@@ -77,6 +77,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'PATCH #update' do
     sign_in_user
     let(:question) { create(:question, user: @user) }
+    let(:other_question) { create(:question) }
 
     it 'assigns the request question to @question' do
       patch :update, id: question, question: attributes_for(:question), format: :js
@@ -90,6 +91,13 @@ RSpec.describe QuestionsController, type: :controller do
       expect(question.body).to eq 'new body'
     end
 
+    it "doesn't change someone's question attribures" do
+      patch :update, id: other_question, question: { title: 'new title', body: 'new body' }, format: :js
+      other_question.reload
+      expect(other_question.title).to_not eq 'new title'
+      expect(other_question.body).to_not eq 'new body'
+    end
+
     it 'renders update template' do
       patch :update, id: question, question: attributes_for(:question), format: :js
       expect(response).to render_template :update
@@ -99,16 +107,28 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'DELETE #destroy' do
     sign_in_user
     let!(:question) { create(:question, user_id: @user.id) }
+    let!(:other_question) { create(:question) }
 
-    it 'deletes the question from DB'do
+    it 'deletes the question from DB...' do
       expect{
         delete :destroy, id: question
       }.to change(@user.questions, :count).by(-1)
     end
 
-    it 'redirects to index view' do
+    it '...and redirects to index view' do
       delete :destroy, id: question
       expect(response).to redirect_to questions_path
+    end
+
+    it "doesn't delete the someone's question from DB..." do
+      expect{
+        delete :destroy, id: other_question
+      }.not_to change(Question, :count)
+    end
+
+    it "...and redirects to root path" do
+      delete :destroy, id: other_question
+      expect(response).to redirect_to root_path
     end
   end
 end
