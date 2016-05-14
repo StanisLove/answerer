@@ -77,8 +77,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'DELETE #destroy' do
     sign_in_user
-    let!(:answer) { create(:answer,
-                           user_id: @user.id) }
+    let!(:answer) { create(:answer, user_id: @user.id) }
     
     it 'deletes the answer from DB' do
       expect{
@@ -117,7 +116,5 @@ RSpec.describe AnswersController, type: :controller do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(response).to render_template :update
     end
-  
-
   end
 end

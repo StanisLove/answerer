@@ -31,9 +31,13 @@ feature 'Answer editing', %q{
 
     scenario 'try to edit his answer', js: true do
       within "#answer-#{answer.id}" do
+        expect(page).to_not have_selector 'textarea'
         click_on 'Редактировать ответ'
+        expect(page).to have_selector 'textarea'
+
         fill_in 'Ответ', with: 'edited answer'
         find('input[type="submit"]').click
+
         expect(page).to have_content('edited answer')
         expect(page).to_not have_content answer.body
         expect(page).to_not have_selector 'textarea'
