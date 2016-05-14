@@ -143,7 +143,7 @@ RSpec.describe AnswersController, type: :controller do
 
     it "not changes the someone's answer attributes" do
       patch :update, id: other_answer, question_id: question, answer: { body: 'new body' }, format: :js
-      answer.reload
+      other_answer.reload
       expect(other_answer.body).to_not eq 'new body'
     end
 
