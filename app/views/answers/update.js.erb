@@ -4,5 +4,6 @@ $('#notice').html('<%= j flash[:notice] %>');
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
+  $('.answer-errors').empty();
   $('#answer-<%= @answer.id %> p').html('<%= j @answer.body %>');
 <% end %>

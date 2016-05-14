@@ -36,7 +36,7 @@ feature 'Answer editing', %q{
         expect(page).to have_selector 'textarea'
 
         fill_in 'Ответ', with: 'edited answer'
-        find('input[type="submit"]').click
+        click_on 'Сохранить'
 
         expect(page).to have_content('edited answer')
         expect(page).to_not have_content answer.body
@@ -47,7 +47,20 @@ feature 'Answer editing', %q{
         fill_in 'Ответ', with: 'edit again'
       end
     end
-    
+
+    scenario 'try to update answer with invalid content', js: true do
+      within "#answer-#{answer.id}" do
+        click_on 'Редактировать ответ'
+        fill_in 'Ответ', with: ''
+        click_on 'Сохранить'
+        expect(page).to have_content("Body can't be blank")
+
+        click_on 'Редактировать ответ'
+        fill_in 'Ответ', with: 'some content'
+        click_on 'Сохранить'
+        expect(page).to_not have_content("Body can't be blank")
+      end
+    end
   end
 
   scenario "User try to edit someone's answer" do
