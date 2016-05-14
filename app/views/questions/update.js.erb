@@ -4,5 +4,6 @@ $('#notice').html('<%= j flash[:notice] %>');
     $('.question-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.question').html('<%= j render 'content' %>');
+  $('.question-errors').empty();
+  $('.question-content').html('<%= j render 'content' %>');
 <% end %>

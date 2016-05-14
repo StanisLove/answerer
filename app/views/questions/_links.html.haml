@@ -1,4 +1,4 @@
 - if user_signed_in? && (current_user.id == @question.user_id)
-  = link_to 'Редактировать'
+  = link_to 'Редактировать', '', class: 'edit-question-link'
   |
 = link_to 'Cписок вопросов', questions_path
