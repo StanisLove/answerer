@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question
-  around_action :catch_not_found, only: [:destroy]
+  around_action :catch_not_found, only: [:destroy, :update]
 
   def index
     @answers = Answer.all

@@ -122,6 +122,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #update' do
     sign_in_user
     let(:answer) { create(:answer, question: question, user: @user) }
+    let(:other_answer) { create(:answer, question: question) }
 
     it 'assigns the requested answer to @answer' do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
@@ -134,10 +135,16 @@ RSpec.describe AnswersController, type: :controller do
     end
 
 
-    it 'changes answer attributes' do
+    it 'changes the own answer attributes' do
       patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
       answer.reload
       expect(answer.body).to eq 'new body'
+    end
+
+    it "not changes the someone's answer attributes" do
+      patch :update, id: other_answer, question_id: question, answer: { body: 'new body' }, format: :js
+      answer.reload
+      expect(other_answer.body).to_not eq 'new body'
     end
 
     it 'render update template' do
