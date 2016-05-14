@@ -6,9 +6,8 @@ feature 'User destroy question', %q{
   I want to be able to destroy question
 } do
 
-  given(:user)      { create(:user) }
-  given(:other_user){ create(:user) }
   given!(:question) { create(:question) }
+  given(:other_user){ create(:user) }
 
   scenario 'Author of the question try to delete the question' do
     sign_in(question.user)
