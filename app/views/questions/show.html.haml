@@ -1,9 +1,6 @@
-%h1 Вопрос
-= link_to 'Cписок вопросов', questions_path
-
-%h3= "#{@question.title}"
-
-%p= "#{@question.body}"
+.question
+  %h1= "Вопрос № #{@question.id}"
+  = render 'question'
 
 .answers
   = render 'answers'
