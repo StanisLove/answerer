@@ -6,11 +6,9 @@ feature 'Answer editing', %q{
   I'd like to be able to edit my answer
 } do
 
-  given(:user) { create(:user) }
-  given(:other_user) { create(:user) }
   given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question, user: user) }
-  given!(:other_answer) { create(:answer, question: question, user: user) }
+  given!(:answer) { create(:answer, question: question) }
+  given!(:other_answer) { create(:answer, question: question) }
 
   scenario 'Unauthenticated user try to edit answer' do
     visit question_path(question)
@@ -19,11 +17,11 @@ feature 'Answer editing', %q{
 
   describe 'Authenticated user' do
     before do
-      sign_in(user)
+      sign_in(answer.user)
       visit question_path(question)
     end
 
-    scenario 'user sees link to Edit' do
+    scenario 'sees link to Edit' do
       within '.answers' do
         expect(page).to have_content('Редактировать ответ')
       end
@@ -61,11 +59,11 @@ feature 'Answer editing', %q{
         expect(page).to_not have_content("Body can't be blank")
       end
     end
-  end
 
-  scenario "User try to edit someone's answer" do
-    sign_in(other_user)
-    visit question_path(question)
-    expect(page).not_to have_content('Редактировать ответ')
+    scenario "try to edit someone's answer" do
+      within "#answer-#{other_answer.id}" do
+        expect(page).not_to have_content('Редактировать ответ')
+      end
+    end
   end
 end
