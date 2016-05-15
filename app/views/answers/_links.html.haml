@@ -1,0 +1,13 @@
+- if user_signed_in? && (current_user.id == answer.user_id)
+  = link_to 'Удалить ответ',
+    question_answer_path(@question, answer), 
+    method: :delete, remote: true
+  |
+  = link_to 'Редактировать ответ',
+    '', class: 'edit-answer-link',
+    data: { answer_id: answer.id }
+
+- if user_signed_in? && (current_user.id == @question.user_id)
+  = link_to 'Выбрать лучшим ответом', "#",
+    class: 'best-answer-link',
+    data: { answer_id: answer.id }
