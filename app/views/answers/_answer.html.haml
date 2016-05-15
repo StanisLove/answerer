@@ -1,4 +1,4 @@
-%div{class: "answer-#{@answer.id}"}
+%div{id: "answer-#{@answer.id}"}
   %h3 Ответ
   - if user_signed_in? && (current_user.id == @answer.user_id)
     = link_to 'Удалить ответ',
