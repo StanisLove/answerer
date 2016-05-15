@@ -5,6 +5,6 @@ $('#notice').html('<%= j flash[:notice] %>');
   <% end %>
 <% else %>
   $('.answer-errors').empty();
-  $('.answers').append('<%= j render partial: "answer" %>');
+  $('.answers').append('<%= j render "answer", answer: @answer %>');
   $('#answer_body').val('');
 <% end %>

@@ -1,18 +1,3 @@
 - @question.answers.each do |answer|
   - if answer.persisted?
-    %div{id: "answer-#{answer.id}"}
-      %h3 Ответ
-      - if user_signed_in? && (current_user.id == answer.user_id)
-        = link_to 'Удалить ответ',
-          question_answer_path(@question, answer), method: :delete, remote: true
-        |
-        = link_to 'Редактировать ответ', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-      .answer-errors
-      %p= answer.body
-      = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-        .field
-          = f.label :body, 'Ответ'
-          = f.text_area :body
-        .actions
-          = f.submit 'Сохранить', data: { answer_id: answer.id }
-    %br
+    = render 'answers/answer', answer: answer
