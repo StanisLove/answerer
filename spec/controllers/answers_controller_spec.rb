@@ -167,7 +167,7 @@ RSpec.describe AnswersController, type: :controller do
       let!(:some_answer_two){ create(:answer, question: own_question) }
 
       it "can't choose the best answer" do
-        patch :choose_best, id: answer, question_id: question, answer: { is_best: true }, format: :js
+        patch :choose_best, id: answer, question_id: question, format: :js
         expect(answer.is_best).to eq false
       end
 
@@ -175,11 +175,11 @@ RSpec.describe AnswersController, type: :controller do
             can choose the best answer and
             the best answer is only one
       } do
-        patch :choose_best, id: some_answer_one, question_id: own_question, answer: { is_best: true }, format: :js
+        patch :choose_best, id: some_answer_one, question_id: own_question, format: :js
         some_answer_one.reload
         expect(some_answer_one.is_best).to eq true
 
-        patch :choose_best, id: some_answer_two, question_id: own_question, answer: { is_best: true }, format: :js
+        patch :choose_best, id: some_answer_two, question_id: own_question, format: :js
         some_answer_two.reload
         expect(some_answer_two.is_best).to eq true
         some_answer_one.reload

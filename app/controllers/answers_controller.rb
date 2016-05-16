@@ -37,7 +37,7 @@ class AnswersController < ApplicationController
     @old_best.toggle!(:is_best) unless @old_best.nil?
 
     @answer = @question.answers.find(params[:id])
-    @answer.update(answer_params)
+    @answer.toggle!(:is_best)
   end
 
   private
