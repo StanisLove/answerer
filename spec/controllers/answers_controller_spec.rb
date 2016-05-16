@@ -103,6 +103,8 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
+      
+
     context 'Not signed in user' do
       it "not deletes someone's answer from DB..." do
         expect{
@@ -132,7 +134,6 @@ RSpec.describe AnswersController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-
     it 'changes the own answer attributes' do
       patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
       answer.reload
@@ -148,6 +149,42 @@ RSpec.describe AnswersController, type: :controller do
     it 'render update template' do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(response).to render_template :update
+    end
+  end
+
+  describe 'PATCH #choose_best' do
+    let!(:answer) { create(:answer, question: question) }
+
+    it "user can't choose the best answer" do
+      patch :choose_best, id: answer, question_id: question, answer: { is_best: true }, format: :js
+      expect(answer.is_best).to eq false
+    end
+
+    context "Authenticated user" do
+      sign_in_user
+      let!(:own_question)   { create(:question, user: @user) }
+      let!(:some_answer_one){ create(:answer, question: own_question) }
+      let!(:some_answer_two){ create(:answer, question: own_question) }
+
+      it "can't choose the best answer" do
+        patch :choose_best, id: answer, question_id: question, answer: { is_best: true }, format: :js
+        expect(answer.is_best).to eq false
+      end
+
+      it %q{is the author of the question and 
+            can choose the best answer and
+            the best answer is only one
+      } do
+        patch :choose_best, id: some_answer_one, question_id: own_question, answer: { is_best: true }, format: :js
+        some_answer_one.reload
+        expect(some_answer_one.is_best).to eq true
+
+        patch :choose_best, id: some_answer_two, question_id: own_question, answer: { is_best: true }, format: :js
+        some_answer_two.reload
+        expect(some_answer_two.is_best).to eq true
+        some_answer_one.reload
+        expect(some_answer_one.is_best).to eq false
+      end
     end
   end
 end

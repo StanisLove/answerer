@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question
-  around_action :catch_not_found, only: [:destroy, :update]
+  before_action :load_question, except: [:choose_best]
+  around_action :catch_not_found, only: [:destroy, :update, :choose_best]
 
   def index
     @answers = Answer.all
@@ -31,6 +31,15 @@ class AnswersController < ApplicationController
     #flash.now[:notice] = 'Ответ удалён'
   end
 
+  def choose_best
+    @question = current_user.questions.find(params[:question_id])
+    @old_best = @question.answers.find_by(is_best: true)
+    @old_best.toggle!(:is_best) unless @old_best.nil?
+
+    @answer = @question.answers.find(params[:id])
+    @answer.update(answer_params)
+  end
+
   private
     def load_question
       @question = Question.find(params[:question_id])
@@ -43,6 +52,6 @@ class AnswersController < ApplicationController
     end
 
     def answer_params
-      params.require(:answer).permit(:body)
+      params.require(:answer).permit(:body, :is_best)
     end
 end
