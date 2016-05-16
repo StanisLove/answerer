@@ -1,3 +1,7 @@
-- @question.answers.each do |answer|
+- @question.answers.where(is_best: true).each do |answer|
+  - if answer.persisted?
+    = render 'answers/answer', answer: answer
+
+- @question.answers.where(is_best: false).each do |answer|
   - if answer.persisted?
     = render 'answers/answer', answer: answer

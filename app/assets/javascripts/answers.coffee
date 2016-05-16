@@ -13,6 +13,16 @@ ready = ->
     $('form#edit-answer-' + answer_id).hide();
     $('#answer-' + answer_id + ' > .edit-answer-link').show();
 
+  $('.best-answer-link').click (e) ->
+    e.preventDefault();
+    $('.best-answer-link').show();
+    $('.answers > div > h3').html("Ответ");
+    $(this).hide();
+    answer_id = $(this).data('answerId')
+    $('#answer-' + answer_id + ' > h3').html("Лучший ответ");
+
+
+
     
 $(document).ready(ready)
 $(document).on('page:load', ready)

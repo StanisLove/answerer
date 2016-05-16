@@ -4,10 +4,14 @@
     method: :delete, remote: true
   |
   = link_to 'Редактировать ответ',
-    '', class: 'edit-answer-link',
+    '#', class: 'edit-answer-link',
     data: { answer_id: answer.id }
 
 - if user_signed_in? && (current_user.id == @question.user_id)
-  = link_to 'Выбрать лучшим ответом', "#",
+  = link_to 'Выбрать лучшим ответом',
+    choose_best_question_answer_path(@question, answer),
+    method: :patch,
+    style: answer.is_best ? "display:none" : '',
     class: 'best-answer-link',
-    data: { answer_id: answer.id }
+    data: { answer_id: answer.id },
+    remote: true

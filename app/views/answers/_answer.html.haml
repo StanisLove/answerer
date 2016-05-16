@@ -1,7 +1,10 @@
 %div{id: "answer-#{answer.id}"}
-  %h3 Ответ
+  %h3= answer.is_best ? "Лучший ответ" : "Ответ"
+
   = render 'answers/links', answer: answer  
+
   .answer-errors
+
   %p= answer.body
 
   = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
