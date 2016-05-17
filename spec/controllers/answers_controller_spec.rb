@@ -175,11 +175,21 @@ RSpec.describe AnswersController, type: :controller do
             can choose the best answer and
             the best answer is only one
       } do
+        expect(some_answer_one.is_best).to eq false
+        expect(some_answer_two.is_best).to eq false
+
         patch :choose_best, id: some_answer_one, question_id: own_question, format: :js
         some_answer_one.reload
+
         expect(some_answer_one.is_best).to eq true
+        expect(some_answer_two.is_best).to eq false
 
         patch :choose_best, id: some_answer_two, question_id: own_question, format: :js
+
+        expect(assigns(:question)).to eq own_question
+        expect(assigns(:old_best)).to eq some_answer_one
+        expect(assigns(:answer)).to   eq some_answer_two
+
         some_answer_two.reload
         expect(some_answer_two.is_best).to eq true
         some_answer_one.reload
