@@ -28,16 +28,14 @@ class AnswersController < ApplicationController
   def destroy
     @answer = current_user.answers.find(params[:id])
     @answer.destroy
-    #flash.now[:notice] = 'Ответ удалён'
   end
 
   def choose_best
     @question = current_user.questions.find(params[:question_id])
-    @old_best = @question.answers.find_by(is_best: true)
-    @old_best.toggle!(:is_best) unless @old_best.nil?
+    @question.answers.update_all(is_best: false)
 
     @answer = @question.answers.find(params[:id])
-    @answer.toggle!(:is_best)
+    @answer.make_best!
   end
 
   private

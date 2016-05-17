@@ -187,7 +187,6 @@ RSpec.describe AnswersController, type: :controller do
         patch :choose_best, id: some_answer_two, question_id: own_question, format: :js
 
         expect(assigns(:question)).to eq own_question
-        expect(assigns(:old_best)).to eq some_answer_one
         expect(assigns(:answer)).to   eq some_answer_two
 
         some_answer_two.reload
