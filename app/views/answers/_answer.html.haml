@@ -1,4 +1,4 @@
-%div{id: "answer-#{answer.id}"}
+%div.col-md-6{id: "answer-#{answer.id}"}
   %h3= answer.is_best ? "Лучший ответ" : "Ответ"
 
   = render 'answers/links', answer: answer  

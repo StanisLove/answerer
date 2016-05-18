@@ -1,11 +1,35 @@
 // Place all the styles related to the answers controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "bootstrap";
+
 .edit_answer {
   display: none;
 }
+.answers {
+  @extend .container
+}
 .answers > div {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  background: #eee;
+  border: 2px solid white;
+  border-radius: 10px;
+}
+.answers > div:nth-child(2n) {
+  background-color: #aca;
+  @extend .col-md-offset-1;
+}
+.answers > div:nth-child(2n+1) {
+  background-color: #aac;
+  @extend .col-md-offset-2;
+}
+.new_answer {
+  @extend .col-md-7;
+  @extend .col-md-offset-1;
+  padding: 0;
+}
+
+.new_answer > .field {
+  @extend .form-group;
+}
+.new_answer textarea {
+  @extend .form-control
 }

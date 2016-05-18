@@ -1,0 +1,7 @@
+- if user_signed_in?
+  %span.glyphicon.glyphicon-log-out
+  = link_to 'Выйти',
+    destroy_user_session_path, method: :delete
+- else
+  %span.glyphicon.glyphicon-log-in
+  = link_to 'Войти', new_user_session_path
