@@ -32,8 +32,6 @@ class AnswersController < ApplicationController
 
   def choose_best
     @question = current_user.questions.find(params[:question_id])
-    @question.answers.update_all(is_best: false)
-
     @answer = @question.answers.find(params[:id])
     @answer.make_best!
   end
