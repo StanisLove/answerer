@@ -7,7 +7,9 @@ class Answer < ActiveRecord::Base
   scope :order_by_best, -> { order(is_best: :desc) }
 
   def make_best!
-    self.question.answers.update_all(is_best: false)
-    self.toggle!(:is_best)
+    Answer.transaction do
+      self.question.answers.update_all(is_best: false)
+      self.toggle!(:is_best)
+    end
   end
 end
