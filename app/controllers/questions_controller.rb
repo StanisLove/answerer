@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, 
     only: [:new, :create, :destroy, :update]
-  around_action :catch_not_found
 
   def index
     @questions = Question.all
@@ -39,11 +38,5 @@ class QuestionsController < ApplicationController
   private
     def question_params
       params.require(:question).permit(:title, :body)
-    end
-
-    def catch_not_found
-      yield
-    rescue ActiveRecord::RecordNotFound
-      redirect_to root_url, flash: { error: "Вопрос не найден" }
     end
 end

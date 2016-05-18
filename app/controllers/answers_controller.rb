@@ -1,7 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, except: [:choose_best]
-  around_action :catch_not_found, only: [:destroy, :update, :choose_best]
 
   def index
     @answers = Answer.all
@@ -39,12 +38,6 @@ class AnswersController < ApplicationController
   private
     def load_question
       @question = Question.find(params[:question_id])
-    end
-
-    def catch_not_found
-      yield
-    rescue ActiveRecord::RecordNotFound
-      redirect_to root_url, flash: { error: "Ответ не найден" }
     end
 
     def answer_params
