@@ -2,6 +2,10 @@
   .question
     %h1= "Вопрос № #{@question.id}"
     = render 'question'
+    %b{style: "text-decoration:underline"} Файлы:
+    %ul
+      - @question.attachments.each do |a|
+        %li= a.file.file.filename
 
 .answers
   = render 'answers'
