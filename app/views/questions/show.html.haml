@@ -17,5 +17,9 @@
       = f.label :body, 'Новый ответ'
       .answer-errors
       = f.text_area :body
+    .attachments
+      = f.fields_for :attachments do |a|
+        = a.label :file, "Файл:"
+        = a.file_field :file
     .actions
       = f.submit 'Отправить ответ'
