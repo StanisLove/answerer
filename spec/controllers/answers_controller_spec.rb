@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-RSpec::Matchers.define_negated_matcher  :not_change, :change
-
 RSpec.describe AnswersController, type: :controller do
   let!(:question) { create(:question) }
 
@@ -76,19 +74,126 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
-    let!(:answer) { create(:answer,
-                           user_id: @user.id) }
-    
-    it 'deletes the answer from DB' do
-      expect{
-        delete :destroy, id: answer, question_id: question
-      }.to change(Answer, :count).by(-1)
+    let!(:other_answer) { create(:answer) }
+
+    context 'Signed in user' do
+      sign_in_user
+      let!(:answer) { create(:answer, user_id: @user.id) }
+      
+      it 'deletes the own answer from DB...' do
+        expect{
+          delete :destroy, id: answer, question_id: question, format: :js
+        }.to change(Answer, :count).by(-1)
+      end
+
+      it '...and renders template destroy' do
+        delete :destroy, id: answer, question_id: question, format: :js
+        expect(response).to render_template :destroy
+      end
+
+      it "not deletes someone's answer from DB..." do
+        expect{
+          delete :destroy, id: other_answer, question_id: question, format: :js
+        }.to_not change(Answer, :count) 
+      end
+      
+      it '... and redirect to root path' do
+        delete :destroy, id: other_answer, question_id: question, format: :js
+        expect(response).to redirect_to root_path
+      end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, id: answer, question_id: question
-      expect(response).to redirect_to question_path(question)
+      
+
+    context 'Not signed in user' do
+      it "not deletes someone's answer from DB..." do
+        expect{
+          delete :destroy, id: other_answer, question_id: question, format: :js
+        }.to_not change(Answer, :count) 
+      end
+      
+      it '...and gets 401' do
+        delete :destroy, id: other_answer, question_id: question, format: :js
+        expect(response.status).to eq 401 
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    sign_in_user
+    let(:answer) { create(:answer, question: question, user: @user) }
+    let(:other_answer) { create(:answer, question: question) }
+
+    it 'assigns the requested answer to @answer' do
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      expect(assigns(:answer)).to eq answer
+    end
+
+    it "assigns the requested answer's question to @question" do
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'changes the own answer attributes' do
+      patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
+      answer.reload
+      expect(answer.body).to eq 'new body'
+    end
+
+    it "not changes the someone's answer attributes" do
+      patch :update, id: other_answer, question_id: question, answer: { body: 'new body' }, format: :js
+      other_answer.reload
+      expect(other_answer.body).to_not eq 'new body'
+    end
+
+    it 'render update template' do
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      expect(response).to render_template :update
+    end
+  end
+
+  describe 'PATCH #choose_best' do
+    let!(:answer) { create(:answer, question: question) }
+
+    it "user can't choose the best answer" do
+      patch :choose_best, id: answer, question_id: question, answer: { is_best: true }, format: :js
+      expect(answer.is_best).to eq false
+    end
+
+    context "Authenticated user" do
+      sign_in_user
+      let!(:own_question)   { create(:question, user: @user) }
+      let!(:some_answer_one){ create(:answer, question: own_question) }
+      let!(:some_answer_two){ create(:answer, question: own_question) }
+
+      it "can't choose the best answer" do
+        patch :choose_best, id: answer, question_id: question, format: :js
+        expect(answer.is_best).to eq false
+      end
+
+      it %q{is the author of the question and 
+            can choose the best answer and
+            the best answer is only one
+      } do
+        expect(some_answer_one.is_best).to eq false
+        expect(some_answer_two.is_best).to eq false
+
+        patch :choose_best, id: some_answer_one, question_id: own_question, format: :js
+        some_answer_one.reload
+
+        expect(some_answer_one.is_best).to eq true
+        expect(some_answer_two.is_best).to eq false
+
+        patch :choose_best, id: some_answer_two, question_id: own_question, format: :js
+
+        expect(assigns(:question)).to eq own_question
+        expect(assigns(:answer)).to   eq some_answer_two
+
+        some_answer_two.reload
+        expect(some_answer_two.is_best).to eq true
+        some_answer_one.reload
+        expect(some_answer_one.is_best).to eq false
+      end
     end
   end
 end

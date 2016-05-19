@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, 
-    only: [:new, :create, :destroy]
-  before_action :set_question, only: [:show]
+    only: [:new, :create, :destroy, :update]
 
   def index
     @questions = Question.all
@@ -12,6 +11,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @question = Question.find(params[:id])
     @answer = @question.answers.build
   end
 
@@ -24,6 +24,11 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    @question = current_user.questions.find(params[:id])
+    @question.update(question_params)
+  end
+
   def destroy
     @question = current_user.questions.find(params[:id])
     @question.destroy
@@ -31,11 +36,6 @@ class QuestionsController < ApplicationController
   end
 
   private
-
-    def set_question
-      @question = Question.find(params[:id])
-    end
-
     def question_params
       params.require(:question).permit(:title, :body)
     end

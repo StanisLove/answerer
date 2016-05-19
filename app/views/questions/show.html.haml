@@ -1,16 +1,16 @@
-%h1 Вопрос
-= link_to 'Cписок вопросов', questions_path
-
-%h3= "#{@question.title}"
-
-%p= "#{@question.body}"
+.container
+  .question
+    %h1= "Вопрос № #{@question.id}"
+    = render 'question'
 
 .answers
   = render 'answers'
 
-= form_for [@question, @answer], remote: true do |f|
-  .field
-    = f.label :body, 'Новый ответ'
-    = f.text_area :body
-  .actions
-    = f.submit 'Отправить ответ'
+.container
+  = form_for [@question, @answer], remote: true do |f|
+    .field
+      = f.label :body, 'Новый ответ'
+      .answer-errors
+      = f.text_area :body
+    .actions
+      = f.submit 'Отправить ответ'
