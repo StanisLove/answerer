@@ -7,7 +7,7 @@ feature 'Add files to question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
+  given(:question) { build(:question) }
   
   background do
     sign_in(user)
@@ -21,6 +21,6 @@ feature 'Add files to question', %q{
 
     click_on 'Спросить'
 
-    expect(page).to have_content 'spec_helper.rb'
+    expect(page).to have_link 'spec_helper.rb', href: "/uploads/attachment/file/1/spec_helper.rb"
   end
 end
