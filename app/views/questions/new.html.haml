@@ -7,9 +7,14 @@
   .field
     = f.label :body, 'Вопрос'
     = f.text_area :body
+
   .attachments
     = f.fields_for  :attachments do |a|
-      = a.label :file, "Файл"
-      = a.file_field :file
+      = link_to_add_association 'Добавить ещё один файл', f, :attachments,
+        'data-association-insertion-nod' => '.attachments',
+        'data-association-insertion-method' =>  'append',
+        partial: 'common/attachment_fields'
+      %br
+
   .actions
     = f.submit 'Спросить'
