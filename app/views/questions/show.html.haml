@@ -3,16 +3,11 @@
     %h1= "Вопрос № #{@question.id}"
     = render 'question'
 
-    .attachments
-      - if @question.attachments.any?
-        %b= "Файлы:"
-        %ul
-          - @question.attachments.each do |a|
-            %li= link_to a.file.identifier, a.file.url
 
 
 .answers
   = render 'answers'
+
 
 .container
   = form_for [@question, @answer], remote: true do |f|
@@ -20,9 +15,9 @@
       = f.label :body, 'Новый ответ'
       .answer-errors
       = f.text_area :body
-
     .attachments
       %b= "Можете добавить файлы:"
+
       = f.fields_for :attachments do |a|
         = link_to_add_association 'Добавить ещё один файл', f, :attachments,
           'data-association-insertion-nod' => '.attachments',

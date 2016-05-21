@@ -1,0 +1,4 @@
+= form_for @question, remote: true do |q|
+  = check_box_tag     "question[attachments_attributes][#{@question.attachments.index(a)}][_destroy]", '1', true, class: "hidden"
+  = hidden_field_tag  "question[attachments_attributes][#{@question.attachments.index(a)}][id]", "#{a.id}"
+  = q.submit 'Удалить'

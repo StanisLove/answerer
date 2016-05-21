@@ -5,5 +5,10 @@
   .field
     = f.label :body, 'Вопрос'
     = f.text_area :body
+  .attachments
+    = f.fields_for :attachments do |a|
+      = a.label :file, class: "hidden"
+      = a.text_field :file
+      = a.check_box :_destroy
   .actions
     = f.submit 'Сохранить', class: 'edit-question-button'
