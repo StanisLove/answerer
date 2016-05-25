@@ -15,12 +15,13 @@ feature 'Remove files from question', %q{
 
   scenario 'User remove file from the question', js: true do
     expect(page).to have_content 'Файлы'
-    expect(page).to have_link 'spec_helper.rb', href: "/uploads/attachment/file/1/spec_helper.rb"
-    expect(page).to have_button 'Удалить'
+    expect(page).to have_link 'spec_helper.rb',
+        href: /^\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+    expect(page).to have_content 'Удалить'
     click_on 'Удалить'
     wait_for_ajax
 
     expect(page).to_not have_content 'Файлы'
-    expect(page).to_not have_link 'spec_helper.rb', href: "/uploads/attachment/file/1/spec_helper.rb"
+    expect(page).to_not have_link 'spec_helper.rb'
   end
 end

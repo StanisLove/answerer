@@ -29,8 +29,10 @@ feature 'Add files to question', %q{
     click_on 'Спросить'
 
     expect(page).to have_content 'Файлы'
-    expect(page).to have_link 'spec_helper.rb', href: "/uploads/attachment/file/1/spec_helper.rb"
-    expect(page).to have_link 'rails_helper.rb', href: "/uploads/attachment/file/2/rails_helper.rb"
+    expect(page).to have_link 'spec_helper.rb',
+        href: /^\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+    expect(page).to have_link 'rails_helper.rb',
+        href: /^\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
   end
 
   scenario 'User can add and then revmove file while creating an answer', js: true do
@@ -46,7 +48,7 @@ feature 'Add files to question', %q{
     wait_for_ajax
 
     within '.question' do
-      expect(page).to_not have_link 'spec_helper.rb', href: "/uploads/attachment/file/1/spec_helper.rb"
+      expect(page).to_not have_link 'spec_helper.rb'
       expect(page).to_not have_content 'Файлы'
     end
   end

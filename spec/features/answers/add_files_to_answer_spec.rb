@@ -32,10 +32,15 @@ feature 'Add files to answer', %q{
     click_on 'Отправить ответ'
     wait_for_ajax
     
+    within '.new_answer' do
+      expect(page).to_not have_content("#{answer.body}")
+    end
     within '.answers' do
       expect(page).to have_content 'Файлы'
-      expect(page).to have_link 'spec_helper.rb', href: "/uploads/attachment/file/1/spec_helper.rb"
-      expect(page).to have_link 'rails_helper.rb', href: "/uploads/attachment/file/2/rails_helper.rb"
+      expect(page).to have_link 'spec_helper.rb',
+        href: /^\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+      expect(page).to have_link 'rails_helper.rb',
+        href: /^\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
     end
   end
 
@@ -50,7 +55,7 @@ feature 'Add files to answer', %q{
     wait_for_ajax
     
     within '.answers' do
-      expect(page).to_not have_link 'spec_helper.rb', href: "/uploads/attachment/file/1/spec_helper.rb"
+      expect(page).to_not have_link 'spec_helper.rb'
       expect(page).to_not have_content 'Файлы'
     end
   end

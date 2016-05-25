@@ -3,6 +3,10 @@ FactoryGirl.define do
     sequence(:body) { |n| "Answer #{n}" }
     question
     user
+
+    after(:create) do |answer|
+      create(:attachment, attachable: answer)
+    end
   end
 
   factory :invalid_answer, class: "Answer" do
