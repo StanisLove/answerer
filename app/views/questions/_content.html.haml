@@ -1,2 +1,12 @@
 %h3= "#{@question.title}"
 %p= "#{@question.body}"
+.attachments
+  - if @question.attachments.any?
+    %b= "Файлы:"
+    %table
+      - @question.attachments.each do |attachment|
+        %tr
+          %td= link_to attachment.file.identifier, attachment.file.url
+          %td= link_to 'Удалить', question_path(@question.id,
+            question: { attachments_attributes: { id: attachment.id,
+            "_destroy" => true } }), remote: true, method: :patch

@@ -21,9 +21,6 @@ ready = ->
     answer_id = $(this).data('answerId')
     $('#answer-' + answer_id + ' > h3').html("Лучший ответ");
 
-
-
-    
 $(document).ready(ready)
 $(document).on('page:load', ready)
 $(document).on('page:update', ready)

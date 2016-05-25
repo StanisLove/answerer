@@ -19,6 +19,9 @@ feature 'User creates answer', %q{
     expect(page).to have_content("#{question.title}")
     expect(page).to have_content("#{question.body}")
     expect(page).to have_content("#{answer.body}")
+    within '.new_answer' do
+      expect(page).to_not have_content("#{answer.body}")
+    end
   end
 
   scenario 'User try to create invalid answer', js: true do

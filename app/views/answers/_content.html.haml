@@ -1,0 +1,12 @@
+%p= answer.body
+
+.attachments
+  - if answer.attachments.any?
+    %b= "Файлы:" 
+    %table
+      %tr
+        - answer.attachments.each do |attachment|
+          %td= link_to attachment.file.identifier, attachment.file.url
+          %td= link_to 'Удалить', question_answer_path(@question.id, answer.id,
+            answer: { attachments_attributes: { id: attachment.id,
+            "_destroy" => true, } }), remote: true, method: :patch 

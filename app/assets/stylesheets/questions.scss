@@ -4,6 +4,10 @@
 @import "bootstrap";
 .edit_question { display: none; }
 
+.attachments {
+  .edit_question { display: block; }
+}
+
 .question {
   border: 2px solid #a9a;
   border-radius: 10px;
