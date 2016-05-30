@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+  it_behaves_like "attachable"
   
   it { should belong_to :question }
   it { should have_db_index :question_id }
