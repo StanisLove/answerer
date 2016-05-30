@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  include PublicIndexAndShow
+
   before_action :load_question, except: [:choose_best]
 
   def index

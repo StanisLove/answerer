@@ -1,6 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, 
-    only: [:new, :create, :destroy, :update]
+  include PublicIndexAndShow
 
   def index
     @questions = Question.all
