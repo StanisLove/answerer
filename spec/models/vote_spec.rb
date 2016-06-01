@@ -7,7 +7,7 @@ RSpec.describe Vote, type: :model do
   it { should have_db_index [:votable_type, :votable_id] }
   it { should have_db_index :user_id }
 
-  it { should validate_presence_of :voice }
+  it { should validate_inclusion_of(:voice).in_array [true, false] }
   it { should validate_presence_of :user_id }
   it { should validate_presence_of :votable_id }
   it { should validate_presence_of :votable_type }
