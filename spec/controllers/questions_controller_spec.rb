@@ -139,4 +139,62 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to redirect_to root_path
     end
   end
+
+  describe 'PATCH #vote_up' do
+    sign_in_user
+    let(:question) { create(:question) }
+
+    it 'assigns the request to @question' do
+      patch :vote_up, id: question, format: :json
+      expect(assigns(:question)).to eq question
+    end
+
+    it "increase question's votes only once" do
+      expect{
+        patch :vote_up, id: question,
+        format: :json }.to change(question, :voting_result).by(1)
+
+      expect{
+        patch :vote_up, id: question,
+        format: :json }.to change(question.votes, :count).by(0)
+    end
+  end
+
+  describe 'PATCH #vote_down' do
+    sign_in_user
+    let(:question) { create(:question) }
+
+    it 'assigns the request to @question' do
+      patch :vote_down, id: question, format: :json
+      expect(assigns(:question)).to eq question
+    end
+
+    it "decrease question's votes only once" do
+      expect{
+        patch :vote_down, id: question,
+        format: :json }.to change(question, :voting_result).by(-1)
+
+      expect{
+        patch :vote_down, id: question,
+        format: :json }.to change(question.votes, :count).by(0)
+    end
+  end
+
+  describe 'PATCH #vote_reset' do
+    sign_in_user
+    let(:question) { create(:question) }
+    let!(:vote)  { create(:vote_up, user_id: @user.id, votable: question) }
+
+    it 'assigns the request to @question' do
+      patch :vote_reset, id: question, format: :json
+      expect(assigns(:question)).to eq question
+    end
+
+    it "cancel user vote for question" do
+      expect(question.voting_result).to eq 1
+      expect{
+        patch :vote_reset, id: question,
+        format: :json }.to change(question, :voting_result).by(-1)
+    end
+  end
 end

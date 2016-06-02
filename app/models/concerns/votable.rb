@@ -3,8 +3,6 @@ module Concerns::Votable
 
   included do
     has_many  :votes, as: :votable, dependent: :destroy
-
-    accepts_nested_attributes_for :votes, allow_destroy: true
   end
 
   def vote_up!(current_user)
