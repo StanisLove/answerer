@@ -14,6 +14,10 @@ ready = ->
   $('.question .vote').bind 'ajax:success', (e, data, status, xhr) ->
     voting_result = $.parseJSON(xhr.responseText)
     $('.question .voting_result').html('<b>' + voting_result + '</b>')
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    errors = $.parseJSON(hxr.responseText)
+    $.each errors, (index, value) ->
+      $('.question-errors').html(value)
 
   $('.question .vote-link').click (e) ->
     e.preventDefault();
