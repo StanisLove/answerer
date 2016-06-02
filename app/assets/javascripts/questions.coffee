@@ -13,17 +13,17 @@ ready = ->
 
   $('.question .vote').bind 'ajax:success', (e, data, status, xhr) ->
     voting_result = $.parseJSON(xhr.responseText)
-    $('.voting_result').html('<b>' + voting_result + '</b>')
+    $('.question .voting_result').html('<b>' + voting_result + '</b>')
 
-  $('.vote-link').click (e) ->
+  $('.question .vote-link').click (e) ->
     e.preventDefault();
-    $('.vote-link').hide();
-    $('.reset-vote-link').show();
+    $('.question .vote-link').hide();
+    $('.question .reset-vote-link').show();
 
-  $('.reset-vote-link').click (e) ->
+  $('.question .reset-vote-link').click (e) ->
     e.preventDefault();
-    $('.reset-vote-link').hide();
-    $('.vote-link').show();
+    $('.question .reset-vote-link').hide();
+    $('.question .vote-link').show();
 
 
 $(document).ready(ready)

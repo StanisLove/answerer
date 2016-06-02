@@ -5,39 +5,5 @@
 .question-content
   = render 'content'
 
-.vote
-  %b Голосование:
-  - if user_signed_in? && (current_user.id != @question.user_id)
-    - if @question.votes.pluck(:user_id).include?(current_user.id)
-      = link_to "+", vote_up_question_path(@question),
-        class: 'vote-link up', style: 'display:none;',
-        remote: true, method: :patch
-
-      %b.voting_result= "#{@question.voting_result}"
-
-      = link_to "&ndash;".html_safe, vote_down_question_path(@question),
-        class: 'vote-link down', style: 'display:none;',
-        remote: true, method: :patch
-      = link_to "Отменить", vote_reset_question_path(@question.id),
-        class: 'reset-vote-link', remote: true, method: :patch
-    - else
-      = link_to "+", vote_up_question_path(@question),
-        class: 'vote-link up',
-        remote: true, method: :patch
-
-      %b.voting_result= "#{@question.voting_result}"
-
-      = link_to "&ndash;".html_safe, vote_down_question_path(@question),
-        class: 'vote-link down',
-        remote: true, method: :patch
-      = link_to "Отменить", vote_reset_question_path(@question.id),
-        class: 'reset-vote-link', style: 'display:none',
-        remote: true, method: :patch
-  
-  - else
-
-    %b.voting_result= "#{@question.voting_result}"
-
-
-
+= render 'vote'
 = render 'form'
