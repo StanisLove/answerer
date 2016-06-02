@@ -1,7 +1,8 @@
 class AnswersController < ApplicationController
   include PublicIndexAndShow
+  include Voted
 
-  before_action :load_question, except: [:choose_best]
+  before_action :load_question, only: [:index, :create]
 
   def index
     @answers = Answer.all

@@ -8,6 +8,8 @@
   .content
     = render 'answers/content', answer: answer
 
+  = render 'answers/vote', answer: answer
+
   = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
     .field
       = f.label :body, 'Ответ'

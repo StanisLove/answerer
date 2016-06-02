@@ -21,6 +21,23 @@ ready = ->
     answer_id = $(this).data('answerId')
     $('#answer-' + answer_id + ' > h3').html("Лучший ответ");
 
+  $('.answers .vote').bind 'ajax:success', (e, data, status, xhr) ->
+    answer_id = $(this).data('answerId')
+    voting_result = $.parseJSON(xhr.responseText)
+    $('#answer-' + answer_id + ' .voting_result').html('<b>' + voting_result + '</b>')
+
+  $('.answers .vote-link').click (e) ->
+    e.preventDefault();
+    answer_id = $(this).data('answerId')
+    $('#answer-' + answer_id + ' .vote-link').hide();
+    $('#answer-' + answer_id + ' .reset-vote-link').show();
+
+  $('.answers .reset-vote-link').click (e) ->
+    e.preventDefault();
+    answer_id = $(this).data('answerId')
+    $('#answer-' + answer_id + ' .reset-vote-link').hide();
+    $('#answer-' + answer_id + ' .vote-link').show();
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
 $(document).on('page:update', ready)

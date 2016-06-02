@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   resources :questions, concerns: [:votable] do
-    resources :answers do
+    resources :answers, concerns: [:votable] do
       patch :choose_best, on: :member
     end
   end
