@@ -146,7 +146,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns the request to @question' do
       patch :vote_up, id: question, format: :json
-      expect(assigns(:question)).to eq question
+      expect(assigns(:votable)).to eq question
     end
 
     it "increase question's votes only once" do
@@ -166,7 +166,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns the request to @question' do
       patch :vote_down, id: question, format: :json
-      expect(assigns(:question)).to eq question
+      expect(assigns(:votable)).to eq question
     end
 
     it "decrease question's votes only once" do
@@ -187,7 +187,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns the request to @question' do
       patch :vote_reset, id: question, format: :json
-      expect(assigns(:question)).to eq question
+      expect(assigns(:votable)).to eq question
     end
 
     it "cancel user vote for question" do

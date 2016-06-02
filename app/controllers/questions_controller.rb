@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   include PublicIndexAndShow
+  include Voted
 
   def index
     @questions = Question.all
@@ -36,32 +37,7 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
-  def vote_up
-    @question = Question.find(params[:id])
-    @question.vote_up!(current_user)
-    if @question.save
-      respond_to do |format|
-        format.json { render json: @question }
-      end
-    end
-  end
-
-  def vote_down
-    @question = Question.find(params[:id])
-    @question.vote_down!(current_user)
-    if @question.save
-      respond_to do |format|
-        format.json { render json: @question }
-      end
-    end
-  end
-
-  def vote_reset
-    @question = Question.find(params[:id])
-    @question.vote_reset!(current_user)
-    render json: @question
-  end
-
+  
   private
     def question_params
       params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
