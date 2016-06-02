@@ -11,4 +11,19 @@ ready = ->
     $('.edit_question').hide();
     $('.edit-question-link').show();
 
+  $('.question .vote').bind 'ajax:success', (e, data, status, xhr) ->
+    voting_result = $.parseJSON(xhr.responseText)
+    $('.voting_result').html('<b>' + voting_result + '</b>')
+
+  $('.vote-link').click (e) ->
+    e.preventDefault();
+    $('.vote-link').hide();
+    $('.reset-vote-link').show();
+
+  $('.reset-vote-link').click (e) ->
+    e.preventDefault();
+    $('.reset-vote-link').hide();
+    $('.vote-link').show();
+
+
 $(document).ready(ready)

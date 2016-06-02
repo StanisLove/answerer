@@ -24,3 +24,7 @@ input[type=submit] { @extend .btn; @extend .btn-primary }
 .attachments .field input {
   display: inline-block;
 }
+
+.vote {
+  font-size: 150%;
+}
