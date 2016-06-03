@@ -7,6 +7,7 @@
       %tr
         - answer.attachments.each do |attachment|
           %td= link_to attachment.file.identifier, attachment.file.url
-          %td= link_to 'Удалить', question_answer_path(@question.id, answer.id,
-            answer: { attachments_attributes: { id: attachment.id,
-            "_destroy" => true, } }), remote: true, method: :patch 
+          - if user_signed_in? && (current_user.id == answer.user_id)
+            %td= link_to 'Удалить', question_answer_path(@question.id, answer.id,
+              answer: { attachments_attributes: { id: attachment.id,
+              "_destroy" => true, } }), remote: true, method: :patch 

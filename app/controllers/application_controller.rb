@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   
+  before_action :authenticate_user!
+
   protected
     def not_found
       redirect_to root_url, flash: { error: "Запись не найдена" }

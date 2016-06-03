@@ -129,11 +129,6 @@ RSpec.describe AnswersController, type: :controller do
       expect(assigns(:answer)).to eq answer
     end
 
-    it "assigns the requested answer's question to @question" do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-      expect(assigns(:question)).to eq question
-    end
-
     it 'changes the own answer attributes' do
       patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
       answer.reload
@@ -194,6 +189,64 @@ RSpec.describe AnswersController, type: :controller do
         some_answer_one.reload
         expect(some_answer_one.is_best).to eq false
       end
+    end
+  end
+
+  describe 'PATCH #vote_up' do
+    sign_in_user
+    let(:answer) { create(:answer, question: question) }
+
+    it 'assigns the request to @answer' do
+      patch :vote_up, id: answer, question_id: question, format: :json
+      expect(assigns(:votable)).to eq answer
+    end
+
+    it "increase answer's votes only once" do
+      expect{
+        patch :vote_up, id: answer, question_id: question,
+        format: :json }.to change(answer, :voting_result).by(1)
+
+      expect{
+        patch :vote_up, id: answer, question_id: question,
+        format: :json }.to change(answer.votes, :count).by(0)
+    end
+  end
+  
+  describe 'PATCH #vote_down' do
+    sign_in_user
+    let(:answer) { create(:answer, question: question) }
+
+    it 'assigns the request to @answer' do
+      patch :vote_down, id: answer, question_id: question, format: :json
+      expect(assigns(:votable)).to eq answer
+    end
+
+    it "decrease answer's votes only once" do
+      expect{
+        patch :vote_down, id: answer, question_id: question,
+        format: :json }.to change(answer, :voting_result).by(-1)
+
+      expect{
+        patch :vote_down, id: answer, question_id: question,
+        format: :json }.to change(answer.votes, :count).by(0)
+    end
+  end
+
+  describe 'PATCH #vote_reset' do
+    sign_in_user
+    let(:answer) { create(:answer, question: question) }
+    let!(:vote)  { create(:vote_up, user_id: @user.id, votable: answer) }
+
+    it 'assigns the request to @answer' do
+      patch :vote_reset, id: answer, question_id: question, format: :json
+      expect(assigns(:votable)).to eq answer
+    end
+
+    it "cancel user vote for answer" do
+      expect(answer.voting_result).to eq 1
+      expect{
+        patch :vote_reset, id: answer, question_id: question,
+        format: :json }.to change(answer, :voting_result).by(-1)
     end
   end
 end
