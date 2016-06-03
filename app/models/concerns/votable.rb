@@ -36,18 +36,10 @@ module Concerns::Votable
     end
 
     def already_votes?(current_user)
-      !Vote.find_by(user_id: current_user.id,
-                    votable_type: model_name.name,
-                    votable_id: self.id).nil?
+      !votes.find_by(user: current_user).nil?
     end
 
     def create_vote(current_user, voice)
-      Vote.create(user_id: current_user.id, voice: voice,
-                  votable_type: model_name.name, votable_id: self.id)
-    end
-
-    def result(voice)
-      Vote.where(votable_id: self.id, votable_type: model_name.name,
-                 voice: voice).count 
+      votes.create(user: current_user, voice: voice)
     end
 end
