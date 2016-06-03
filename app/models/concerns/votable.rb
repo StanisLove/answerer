@@ -18,8 +18,7 @@ module Concerns::Votable
   end
 
   def vote_reset!(current_user)
-    Vote.where(user_id: current_user.id, votable_type: model_name.name,
-               votable_id: self.id).delete_all
+    votes.where(user: current_user).delete_all
   end
 
   private
