@@ -27,3 +27,5 @@
 
     .actions
       = f.submit 'Отправить ответ'
+
+= subscribe_to "/questions/#{@question.id}/answer"
