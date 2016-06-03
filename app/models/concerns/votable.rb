@@ -6,15 +6,15 @@ module Concerns::Votable
   end
 
   def vote_up!(current_user)
-    create_vote(current_user, true) unless bad_conditions(current_user)
+    create_vote(current_user, 1) unless bad_conditions(current_user)
   end
 
   def vote_down!(current_user)
-    create_vote(current_user, false) unless bad_conditions(current_user)
+    create_vote(current_user, -1) unless bad_conditions(current_user)
   end
 
   def voting_result
-    result(true) - result(false)
+    votes.sum(:voice)
   end
 
   def vote_reset!(current_user)
