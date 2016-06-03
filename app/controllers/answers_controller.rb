@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   include PublicIndexAndShow
   include Voted
 
-  before_action :load_question, only: [:index, :create]
+  before_action :load_question, only: [:index, :create, :update]
 
   def index
     @answers = Answer.all
