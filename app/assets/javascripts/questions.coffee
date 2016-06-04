@@ -29,5 +29,13 @@ ready = ->
     $('.question .reset-vote-link').hide();
     $('.question .vote-link').show();
 
+  PrivatePub.subscribe '/questions', (data, channel) ->
+    question = $.parseJSON(data['question'])
+    $('.questions').append('<div class="question-' + question.id + '">')
+    $('.questions').append('<h3>' + question.title + '</h3>')
+    $('.questions').append('<a href="/questions/' + question.id + '"> Открыть вопрос </a>')
+    $('.questions').append('<p>' + question.body + '</p>')
+    $('.questions').append('<a href="/questions/' + question.id + '/answers/new"> Написать ответ </a>')
+
 
 $(document).ready(ready)
