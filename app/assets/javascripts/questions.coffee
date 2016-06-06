@@ -11,14 +11,14 @@ ready = ->
     $('.question > .edit_question').hide();
     $('.edit-question-link').show();
 
-  $('.add-comment-link').click (e) ->
+  $('.question > .add-comment-link').click (e) ->
     e.preventDefault();
     $(this).hide();
     $('.question > .new_comment textarea').val('');
-    $('.new_comment').show();
+    $('.question > .new_comment').show();
 
-  $('.add-comment-button').click ->
-    $('.new_comment').hide();
+  $('.question .add-comment-button').click ->
+    $('.question > .new_comment').hide();
     $('.question > .add-comment-link').show();
 
   $('.question .vote').bind 'ajax:success', (e, data, status, xhr) ->

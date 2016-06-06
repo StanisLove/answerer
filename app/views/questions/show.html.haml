@@ -2,7 +2,7 @@
   .question
     %h1= "Вопрос № #{@question.id}"
     = render 'question'
-    = render 'comments'
+    = render 'common/comments', commentable: @question
     = render 'comment_form'
 
 

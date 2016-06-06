@@ -1,3 +1,6 @@
+- if user_signed_in?
+  .add-comment-link
+    = link_to 'Добавить комментарий', '#'
 .new_comment
   = form_for @question, url: { action: "add_comment" }, method: "patch", remote: true do |f|
     = f.fields_for :comments_attributes do |c|

@@ -17,7 +17,7 @@ feature 'User adds comment to the question', %{
 
     sign_in(user)
     visit question_path(question)
-
+    
     expect(page).to have_content 'Добавить комментарий'
     expect(page).to_not have_selector('.new_comment > .edit_question', visible: true)
     click_on 'Добавить комментарий'
@@ -25,6 +25,8 @@ feature 'User adds comment to the question', %{
 
     fill_in 'Комментарий', with: comment.body
     click_on 'Добавить'
+    wait_for_ajax
+
     expect(page).to have_content user.email
     expect(page).to have_content comment.body
     expect(page).to have_content 'Добавить комментарий'

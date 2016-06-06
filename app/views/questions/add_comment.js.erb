@@ -6,6 +6,6 @@ $('#notice').html('<%= j flash[:notice] %>');
 <% else %>
   $('.question-errors').empty();
   <%= publish_to "/questions/#{@commentable.id}/comment" do %>
-    $('.comments').append('<%= j render 'comment_content', comment: @comment %>');
+    $('.question .comments').append('<%= j render 'common/comment_content', comment: @comment %>');
   <% end %>
 <% end %>
