@@ -1,0 +1,4 @@
+.comments
+  - if commentable.comments.any?
+    - commentable.comments.asc.each do |comment|
+      = render 'common/comment_content', comment: comment

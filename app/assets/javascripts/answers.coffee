@@ -21,6 +21,19 @@ ready = ->
     answer_id = $(this).data('answerId')
     $('#answer-' + answer_id + ' > h3').html("Лучший ответ");
 
+  $('.answers .add-comment-link').click (e) ->
+    e.preventDefault();
+    $(this).hide();
+    answer_id = $(this).data('answerId')
+    $('#answer-' + answer_id + ' > .new_comment textarea').val('');
+    $('#answer-' + answer_id + ' > .new_comment').show();
+    $('#answer-' + answer_id + ' > .new_comment .edit_answer').show();
+
+  $('.answers .add-comment-button').click ->
+    answer_id = $(this).data('answerId')
+    $('#answer-' + answer_id + ' > .new_comment').hide();
+    $('#answer-' + answer_id + ' > .add-comment-link').show();
+
   $('.answers .vote').bind 'ajax:success', (e, data, status, xhr) ->
     answer_id = $(this).data('answerId')
     voting_result = $.parseJSON(xhr.responseText)

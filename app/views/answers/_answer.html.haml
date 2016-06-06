@@ -17,3 +17,8 @@
 
     .actions
       = f.submit 'Сохранить', data: { answer_id: answer.id }
+
+  = render 'common/comments', commentable: answer
+  = render 'answers/comment_form', answer: answer
+
+  = subscribe_to "/answer/#{answer.id}/comment"
