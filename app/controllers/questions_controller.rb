@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   include PublicIndexAndShow
   include Voted
+  include Concerns::Commented
 
   def index
     @questions = Question.all
@@ -38,9 +39,11 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
-  
   private
     def question_params
-      params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
+      params.require(:question).permit(
+        :title, :body,
+        attachments_attributes: [:id, :file, :_destroy],
+        comments_attributes:    [:id, :body])
     end
 end
