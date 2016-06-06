@@ -5,11 +5,21 @@ ready = ->
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();
-    $('.edit_question').show();
+    $('.question > .edit_question').show();
 
   $('.edit-question-button').click ->
-    $('.edit_question').hide();
+    $('.question > .edit_question').hide();
     $('.edit-question-link').show();
+
+  $('.add-comment-link').click (e) ->
+    e.preventDefault();
+    $(this).hide();
+    $('.question > .new_comment textarea').val('');
+    $('.new_comment').show();
+
+  $('.add-comment-button').click ->
+    $('.new_comment').hide();
+    $('.question > .add-comment-link').show();
 
   $('.question .vote').bind 'ajax:success', (e, data, status, xhr) ->
     voting_result = $.parseJSON(xhr.responseText)

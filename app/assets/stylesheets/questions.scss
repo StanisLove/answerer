@@ -2,7 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "bootstrap";
-.edit_question { display: none; }
+.question > .edit_question,
+.new_comment { 
+  display: none; 
+}
+
 
 .attachments {
   .edit_question { display: block; }

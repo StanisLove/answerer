@@ -2,6 +2,8 @@
   .question
     %h1= "Вопрос № #{@question.id}"
     = render 'question'
+    = render 'comments'
+    = render 'comment_form'
 
 
 
@@ -29,3 +31,4 @@
       = f.submit 'Отправить ответ'
 
 = subscribe_to "/questions/#{@question.id}/answer"
+= subscribe_to "/questions/#{@question.id}/comment"

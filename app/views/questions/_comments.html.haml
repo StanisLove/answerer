@@ -1,0 +1,7 @@
+.comments
+  - if @question.comments.any?
+    - @question.comments.asc.each do |comment|
+      = render 'comment_content', comment: comment
+- if user_signed_in?
+  .add-comment-link
+    = link_to 'Добавить комментарий', '#'

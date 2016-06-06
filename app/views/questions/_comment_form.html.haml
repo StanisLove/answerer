@@ -1,0 +1,8 @@
+.new_comment
+  = form_for @question, url: { action: "add_comment" }, method: "patch", remote: true do |f|
+    = f.fields_for :comments_attributes do |c|
+      .field
+        = c.label :body, 'Комментарий'
+        %br
+        = c.text_area :body
+    = f.submit 'Добавить', class: 'add-comment-button'
