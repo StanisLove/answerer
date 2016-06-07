@@ -7,18 +7,14 @@ Rails.application.routes.draw do
     end
   end
 
-  concern :commentable do
-    member do
-      patch :add_comment
-    end
-  end
-
   devise_for :users
 
   root 'questions#index'
 
-  resources :questions, concerns: [:votable, :commentable] do
-    resources :answers, concerns: [:votable, :commentable] do
+  resources :questions, concerns: [:votable] do
+    resources   :comments, only: [:create]
+    resources :answers, concerns: [:votable] do
+      resources   :comments, only: [:create]
       patch :choose_best, on: :member
     end
   end

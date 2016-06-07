@@ -1,7 +1,6 @@
 class AnswersController < ApplicationController
   include PublicIndexAndShow
   include Voted
-  include Concerns::Commented
 
   before_action :load_question, except: [:choose_best]#, only: [:index, :new, :create, :update, :destroy]
 
@@ -45,7 +44,6 @@ class AnswersController < ApplicationController
 
     def answer_params
       params.require(:answer).permit(:body, :is_best,
-        attachments_attributes: [:id, :file, :_destroy],
-        comments_attributes:    [:id, :body])
+        attachments_attributes: [:id, :file, :_destroy])
     end
 end
