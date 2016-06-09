@@ -2,6 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 ready = ->
+
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();
@@ -40,12 +41,13 @@ ready = ->
     $('.question .vote-link').show();
 
   PrivatePub.subscribe '/questions', (data, channel) ->
-    question = $.parseJSON(data['question'])
-    $('.questions').append('<div class="question-' + question.id + '">')
-    $('.questions').append('<h3>' + question.title + '</h3>')
-    $('.questions').append('<a href="/questions/' + question.id + '"> Открыть вопрос </a>')
-    $('.questions').append('<p>' + question.body + '</p>')
-    $('.questions').append('<a href="/questions/' + question.id + '/answers/new"> Написать ответ </a>')
+    question = $.parseJSON(data['question']);
+    $('.questions').append(JST["question"]({question: question}));
+#    $('.questions').append('<div class="question-' + question.id + '">')
+#    $('.questions').append('<h3>' + question.title + '</h3>')
+#    $('.questions').append('<a href="/questions/' + question.id + '"> Открыть вопрос </a>')
+#    $('.questions').append('<p>' + question.body + '</p>')
+#    $('.questions').append('<a href="/questions/' + question.id + '/answers/new"> Написать ответ </a>')
 
 
 $(document).ready(ready)
