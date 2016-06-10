@@ -1,15 +1,14 @@
 .container
-  .question
+  .question{data: {question_id: @question.id}, id: "question-#{@question.id}"}
     %h1= "Вопрос № #{@question.id}"
     = render 'question'
     = render 'common/comments', commentable: @question
-    = render 'comment_form'
 
+    - if !current_user.nil?
+      = render 'questions/comment_form'
 
-
-.answers
+.answers{data: { question_id: @question.id } } 
   = render 'answers'
-
 
 .container
   = form_for [@question, @answer], remote: true do |f|

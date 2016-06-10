@@ -1,7 +1,7 @@
 %p= answer.body
 
-.attachments
-  - if answer.attachments.any?
+- if answer.attachments.any?
+  .attachments
     %b= "Файлы:" 
     %table
       %tr

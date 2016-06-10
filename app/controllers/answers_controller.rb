@@ -17,8 +17,14 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.create(answer_params.merge(user_id: current_user.id))
-    flash.now[:notice] = 'Ответ успешно создан'
+    @answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
+    if @answer.save
+      PrivatePub.publish_to "/questions/#{@question.id}/answer",
+        answer: render_to_string(template: 'answers/create.json.jbuilder')
+      flash.now[:notice] = 'Ответ успешно создан'
+    else
+      :js
+    end
   end
 
   def update

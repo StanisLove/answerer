@@ -15,6 +15,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @answer = @question.answers.build
     @answer.attachments.build
+    gon.current_user_id = current_user.try(:id)
   end
 
   def create

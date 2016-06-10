@@ -1,13 +1,11 @@
-- if user_signed_in?
-  .add-comment-link{ data: { answer_id: answer.id } }
-    = link_to 'Добавить комментарий', '#', data: { answer_id: answer.id }
-.new_comment
-  = form_for [@question, answer],
-    url: add_comment_question_answer_path(@question, answer),
-    method: "patch", remote: true do |f|
-    = f.fields_for :comments_attributes do |c|
-      .field
-        = c.label :body, 'Комментарий'
-        %br
-        = c.text_area :body
-    = f.submit 'Добавить', class: 'add-comment-button', data: { answer_id: answer.id }
+.add-comment-link{ data: { answer_id: answer.id } }
+  = link_to 'Добавить комментарий', '#', data: { answer_id: answer.id }
+
+.comment-errors
+
+= form_for [answer, answer.comments.build], remote: true do |f|
+  .field
+    = f.label :body, 'Комментарий'
+    %br
+    = f.text_area :body
+  = f.submit 'Добавить', class: 'add-comment-button', data: { answer_id: answer.id }

@@ -1,0 +1,11 @@
+.vote data-answer-id="#{@answer.id}"
+  b= "Голосование: "
+
+  - if gon.current_user_id && (gon.current_user_id != @answer.user_id)
+    == @answer.vote_up_link
+    b.voting_result= @answer.voting_result
+    == @answer.vote_down_link
+    == @answer.vote_reset_link
+  - else
+    b.voting_result= @answer.voting_result
+

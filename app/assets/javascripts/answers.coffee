@@ -25,14 +25,14 @@ ready = ->
     e.preventDefault();
     $(this).hide();
     answer_id = $(this).data('answerId')
-    $('#answer-' + answer_id + ' > .new_comment textarea').val('');
-    $('#answer-' + answer_id + ' > .new_comment').show();
-    $('#answer-' + answer_id + ' > .new_comment .edit_answer').show();
+    $('#answer-' + answer_id + ' .new_comment textarea').val('');
+    $('#answer-' + answer_id + ' .new_comment').show();
+    $('#answer-' + answer_id + ' .new_comment .edit_answer').show();
 
   $('.answers .add-comment-button').click ->
     answer_id = $(this).data('answerId')
-    $('#answer-' + answer_id + ' > .new_comment').hide();
-    $('#answer-' + answer_id + ' > .add-comment-link').show();
+    $('#answer-' + answer_id + ' .new_comment').hide();
+    $('#answer-' + answer_id + ' .add-comment-link').show();
 
   $('.answers .vote').bind 'ajax:success', (e, data, status, xhr) ->
     answer_id = $(this).data('answerId')
@@ -54,6 +54,15 @@ ready = ->
     answer_id = $(this).data('answerId')
     $('#answer-' + answer_id + ' .reset-vote-link').hide();
     $('#answer-' + answer_id + ' .vote-link').show();
+
+  questionId = $('.answers').data('questionId');
+  PrivatePub.subscribe '/questions/' + questionId + '/answer', (data, channel) ->
+    answer = $.parseJSON(data['answer']);
+    $('#notice').html(answer.flash_notice);
+    $('textarea#answer_body').val('');
+    $('.answer-errors').empty();
+    $('.answers').append(JST["answer"]({answer: answer}));
+
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

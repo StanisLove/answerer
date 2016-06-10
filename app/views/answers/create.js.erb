@@ -3,11 +3,4 @@ $('#notice').html('<%= j flash[:notice] %>');
   <% @answer.errors.full_messages.each do |message| %>
     $('.answer-errors').html('<%= j message %>');
   <% end %>
-<% else %>
-  $('.answer-errors').empty();
-  $('textarea#answer_body').val('');
-  <% publish_to "/questions/#{@question.id}/answer" do %>
-    $('.answers').append('<%= j render "answer", answer: @answer %>');
-  <% end %>
-
 <% end %>
