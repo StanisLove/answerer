@@ -197,32 +197,4 @@ RSpec.describe QuestionsController, type: :controller do
         format: :json }.to change(question, :voting_result).by(-1)
     end
   end
-
-  describe 'PATCH #add_comment' do
-    sign_in_user
-    let(:question) { create(:question) }
-
-    it 'assigns the request to @commentable' do
-      patch :add_comment, id: question,
-        question: { comments_attributes: attributes_for(:comment) },
-        format: :js
-      expect(assigns(:commentable)).to eq question
-    end
-
-    it 'adds a comment to the question' do
-      expect{
-        patch :add_comment, id: question,
-        question: { comments_attributes: attributes_for(:comment) },
-        format: :js
-      }.to change(question.comments, :count).by(1)
-    end
-
-    it "doesn't add an invalid comment to the question" do
-      expect{
-        patch :add_comment, id: question,
-        question: { comments_attributes: attributes_for(:invalid_comment) },
-        format: :js
-      }.to_not change(Comment, :count)
-    end
-  end
 end

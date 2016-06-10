@@ -14,9 +14,12 @@ Rails.application.routes.draw do
   resources :questions, concerns: [:votable] do
     resources   :comments, only: [:create]
     resources :answers, concerns: [:votable] do
-      resources   :comments, only: [:create]
       patch :choose_best, on: :member
     end
+  end
+
+  resources  :answers do
+    resource  :comments, only: [:create]
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

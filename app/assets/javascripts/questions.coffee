@@ -3,6 +3,9 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 ready = ->
 
+  $('h1').click ->
+    $(this).append("#{gon.gon}")
+
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();
@@ -15,12 +18,12 @@ ready = ->
   $('.question > .add-comment-link').click (e) ->
     e.preventDefault();
     $(this).hide();
-    $('.question > .new_comment textarea').val('');
-    $('.question > .new_comment').show();
+    $('.question .new_comment textarea').val('');
+    $('.question .new_comment').show();
 
   $('.question .add-comment-button').click ->
-    $('.question > .new_comment').hide();
-    $('.question > .add-comment-link').show();
+    $('.question .new_comment').hide();
+    $('.question .add-comment-link').show();
 
   $('.question .vote').bind 'ajax:success', (e, data, status, xhr) ->
     voting_result = $.parseJSON(xhr.responseText)
@@ -43,11 +46,5 @@ ready = ->
   PrivatePub.subscribe '/questions', (data, channel) ->
     question = $.parseJSON(data['question']);
     $('.questions').append(JST["question"]({question: question}));
-#    $('.questions').append('<div class="question-' + question.id + '">')
-#    $('.questions').append('<h3>' + question.title + '</h3>')
-#    $('.questions').append('<a href="/questions/' + question.id + '"> Открыть вопрос </a>')
-#    $('.questions').append('<p>' + question.body + '</p>')
-#    $('.questions').append('<a href="/questions/' + question.id + '/answers/new"> Написать ответ </a>')
-
 
 $(document).ready(ready)

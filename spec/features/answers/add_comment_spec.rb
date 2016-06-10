@@ -21,16 +21,16 @@ feature 'User adds comment to the answer', %{
 
     within "#answer-#{answer.id}" do
       expect(page).to have_content 'Добавить комментарий'
-      expect(page).to_not have_selector('.new_comment > .edit_answer', visible: true)
+      expect(page).to_not have_selector('.answers .new_comment', visible: true)
       click_on 'Добавить комментарий'
-      expect(page).to have_selector('.new_comment > .edit_answer', visible: true)
+      expect(page).to have_selector('.answers .new_comment', visible: true)
 
       fill_in 'Комментарий', with: comment.body
       click_on 'Добавить'
       expect(page).to have_content user.email
       expect(page).to have_content comment.body
       expect(page).to have_content 'Добавить комментарий'
-      expect(page).to_not have_selector('.new_comment > .edit_answer', visible: true)
+      expect(page).to_not have_selector('.answers .new_comment', visible: true)
     end
   end
 
@@ -42,7 +42,7 @@ feature 'User adds comment to the answer', %{
       click_on 'Добавить комментарий'
       fill_in 'Комментарий', with: ' '
       click_on 'Добавить'
-      expect(page).to have_content("body can't be blank")
+      expect(page).to have_content("Body can't be blank")
     end
   end
 
