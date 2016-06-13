@@ -1,0 +1,5 @@
+div class="question-#{@question.id}"
+  h3 #{@question.title}
+  a href="/questions/#{@question.id}" Открыть вопрос
+  p #{@question.body}
+  a href="/questions/#{@question.id}/answers/new" Написать ответ

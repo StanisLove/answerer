@@ -1,0 +1,15 @@
+- if gon.current_user_id && (gon.current_user_id == @answer.user_id)
+  a{ href= "#{@answer.url}"
+    data-method="delete" data-remote="true" } Удалить ответ 
+  ||
+  a.edit-answer-link<{
+    href='#' data-answer-id="#{@answer.id}" } Редактировать ответ 
+
+- if gon.current_user_id && (gon.current_user_id == gon.question_user_id) && (@answer.is_best == false)
+  a.best-answer-link<{ 
+    href="#{@answer.best_url}"
+    data-answer-id="#{@answer.id}" data-remote="true" rel="nofollow" 
+    data-mehtod="patch" } Выбрать лучшим ответом
+    
+  
+

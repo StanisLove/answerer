@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   include PublicIndexAndShow
   include Voted
 
-  before_action :load_question, only: [:index, :create, :update]
+  before_action :load_question, except: [:choose_best]#, only: [:index, :new, :create, :update, :destroy]
 
   def index
     @answers = Answer.all
@@ -17,8 +17,14 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.create(answer_params.merge(user_id: current_user.id))
-    flash.now[:notice] = 'Ответ успешно создан'
+    @answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
+    if @answer.save
+      PrivatePub.publish_to "/questions/#{@question.id}/answer",
+        answer: render_to_string(template: 'answers/create.json.jbuilder')
+      flash.now[:notice] = 'Ответ успешно создан'
+    else
+      :js
+    end
   end
 
   def update
@@ -43,6 +49,7 @@ class AnswersController < ApplicationController
     end
 
     def answer_params
-      params.require(:answer).permit(:body, :is_best, attachments_attributes: [:id, :file, :_destroy])
+      params.require(:answer).permit(:body, :is_best,
+        attachments_attributes: [:id, :file, :_destroy])
     end
 end

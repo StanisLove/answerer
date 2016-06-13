@@ -164,7 +164,7 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
     let(:question) { create(:question) }
 
-    it 'assigns the request to @question' do
+    it 'assigns the request to @votable' do
       patch :vote_down, id: question, format: :json
       expect(assigns(:votable)).to eq question
     end
@@ -185,7 +185,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:question) { create(:question) }
     let!(:vote)  { create(:vote_up, user_id: @user.id, votable: question) }
 
-    it 'assigns the request to @question' do
+    it 'assigns the request to @votable' do
       patch :vote_reset, id: question, format: :json
       expect(assigns(:votable)).to eq question
     end

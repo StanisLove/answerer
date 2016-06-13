@@ -1,2 +1,4 @@
 $('#notice').html('<%= j flash[:notice] %>');
-$('#answer-<%= @answer.id %>').remove();
+<% publish_to "/questions/#{@question.id}/answer" do %>
+  $('#answer-<%= @answer.id %>').remove();
+<% end %>

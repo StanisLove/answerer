@@ -10,10 +10,9 @@
 
   = render 'answers/vote', answer: answer
 
-  = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-    .field
-      = f.label :body, 'Ответ'
-      = f.text_area :body
+  = render 'answers/form', answer: answer
 
-    .actions
-      = f.submit 'Сохранить', data: { answer_id: answer.id }
+  = render 'common/comments', commentable: answer
+
+  - if !current_user.nil?
+    = render 'answers/comment_form', answer: answer

@@ -1,0 +1,6 @@
+= form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+  .field
+    = f.label :body, 'Ответ'
+    = f.text_area :body
+  .actions
+    = f.submit 'Сохранить', data: { answer_id: answer.id }

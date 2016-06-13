@@ -15,12 +15,14 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @answer = @question.answers.build
     @answer.attachments.build
+    gon.current_user_id = current_user.try(:id)
   end
 
   def create
     @question = current_user.questions.new(question_params)
     if @question.save
       redirect_to @question, notice: 'Вопрос успешно создан'
+      PrivatePub.publish_to '/questions', question: @question.to_json
     else
       render  :new
     end
@@ -37,9 +39,10 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
-  
   private
     def question_params
-      params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
+      params.require(:question).permit(
+        :title, :body,
+        attachments_attributes: [:id, :file, :_destroy])
     end
 end

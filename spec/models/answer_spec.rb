@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   it_behaves_like "attachable"
   it_behaves_like "votable"
+  it_behaves_like "commentable"
   
   it { should belong_to :question }
   it { should have_db_index :question_id }
@@ -12,6 +13,7 @@ RSpec.describe Answer, type: :model do
               of_type(:boolean).
               with_options(default: false) }
   it { should have_many(:attachments).dependent(:destroy) }
+  it { should have_many(:comments).dependent(:destroy) }
 
   it { should validate_presence_of :body }
   it { should validate_presence_of :question_id }

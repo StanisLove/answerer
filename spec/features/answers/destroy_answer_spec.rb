@@ -16,6 +16,9 @@ I want to be able to destroy answer
     expect(page).to have_content(answer.body)
     expect(page).to have_content('Удалить ответ')
     click_on 'Удалить ответ'
+    wait_for_ajax
+    wait_for_ajax
+
     expect(page).to_not have_content(answer.body)
     expect(page).to_not have_css "#answer-#{answer.id}"
   end

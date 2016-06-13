@@ -1,13 +1,14 @@
 .container
-  .question
+  .question{data: {question_id: @question.id}, id: "question-#{@question.id}"}
     %h1= "Вопрос № #{@question.id}"
     = render 'question'
+    = render 'common/comments', commentable: @question
 
+    - if !current_user.nil?
+      = render 'questions/comment_form'
 
-
-.answers
+.answers{data: { question_id: @question.id } } 
   = render 'answers'
-
 
 .container
   = form_for [@question, @answer], remote: true do |f|
@@ -27,3 +28,6 @@
 
     .actions
       = f.submit 'Отправить ответ'
+
+= subscribe_to "/questions/#{@question.id}/answer"
+= subscribe_to "/questions/#{@question.id}/comment"

@@ -1,0 +1,6 @@
+$('#notice').html('<%= j flash[:notice] %>');
+<% if @comment.errors.present? %>
+  <% @comment.errors.full_messages.each do |message| %>
+    $("#<%= "#{@commentable.model_name.singular}" %>-<%= "#{@commentable.id}" %> .comment-errors").html('<%= j message %>');
+  <% end %>
+<% end %>

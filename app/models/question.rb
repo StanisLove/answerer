@@ -1,6 +1,7 @@
 class Question < ActiveRecord::Base
   include Concerns::Attachable
   include Concerns::Votable
+  include Concerns::Commentable
 
   has_many  :answers, dependent: :destroy
   belongs_to  :user

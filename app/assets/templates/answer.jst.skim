@@ -1,0 +1,15 @@
+div.col-md-6 id="answer-#{@answer.id}"
+  h3= "Ответ"
+
+  == JST["answers/links"]({answer: @answer});
+
+  .answer-errors
+  .content
+    == JST["answers/content"]({answer: @answer});
+
+  == JST["answers/vote"]({answer: @answer});
+  
+  - if gon.current_user_id && (gon.current_user_id == @answer.user_id)
+    == @answer.form
+
+  == @answer.comments

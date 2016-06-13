@@ -2,14 +2,28 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 ready = ->
+
+  $('h1').click ->
+    $(this).append("#{gon.gon}")
+
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();
-    $('.edit_question').show();
+    $('.question > .edit_question').show();
 
   $('.edit-question-button').click ->
-    $('.edit_question').hide();
+    $('.question > .edit_question').hide();
     $('.edit-question-link').show();
+
+  $('.question > .add-comment-link').click (e) ->
+    e.preventDefault();
+    $(this).hide();
+    $('.question .new_comment textarea').val('');
+    $('.question .new_comment').show();
+
+  $('.question .add-comment-button').click ->
+    $('.question .new_comment').hide();
+    $('.question .add-comment-link').show();
 
   $('.question .vote').bind 'ajax:success', (e, data, status, xhr) ->
     voting_result = $.parseJSON(xhr.responseText)
@@ -29,5 +43,8 @@ ready = ->
     $('.question .reset-vote-link').hide();
     $('.question .vote-link').show();
 
+  PrivatePub.subscribe '/questions', (data, channel) ->
+    question = $.parseJSON(data['question']);
+    $('.questions').append(JST["question"]({question: question}));
 
 $(document).ready(ready)

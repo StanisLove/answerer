@@ -1,0 +1,4 @@
+.comment
+  h3= @comment.user_email
+  p=  @comment.created_at
+  p=  @comment.body

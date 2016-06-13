@@ -1,14 +1,18 @@
-- @questions.each do |q|
-  %div{class: "question-#{q.id}"}
-    %h3= q.title
-    = link_to 'Открыть вопрос', question_path(q)
-    -if user_signed_in? && (current_user.id == q.user_id)
-      = link_to 'Удалить вопрос', q, method: :delete
-      |
-      = link_to 'Редактировать вопрос'
-    %p= q.body
-    = link_to 'Посмотреть ответы',
-      question_path(q)
-    = link_to 'Написать ответ',
-      new_question_answer_path(q.id)
-  %br
+- if user_signed_in?
+  = link_to "Новый вопрос", new_question_path
+
+.questions
+  - @questions.each do |q|
+    %div{class: "question-#{q.id}"}
+      %h3= q.title
+      = link_to 'Открыть вопрос', question_path(q)
+      -if user_signed_in? && (current_user.id == q.user_id)
+        = link_to 'Удалить вопрос', q, method: :delete
+        |
+        = link_to 'Редактировать вопрос'
+      %p= q.body
+      = link_to 'Написать ответ',
+        new_question_answer_path(q.id)
+    %br
+
+= subscribe_to '/questions'
