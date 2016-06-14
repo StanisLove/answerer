@@ -10,6 +10,6 @@
         %tr
           %td= link_to attachment.file.identifier, attachment.file.url
           - if user_signed_in? && (current_user.id == @question.user_id)
-            %td= link_to 'Удалить', question_path(@question.id,
+            %td= link_to 'Удалить', question_path(@question,
               question: { attachments_attributes: { id: attachment.id,
               "_destroy" => true } }), remote: true, method: :patch

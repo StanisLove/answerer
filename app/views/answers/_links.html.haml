@@ -1,6 +1,5 @@
 - if user_signed_in? && (current_user.id == answer.user_id)
-  = link_to 'Удалить ответ',
-    question_answer_path(@question, answer), 
+  = link_to 'Удалить ответ', answer,
     method: :delete, remote: true
   |
   = link_to 'Редактировать ответ',
@@ -9,8 +8,7 @@
 
 - if user_signed_in? && (current_user.id == @question.user_id)
   = link_to 'Выбрать лучшим ответом',
-    choose_best_question_answer_path(@question, answer),
-    method: :patch,
+    choose_best_answer_path(answer), method: :patch,
     style: answer.is_best ? "display:none" : '',
     class: 'best-answer-link',
     data: { answer_id: answer.id },

@@ -31,7 +31,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #show' do
     let(:answer) { create(:answer) }
-    before { get  :show, id: answer, question_id: question }
+    before { get  :show, id: answer }
 
     it 'assigns the requested answer to @answer' do
       expect(assigns(:answer)).to eq answer
@@ -82,23 +82,23 @@ RSpec.describe AnswersController, type: :controller do
       
       it 'deletes the own answer from DB...' do
         expect{
-          delete :destroy, id: answer, question_id: question, format: :js
+          delete :destroy, id: answer, format: :js
         }.to change(Answer, :count).by(-1)
       end
 
       it '...and renders template destroy' do
-        delete :destroy, id: answer, question_id: question, format: :js
+        delete :destroy, id: answer, format: :js
         expect(response).to render_template :destroy
       end
 
       it "not deletes someone's answer from DB..." do
         expect{
-          delete :destroy, id: other_answer, question_id: question, format: :js
+          delete :destroy, id: other_answer, format: :js
         }.to_not change(Answer, :count) 
       end
       
       it '... and redirect to root path' do
-        delete :destroy, id: other_answer, question_id: question, format: :js
+        delete :destroy, id: other_answer, format: :js
         expect(response).to redirect_to root_path
       end
     end
@@ -125,24 +125,24 @@ RSpec.describe AnswersController, type: :controller do
     let(:other_answer) { create(:answer, question: question) }
 
     it 'assigns the requested answer to @answer' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      patch :update, id: answer, answer: attributes_for(:answer), format: :js
       expect(assigns(:answer)).to eq answer
     end
 
     it 'changes the own answer attributes' do
-      patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
+      patch :update, id: answer, answer: { body: 'new body' }, format: :js
       answer.reload
       expect(answer.body).to eq 'new body'
     end
 
     it "not changes the someone's answer attributes" do
-      patch :update, id: other_answer, question_id: question, answer: { body: 'new body' }, format: :js
+      patch :update, id: other_answer, answer: { body: 'new body' }, format: :js
       other_answer.reload
       expect(other_answer.body).to_not eq 'new body'
     end
 
     it 'render update template' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      patch :update, id: answer, answer: attributes_for(:answer), format: :js
       expect(response).to render_template :update
     end
   end
@@ -151,7 +151,7 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer) { create(:answer, question: question) }
 
     it "user can't choose the best answer" do
-      patch :choose_best, id: answer, question_id: question, answer: { is_best: true }, format: :js
+      patch :choose_best, id: answer, answer: { is_best: true }, format: :js
       expect(answer.is_best).to eq false
     end
 
@@ -162,7 +162,7 @@ RSpec.describe AnswersController, type: :controller do
       let!(:some_answer_two){ create(:answer, question: own_question) }
 
       it "can't choose the best answer" do
-        patch :choose_best, id: answer, question_id: question, format: :js
+        patch :choose_best, id: answer, format: :js
         expect(answer.is_best).to eq false
       end
 
@@ -173,13 +173,13 @@ RSpec.describe AnswersController, type: :controller do
         expect(some_answer_one.is_best).to eq false
         expect(some_answer_two.is_best).to eq false
 
-        patch :choose_best, id: some_answer_one, question_id: own_question, format: :js
+        patch :choose_best, id: some_answer_one, format: :js
         some_answer_one.reload
 
         expect(some_answer_one.is_best).to eq true
         expect(some_answer_two.is_best).to eq false
 
-        patch :choose_best, id: some_answer_two, question_id: own_question, format: :js
+        patch :choose_best, id: some_answer_two, format: :js
 
         expect(assigns(:question)).to eq own_question
         expect(assigns(:answer)).to   eq some_answer_two
@@ -197,17 +197,17 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer) { create(:answer, question: question) }
 
     it 'assigns the request to @answer' do
-      patch :vote_up, id: answer, question_id: question, format: :json
+      patch :vote_up, id: answer, format: :json
       expect(assigns(:votable)).to eq answer
     end
 
     it "increase answer's votes only once" do
       expect{
-        patch :vote_up, id: answer, question_id: question,
+        patch :vote_up, id: answer,
         format: :json }.to change(answer, :voting_result).by(1)
 
       expect{
-        patch :vote_up, id: answer, question_id: question,
+        patch :vote_up, id: answer,
         format: :json }.to change(answer.votes, :count).by(0)
     end
   end
@@ -217,17 +217,17 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer) { create(:answer, question: question) }
 
     it 'assigns the request to @answer' do
-      patch :vote_down, id: answer, question_id: question, format: :json
+      patch :vote_down, id: answer, format: :json
       expect(assigns(:votable)).to eq answer
     end
 
     it "decrease answer's votes only once" do
       expect{
-        patch :vote_down, id: answer, question_id: question,
+        patch :vote_down, id: answer,
         format: :json }.to change(answer, :voting_result).by(-1)
 
       expect{
-        patch :vote_down, id: answer, question_id: question,
+        patch :vote_down, id: answer,
         format: :json }.to change(answer.votes, :count).by(0)
     end
   end
@@ -238,14 +238,14 @@ RSpec.describe AnswersController, type: :controller do
     let!(:vote)  { create(:vote_up, user_id: @user.id, votable: answer) }
 
     it 'assigns the request to @answer' do
-      patch :vote_reset, id: answer, question_id: question, format: :json
+      patch :vote_reset, id: answer, format: :json
       expect(assigns(:votable)).to eq answer
     end
 
     it "cancel user vote for answer" do
       expect(answer.voting_result).to eq 1
       expect{
-        patch :vote_reset, id: answer, question_id: question,
+        patch :vote_reset, id: answer,
         format: :json }.to change(answer, :voting_result).by(-1)
     end
   end

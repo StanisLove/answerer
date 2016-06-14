@@ -2,7 +2,8 @@ class AnswersController < ApplicationController
   include PublicIndexAndShow
   include Voted
 
-  before_action :load_question, except: [:choose_best]#, only: [:index, :new, :create, :update, :destroy]
+  before_action :load_question, only: [:index, :new, :create]
+  before_action :load_answer,   only: [:show, :choose_best]
 
   def index
     @answers = Answer.all
@@ -13,7 +14,6 @@ class AnswersController < ApplicationController
   end
 
   def show
-    @answer = Answer.find(params[:id])
   end
 
   def create
@@ -38,14 +38,17 @@ class AnswersController < ApplicationController
   end
 
   def choose_best
-    @question = current_user.questions.find(params[:question_id])
-    @answer = @question.answers.find(params[:id])
-    @answer.make_best!
+    @question = @answer.question
+    @answer.make_best! if current_user.id == @question.user_id
   end
 
   private
     def load_question
       @question = Question.find(params[:question_id])
+    end
+
+    def load_answer
+      @answer = Answer.find(params[:id])
     end
 
     def answer_params

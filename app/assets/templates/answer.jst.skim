@@ -13,3 +13,6 @@ div.col-md-6 id="answer-#{@answer.id}"
     == @answer.form
 
   == @answer.comments
+
+  - if gon.current_user_id
+      == @answer.comment_form
