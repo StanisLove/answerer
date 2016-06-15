@@ -15,7 +15,7 @@ feature 'User creates answer', %q{
     visit question_path(question)
     fill_in 'Новый ответ',  with: answer.body
     click_on 'Отправить ответ'
-    expect(page).to have_content('Ответ успешно создан')
+    expect(page).to have_content('Answer was successfully created.')
     expect(page).to have_content("#{question.title}")
     expect(page).to have_content("#{question.body}")
     expect(page).to have_content("#{answer.body}")

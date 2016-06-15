@@ -11,23 +11,7 @@
   = render 'answers'
 
 .container
-  = form_for [@question, @answer], remote: true do |f|
-    .field
-      = f.label :body, 'Новый ответ'
-      .answer-errors
-      = f.text_area :body
-    .attachments
-      %b= "Можете добавить файлы:"
-
-      = f.fields_for :attachments do |a|
-        = link_to_add_association 'Добавить ещё один файл', f, :attachments,
-          'data-association-insertion-nod' => '.attachments',
-          'data-association-insertion-method' =>  'append',
-          partial: 'common/attachment_fields'
-        %br
-
-    .actions
-      = f.submit 'Отправить ответ'
+  = render 'answers/form_new'
 
 = subscribe_to "/questions/#{@question.id}/answer"
 = subscribe_to "/questions/#{@question.id}/comment"

@@ -3,9 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 ready = ->
 
-  $('h1').click ->
-    $(this).append("#{gon.gon}")
-
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();

@@ -8,6 +8,6 @@
         - answer.attachments.each do |attachment|
           %td= link_to attachment.file.identifier, attachment.file.url
           - if user_signed_in? && (current_user.id == answer.user_id)
-            %td= link_to 'Удалить', question_answer_path(@question.id, answer.id,
+            %td= link_to 'Удалить', answer_path(answer,
               answer: { attachments_attributes: { id: attachment.id,
               "_destroy" => true, } }), remote: true, method: :patch 

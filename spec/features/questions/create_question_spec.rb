@@ -18,7 +18,7 @@ feature 'User creates question', %q{
     fill_in 'Заголовок',  with: question.title
     fill_in 'Вопрос',     with: question.body
     click_on 'Спросить'
-    expect(page).to have_content('Вопрос успешно создан')
+    expect(page).to have_content('Question was successfully created.')
   end
 
   scenario %q{

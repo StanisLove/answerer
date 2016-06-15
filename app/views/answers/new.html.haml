@@ -1,9 +1,0 @@
-%h3= @question.title
-%p= @question.body
-%br
-= form_for [@question, @answer] do |f|
-  .field
-    = f.label :body, 'Ответ'
-    = f.text_area :body
-  .actions
-    = f.submit 'Отправить ответ'
