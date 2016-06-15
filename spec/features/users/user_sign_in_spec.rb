@@ -27,5 +27,26 @@ feature 'User sign in', %q{
     expect(page).to have_content 'You are already signed in.'
     expect(current_path).to eq root_path
   end
+
+  scenario 'User try to sign in with Facebook account' do
+    visit new_user_session_path
+    expect(page).to have_content 'Sign in with Facebook'
+    
+    mock_auth_hash
+    click_on 'Sign in with Facebook'
+
+    expect(page).to have_content 'Successfully authenticated from Facebook account.'
+    expect(page).to have_content 'Выйти'
+  end
+
+  
+  scenario 'User try to sign in with invalid Facebook credentials' do
+    visit new_user_session_path
+
+    invalid_credentials
+    click_on 'Sign in with Facebook'
+    
+    expect(page).to have_content 'Could not authenticate you from Facebook'
+  end
 end
 

@@ -5,6 +5,7 @@ RSpec.configure do |config|
 
   config.include AcceptanceHelper,    type: :feature 
   config.include WaitForAjax, type: :feature
+  config.include OmniauthMacros, type: :feature
 
   config.use_transactional_fixtures = false
   # Database Cleaner config
@@ -28,3 +29,5 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
+
+OmniAuth.config.test_mode = true
