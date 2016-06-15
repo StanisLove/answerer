@@ -1,15 +1,12 @@
 class CommentsController < ApplicationController
-  before_action :set_commentable, only: [:create]
+  before_action :load_commentable, only: :create
+  before_action :create_new_comment_to_commentable, only: :create
+  after_action  :publish_comment, only: :create
+
+  respond_to  :json, :js
 
   def create
-    @comment = @commentable.comments
-    .new(comment_params.merge(user_id: current_user.id))
-    if @comment.save
-      PrivatePub.publish_to "/questions/#{@id}/comment",
-      comment: render_to_string(template: 'comments/create.json.jbuilder')
-    else
-      :js
-    end
+    respond_with @comment
   end
 
   private
@@ -18,13 +15,20 @@ class CommentsController < ApplicationController
       params.require(:comment).permit(:body)
     end
 
-    def set_commentable
-      if params[:question_id]
-        @commentable = Question.find(params[:question_id])
-        @id = @commentable.id
-      elsif params[:answer_id]
-        @commentable = Answer.find(params[:answer_id])
-        @id = @commentable.question_id
-      end
+    def load_commentable
+      name = request.fullpath.match(/\w+(?=\/\d+\/comments)/).to_s.singularize
+      model = name.capitalize.constantize
+      @commentable = model.find(params["#{name}_id".to_sym])
+    end
+
+    def create_new_comment_to_commentable
+      @comment = @commentable.comments
+      .create(comment_params.merge(user_id: current_user.id))
+    end
+
+    def publish_comment
+      id = @commentable.try(:question_id) || @commentable.id
+      PrivatePub.publish_to "/questions/#{id}/comment",
+      comment: render_to_string(template: 'comments/create.json.jbuilder')
     end
 end

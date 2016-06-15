@@ -13,20 +13,20 @@ RSpec.describe CommentsController, type: :controller do
       it "creates question's comment in DB" do
         expect{
           post :create, question_id: question, 
-          comment: attributes_for(:comment), format: :js
+          comment: attributes_for(:comment), format: :json
         }.to change(question.comments, :count).by(1)
       end
 
       it "creates answer's comment in DB" do
         expect{
-          post :create, question_id: question, answer_id: answer, 
-          comment: attributes_for(:comment), format: :js
-        }.to change(question.comments, :count).by(1)
+          post :create, answer_id: answer, 
+          comment: attributes_for(:comment), format: :json
+        }.to change(answer.comments, :count).by(1)
       end
 
       it "renders template create" do
         post :create, question_id: question, answer_id: answer, 
-        comment: attributes_for(:comment), format: :js
+        comment: attributes_for(:comment), format: :json
         expect(response).to render_template :create
       end
 
