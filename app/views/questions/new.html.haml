@@ -9,7 +9,7 @@
     = f.text_area :body
 
   .attachments
-    = f.fields_for  :attachments do |a|
+    = f.fields_for  :attachments, @question.attachments.build do |a|
       = link_to_add_association 'Добавить ещё один файл', f, :attachments,
         'data-association-insertion-nod' => '.attachments',
         'data-association-insertion-method' =>  'append',

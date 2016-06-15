@@ -22,10 +22,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
-    it 'build new attachment for question' do
-      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
-    end
-
     it 'renders new view' do
       expect(response).to render_template :new
     end
@@ -43,10 +39,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it 'build new attachment for answer' do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
-
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -58,13 +50,18 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       it 'saves the new question into DB' do
         expect{
-          post  :create, question: attributes_for(:question)
+          post  :create, question: attributes_for(:question), format: :json
         }.to change(@user.questions, :count).by(1)
       end
 
       it 'redirects to show view' do
         post  :create, question: attributes_for(:question)
         expect(response).to redirect_to question_path(assigns(:question))
+      end
+
+      it 'status is 201' do
+        post  :create, question: attributes_for(:question), format: :json
+        expect(response.status).to eq 201
       end
     end
 

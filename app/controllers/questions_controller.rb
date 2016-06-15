@@ -2,47 +2,59 @@ class QuestionsController < ApplicationController
   include PublicIndexAndShow
   include Voted
 
+  before_action :load_question, only: :show
+  before_action :build_answer_and_load_current_user_id, only: :show    
+  before_action :load_current_user_question, only: [:update, :destroy]
+  after_action  :publish_question,  only: :create
+
+  respond_to  :json,  only: :create
+  respond_to  :js,    only: :update    
+
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def show
-    @question = Question.find(params[:id])
-    @answer = @question.answers.build
-    @answer.attachments.build
-    gon.current_user_id = current_user.try(:id)
+    respond_with @question
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-    if @question.save
-      redirect_to @question, notice: 'Вопрос успешно создан'
-      PrivatePub.publish_to '/questions', question: @question.to_json
-    else
-      render  :new
-    end
+    respond_with(@question = current_user.questions.create(question_params))
   end
 
   def update
-    @question = current_user.questions.find(params[:id])
     @question.update(question_params)
+    respond_with @question
   end
 
   def destroy
-    @question = current_user.questions.find(params[:id])
-    @question.destroy
-    redirect_to questions_path
+    respond_with(@question.destroy)
   end
 
   private
     def question_params
-      params.require(:question).permit(
-        :title, :body,
+      params.require(:question).permit(:title, :body,
         attachments_attributes: [:id, :file, :_destroy])
+    end
+
+    def publish_question
+      PrivatePub.publish_to '/questions', question: @question.to_json if @question.valid?
+    end
+
+    def load_question
+      @question = Question.find(params[:id])
+    end
+
+    def load_current_user_question
+      @question = current_user.questions.find(params[:id])
+    end
+
+    def build_answer_and_load_current_user_id
+      @answer = @question.answers.build
+      gon.current_user_id = current_user.try(:id)
     end
 end
