@@ -10,10 +10,6 @@ class AnswersController < ApplicationController
 
   respond_to  :json, :js, only: [:create, :update, :destroy]
 
-  def index
-    respond_with(@answers = current_user.answers.all)
-  end
-
   def show
     respond_with @answer
   end
