@@ -1,6 +1,6 @@
 $('#notice').html('<%= j flash[:notice] %>');
 <% if @answer.errors.present? %>
   <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').html('<%= j message %>');
+    $('.new_answer .answer-errors').html('<%= j message %>');
   <% end %>
 <% end %>

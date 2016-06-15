@@ -4,7 +4,9 @@ RSpec.describe AnswersController, type: :controller do
   let!(:question) { create(:question) }
 
   describe 'GET #index' do
-    let(:answers) { create_list(:answer, 2) }
+    
+    sign_in_user
+    let(:answers) { create_list(:answer, 2, user_id: @user.id) }
     before { get  :index, question_id: question }
 
     it 'fills the array of questons' do
@@ -13,19 +15,6 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'renders index view' do
       expect(response).to render_template :index
-    end
-  end
-
-  describe 'GET #new' do
-    sign_in_user
-    before { get  :new, question_id: question }
-
-    it 'assigns new Answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'renders new view' do
-      expect(response).to render_template :new
     end
   end
 
@@ -48,13 +37,13 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       it 'saves new answer into DB' do
         expect{
-          post  :create, question_id: question, answer: attributes_for(:answer), format: :js
+          post  :create, question_id: question, answer: attributes_for(:answer), format: :json
         }.to  change(question.answers,  :count).by(1)
               .and change(@user.answers,:count).by(1) 
       end
       
       it 'renders template create' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        post :create, question_id: question, answer: attributes_for(:answer), format: :json
         expect(response).to render_template :create
       end
     end
