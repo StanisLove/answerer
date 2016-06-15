@@ -28,7 +28,7 @@ I want to be able to destroy answer
     expect(page).to_not have_content('Удалить ответ')
 
     sign_in(other_user)
-    visit question_answers_path(question)
+    visit question_path(question)
     expect(page).to_not have_content('Удалить ответ')
   end
 end
