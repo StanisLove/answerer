@@ -45,6 +45,7 @@ gem 'gon'
 gem 'responders'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -72,5 +73,6 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-bundler', require: false
   gem 'guard-spring', require: false   
+  gem 'letter_opener'
 end
 

@@ -1,9 +1,9 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, omniauth_providers: [:facebook]
+         :omniauthable, omniauth_providers: [:facebook, :twitter]
 
   has_many  :questions, dependent: :destroy
   has_many  :answers,   dependent: :destroy
@@ -27,5 +27,11 @@ class User < ActiveRecord::Base
       user.authorizations.create(provider: auth.provider, uid: auth.uid)
     end
     user
+  end
+
+  def self.find_from_twitter(auth)
+    authorization = Authorization.where(provider: auth.provider, 
+                                        uid: auth.uid.to_s).first
+    return authorization.user if authorization
   end
 end
