@@ -78,4 +78,37 @@ RSpec.describe User, type: :model do
     end
   end
 
+#  describe '.find_from_twitter' do
+#    let!(:user) { create :user }
+#    let(:auth)  { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456') }
+#
+#    context 'user already has authentication' do
+#      it 'returns the user' do
+#        user.authorizations.create(provider: 'twitter', uid: '123456')
+#        expect(User.find_from_twitter(auth)).to eq user
+#      end
+#    end
+#
+#    context 'user has no authorization' do
+#      context 'user already exists' do
+#        let(:email) { user.email }
+#        
+#        it 'verifies email' do
+#        end
+#
+#        it "doesn't create new user" do
+#        end
+#
+#        it "returns the user" do
+#        end
+#
+#        it 'creates authorization for user' do
+#        end
+#
+#        it 'creates authorization with provider and uid' do
+#        end
+#      end
+#    end
+#  end
+
 end
