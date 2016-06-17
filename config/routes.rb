@@ -11,7 +11,10 @@ Rails.application.routes.draw do
     resource  :comments, only: [:create]
   end 
 
-  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' } 
+  devise_for :users, controllers: { 
+    omniauth_callbacks: 'omniauth_callbacks',
+    registrations: 'registrations'
+  } 
 
   root 'questions#index'
 

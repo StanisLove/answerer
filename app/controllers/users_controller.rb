@@ -1,12 +1,11 @@
 class UsersController < ApplicationController
   before_action :load_user, only: [:finish_signup]
+  skip_before_action :authenticate_user!, only: [:finish_signup]
 
   def finish_signup
     if request.patch? && params[:user]
       if @user.update(user_params)
-        #@user.skip_reconfirmation!
-        sign_in(@user, bypass: true)
-        redirect_to root_path, notice: 'Your email successfully confirmed'
+        redirect_to root_path
       else
         :js
       end

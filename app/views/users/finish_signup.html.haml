@@ -1,6 +1,6 @@
 .container#add-email
   %h1 Add Email
-  = form_for current_user, as: 'user', url: finish_signup_path(current_user) do |f|
+  = form_for @user, as: 'user', url: finish_signup_path(@user) do |f|
     .form-group
       = f.label :email
       .controls
