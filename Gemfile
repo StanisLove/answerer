@@ -33,7 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 gem 'haml-rails'
-gem 'devise'
+gem 'devise', '~> 3.5.10'
 gem 'bootstrap-sass'
 gem 'carrierwave'
 gem 'remotipart'
@@ -58,6 +58,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara-webkit'
   gem 'jquery-turbolinks'
+  gem 'capybara-email'
 end
 
 group :test do

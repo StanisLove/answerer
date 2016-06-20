@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
     user = current_user ? current_user : authorization.user
 
     if user.nil?
-      email = auth.info.email
+      email = auth.info.try(:email)
       user = User.where(email: email).first if email
 
       if user.nil?
