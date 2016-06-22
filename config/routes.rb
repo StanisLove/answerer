@@ -11,7 +11,9 @@ Rails.application.routes.draw do
     resource  :comments, only: [:create]
   end 
 
-  devise_for :users
+  devise_for :users, controllers: { 
+    omniauth_callbacks: 'omniauth_callbacks'
+  } 
 
   root 'questions#index'
 
@@ -21,6 +23,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :authorizations, only: [:new, :create] do
+    get 'confirm/:token', action: :confirm, on: :member, as: :confirm
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

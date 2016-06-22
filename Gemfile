@@ -33,7 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 gem 'haml-rails'
-gem 'devise'
+gem 'devise', '~> 3.5.10'
 gem 'bootstrap-sass'
 gem 'carrierwave'
 gem 'remotipart'
@@ -43,6 +43,9 @@ gem 'thin'
 gem 'skim'
 gem 'gon'
 gem 'responders'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -55,6 +58,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara-webkit'
   gem 'jquery-turbolinks'
+  gem 'capybara-email'
 end
 
 group :test do
@@ -70,5 +74,6 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-bundler', require: false
   gem 'guard-spring', require: false   
+  gem 'letter_opener'
 end
 

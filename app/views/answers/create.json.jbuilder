@@ -52,7 +52,7 @@ else
     data: { answer_id: @answer.id }, style: 'display:none'
 end
 
-json.form render 'answers/form.html.haml', answer: @answer
+json.form render 'answers/form_edit.html.haml', answer: @answer
 
 json.comments render 'common/comments.html.haml', commentable: @answer
 
