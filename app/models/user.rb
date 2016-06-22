@@ -11,35 +11,29 @@ class User < ActiveRecord::Base
   has_many  :comments,  dependent: :destroy
   has_many  :authorizations, dependent: :destroy
 
-  def self.find_for_oauth(auth, current_user = nil)
-    authorization = Authorization.find_or_create_by(provider: auth.provider, uid: auth.uid.to_s)
+  def self.find_for_oauth(auth, current_user_or_email = nil)
+    authorization = Authorization.where(provider: auth.provider, 
+                                        uid: auth.uid.to_s).first
+    return authorization.user if authorization
 
-    user = current_user ? current_user : authorization.user
+    if current_user_or_email.is_a? User
+      current_user_or_email.authorizations.create(provider: auth.provider, uid: auth.uid,
+                                         confirmed_at: Time.now)
+      return current_user_or_email
+    end
 
-    if user.nil?
-      email = auth.info.try(:email)
-      user = User.where(email: email).first if email
-
-      if user.nil?
-        password = Devise.friendly_token[0, 20]
-        user = User.new(
-          email: email ? email : "#{auth.uid}-#{auth.provider}@change.me",
-          password: password,
-          password_confirmation: password)
-        user.skip_confirmation_notification!
-        user.skip_confirmation! if user.email_verified?
-        user.save!
+    auth_email = auth.info.try(:email)
+    email = current_user_or_email || auth_email
+    if email
+      user = User.where(email: email).first
+      password = Devise.friendly_token[0, 20]
+      transaction do
+        user = User.create!(email: email, password: password, 
+               password_confirmation: password, confirmed_at: Time.now) unless user 
+        authorization = user.authorizations.create!(provider: auth.provider, 
+              uid: auth.uid, confirmed_at: auth_email ? Time.now : nil)
       end
     end
-
-    if authorization.user != user
-      authorization.user = user
-      authorization.save!
-    end
     user
-  end
-
-  def email_verified?
-    email && email !~ /.+@change.me/
   end
 end

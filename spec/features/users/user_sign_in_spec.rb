@@ -53,12 +53,32 @@ feature 'User sign in', %q{
     click_on 'Continue'
 
     open_email('really@email.com')
-    expect(current_email).to have_content "You can confirm your account email through the link below: Confirm my account"
-    current_email.click_link 'Confirm my account'
-    expect(page).to have_content "Your email address has been successfully confirmed."
+    expect(current_email).to have_content "Click the following link to activate your account. Confirm email"
+    current_email.click_link 'Confirm email'
+    expect(page).to have_content 'Email successfully confirmed.'
+    expect(page).to have_content 'Выйти'
+
+    click_on 'Выйти'
+    expect(page).to have_content 'Signed out successfully.'
+    click_on 'Войти'
     click_on 'Sign in with Twitter'
     expect(page).to have_content 'Successfully authenticated from Twitter account.'
-    expect(page).to have_content 'Выйти'
+  end
+
+  scenario 'User try to sign in with Twitter account and enter invalid email' do
+    visit new_user_session_path
+    expect(page).to have_content 'Sign in with Twitter'
+
+    mock_auth_twitter_hash
+    click_on 'Sign in with Twitter'
+   
+    expect(page).to have_content 'Войти'
+    expect(page).to have_content 'Please confirm your email address. No spam.'
+    
+    fill_in 'Email', with: 'invalid'
+    click_on 'Continue'
+
+    expect(page).to have_content 'Authorization error.'
   end
   
   scenario 'User try to sign in with invalid Facebook credentials' do

@@ -12,8 +12,7 @@ Rails.application.routes.draw do
   end 
 
   devise_for :users, controllers: { 
-    omniauth_callbacks: 'omniauth_callbacks',
-    registrations: 'registrations'
+    omniauth_callbacks: 'omniauth_callbacks'
   } 
 
   root 'questions#index'
@@ -22,6 +21,10 @@ Rails.application.routes.draw do
     resources :answers, concerns: [:votable, :commentable] do
       patch :choose_best, on: :member
     end
+  end
+
+  resources :authorizations, only: [:new, :create] do
+    get 'confirm/:token', action: :confirm, on: :member, as: :confirm
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

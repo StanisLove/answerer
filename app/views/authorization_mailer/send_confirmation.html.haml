@@ -1,0 +1,10 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %body
+    %h1= "Hi, #{@authorization.user.email}."
+    %h2 Thanks for signing up!
+    %p= "Click the following link to activate your account."
+    = link_to 'Confirm email', confirm_authorization_url(@authorization,
+      token: @authorization.confirmation_token) 

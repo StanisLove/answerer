@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :authorization do
-    user nil
-    provider "MyString"
-    uid "MyString"
+    provider 'twitter'
+    uid '123456'
+    confirmed_at nil
+    user
   end
 end
