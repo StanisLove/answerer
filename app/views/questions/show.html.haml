@@ -1,17 +1,15 @@
-.container
-  .question{data: {question_id: @question.id}, id: "question-#{@question.id}"}
-    %h1= "Вопрос № #{@question.id}"
-    = render 'question'
-    = render 'common/comments', commentable: @question
+.question{data: {question_id: @question.id}, id: "question-#{@question.id}"}
+  %h1=  "#{t('.question_number')} #{@question.id}"
+  = render 'question'
+  = render 'common/comments', commentable: @question
 
-    - if !current_user.nil?
-      = render 'questions/comment_form'
+  - unless current_user.nil?
+    = render 'questions/comment_form'
 
 .answers{data: { question_id: @question.id } } 
   = render 'answers'
 
-.container
-  = render 'answers/form_new'
+= render 'answers/form_new' if user_signed_in?
 
 = subscribe_to "/questions/#{@question.id}/answer"
 = subscribe_to "/questions/#{@question.id}/comment"

@@ -1,9 +1,9 @@
-= render 'links'
-
+= render 'vote'
 .question-errors
-
 .question-content
   = render 'content'
-
-= render 'vote'
-= render 'form'
+- if user_signed_in? && (current_user.id == @question.user_id)
+  = link_to t('.edit_question'), '', class: 'edit-question-link'
+  = render 'form', remote: true, 
+    button_class: 'edit-question-button',
+    attachments: @question.attachments.first || @question.attachments.build

@@ -15,8 +15,8 @@ feature 'Add files to question', %q{
   end
 
   scenario 'User adds files when asks the question', js: true do
-    fill_in 'Заголовок',  with: question.title
-    fill_in 'Вопрос',     with: question.body
+    fill_in 'Title',  with: question.title
+    fill_in 'Question',     with: question.body
 
     click_on 'Добавить ещё один файл'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
@@ -26,7 +26,7 @@ feature 'Add files to question', %q{
       attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
     end
 
-    click_on 'Спросить'
+    click_on 'Ask Question'
 
     expect(page).to have_content 'Файлы'
     expect(page).to have_link 'spec_helper.rb',
@@ -36,15 +36,15 @@ feature 'Add files to question', %q{
   end
 
   scenario 'User can add and then revmove file while creating an answer', js: true do
-    fill_in 'Заголовок',  with: question.title
-    fill_in 'Вопрос',     with: question.body
+    fill_in 'Title',  with: question.title
+    fill_in 'Question',     with: question.body
 
     click_on 'Добавить ещё один файл'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     expect(page).to have_content 'Удалить файл'
 
     click_on 'Удалить файл'
-    click_on 'Спросить'
+    click_on 'Ask Question'
     wait_for_ajax
 
     within '.question' do
@@ -54,9 +54,9 @@ feature 'Add files to question', %q{
   end
 
   scenario "User doesn't add file when asks the quesion" do
-    fill_in 'Заголовок',  with: question.title
-    fill_in 'Вопрос',     with: question.body
-    click_on 'Спросить'
+    fill_in 'Title',  with: question.title
+    fill_in 'Question',     with: question.body
+    click_on 'Ask Question'
     expect(page).to_not have_content 'Файлы'
   end
 end

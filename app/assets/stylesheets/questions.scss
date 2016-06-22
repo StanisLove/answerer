@@ -13,9 +13,11 @@
 }
 
 .question {
-  border: 2px solid #a9a;
-  border-radius: 10px;
-  background-color: #cac;
-  @extend .col-md-6;
-  @extend .col-md-offset-1;
+  @extend .col-lg-8;
+  @extend .col-lg-offset-1;
+  border: 2px solid #e4e4e4;
+  border-radius: 3px;
+  background-color: #f1f1f1;
+  margin: 0 auto;
+  float: none;
 }

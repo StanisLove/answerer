@@ -28,3 +28,17 @@ input[type=submit] { @extend .btn; @extend .btn-primary }
 .vote {
   font-size: 150%;
 }
+
+.sign-in, .sign-up {
+  @extend .col-lg-4;
+  background-color: #d3d3d3;
+  margin: 0 auto;
+  padding: 5px 20px 20px;
+  border: 1px solid #939393;
+  border-radius: 3px;
+  float: none;
+  input[type=email], input[type=password] {
+    @extend .form-control;
+  }
+}
+

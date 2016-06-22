@@ -15,9 +15,9 @@ feature 'User creates question', %q{
   } do
     sign_in(user)
     visit new_question_path
-    fill_in 'Заголовок',  with: question.title
-    fill_in 'Вопрос',     with: question.body
-    click_on 'Спросить'
+    fill_in 'Title',  with: question.title
+    fill_in 'Question',     with: question.body
+    click_on 'Ask Question'
     expect(page).to have_content('Question was successfully created.')
   end
 
