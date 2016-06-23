@@ -1,6 +1,10 @@
 require "application_responder"
 
 class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
+
+  check_authorization
+
   self.responder = ApplicationResponder
   respond_to :html
 
@@ -9,8 +13,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, alert: exception.message
+  end
   
-  before_action :authenticate_user!
 
   protected
     def not_found
