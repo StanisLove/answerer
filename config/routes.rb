@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   concern :votable do
     member do
       patch :vote_up
