@@ -3,37 +3,82 @@ require 'rails_helper'
 describe Ability do
   subject(:ability) { Ability.new(user) }
 
-  describe "for guest" do
+  describe "Guest abilities" do
     let(:user) { nil }
 
-    it { should be_able_to :read, Question }
-    it { should be_able_to :read, Answer }
-    it { should be_able_to :read, Comment }
+    it { should be_able_to :read, :all }
     it { should_not be_able_to :manage, :all }
   end
 
-  describe "for admin" do
+  describe "Admin abilities" do
     let(:user) { create :user, admin: true }
 
     it { should be_able_to :manage, :all }
   end
 
-  describe "for user" do
+  describe "User abilities" do
     let(:user) { create :user }
-    let(:other) { create :user }
 
-    it { should be_able_to :read, :all }
-    it { should be_able_to :create, Question }
-    it { should be_able_to :create, Answer }
-    it { should be_able_to :create, Comment }
-    it { should be_able_to :update, create(:question, user: user), user: user }
-    it { should be_able_to :update, create(:answer, user: user), user: user }
-    it { should be_able_to :update,
-         create(:comment, commentable: create(:question), user: user), user: user }
-    it { should_not be_able_to :update, create(:question, user: other), user: user }
-    it { should_not be_able_to :update, create(:answer, user: other), user: user }
-    it { should_not be_able_to :update, 
-         create(:comment, commentable: create(:question), user: other), user: user }
     it { should_not be_able_to :manage, :all }
+    it { should be_able_to :read, :all }
+
+    context "with question" do
+      it { should be_able_to :create, Question }
+
+      context "when is an author" do
+        let(:question) { create :question, user: user }
+        it { should be_able_to :update, question, user: user }
+        it { should_not be_able_to :vote_up, question, user: user }
+        it { should_not be_able_to :vote_down, question, user: user }
+        it { should_not be_able_to :vote_reset, question, user: user }
+        it { should be_able_to :destroy, question, user: user }
+      end
+      
+
+      context "when is not an author" do
+        let(:question) { create :question }
+        it { should_not be_able_to :update, question, user: user }
+        it { should be_able_to :vote_up, question, user: user }
+        it { should be_able_to :vote_down, question, user: user }
+        it { should be_able_to :vote_reset, question, user: user }
+        it { should_not be_able_to :destroy, question, user: user }
+      end
+    end
+
+    context "with answer" do
+      it { should be_able_to :create, Answer }
+
+      context "when is an author" do
+        let(:answer) { create :answer, user: user }
+        it { should be_able_to :update, answer, user: user }
+        it { should_not be_able_to :vote_up, answer, user: user }
+        it { should_not be_able_to :vote_down, answer, user: user }
+        it { should_not be_able_to :vote_reset, answer, user: user }
+        it { should be_able_to :destroy, answer, user: user }
+      end
+
+      context "when is not an author" do
+        let(:answer) { create :answer }
+        it { should_not be_able_to :update, answer, user: user }
+        it { should be_able_to :vote_up, answer, user: user }
+        it { should be_able_to :vote_down, answer, user: user }
+        it { should be_able_to :vote_reset, answer, user: user }
+        it { should_not be_able_to :destroy, answer, user: user }
+      end
+
+      context "when is an author of anser's question" do
+        let(:answer) { create :answer, question: create(:question, user: user) }
+        it { should be_able_to :choose_best, answer, user: user }
+      end
+
+      context "when is not an author of answer's question" do
+        let(:answer) { create :answer }
+        it { should_not be_able_to :choose_best, answer, user: user }
+      end
+    end
+
+    context "with comment" do
+      it { should be_able_to :create, Comment }
+    end
   end
 end

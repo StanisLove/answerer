@@ -5,6 +5,8 @@ class Ability
 
   def initialize(user)
     @user = user
+
+    alias_action :vote_up, :vote_down, :vote_reset, to: :vote
     
     if user
       user.admin? ? admin_abilities : user_abilities
@@ -26,6 +28,12 @@ class Ability
     def user_abilities
       guest_abilities
       can :create, [Question, Answer, Comment]
-      can :update, [Question, Answer, Comment], user: @user
+      can [:update, :destroy], [Question, Answer], user: user
+      can :choose_best, Answer do |answer|
+        answer.question.user == user
+      end
+      can :vote, [Question, Answer] do |resource|
+        resource.user != user
+      end
     end
 end
