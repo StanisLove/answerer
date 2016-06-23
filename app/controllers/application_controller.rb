@@ -14,7 +14,11 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, alert: exception.message
+    respond_to do |format|
+      format.html { redirect_to root_url, alert: exception.message }
+      format.json { render nothing: true, status: :forbidden }
+      format.js   { render nothing: true, status: :forbidden }
+    end
   end
   
 
