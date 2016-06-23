@@ -2,7 +2,7 @@
 .question-errors
 .question-content
   = render 'content'
-- if user_signed_in? && (current_user.id == @question.user_id)
+- if can? :update, @question
   = link_to t('.edit_question'), '', class: 'edit-question-link'
   = render 'form', remote: true, 
     button_class: 'edit-question-button',

@@ -2,7 +2,7 @@
 
   %b Голосование:
 
-  - if user_signed_in? && (current_user.id != answer.user_id)
+  - if can? :vote, answer
 
     - if answer.votes.pluck(:user_id).include?(current_user.id)
 

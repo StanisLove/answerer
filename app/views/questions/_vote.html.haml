@@ -1,6 +1,6 @@
 .vote
   %b Голосование:
-  - if user_signed_in? && (current_user.id != @question.user_id)
+  - if can? :vote, @question
     - if @question.votes.pluck(:user_id).include?(current_user.id)
       = link_to "+", vote_up_question_path(@question),
         class: 'vote-link up', style: 'display:none;',
