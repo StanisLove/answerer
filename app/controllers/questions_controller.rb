@@ -6,6 +6,8 @@ class QuestionsController < ApplicationController
   before_action :build_answer_and_load_current_user_id, only: :show    
   before_action :load_current_user_question, only: [:update, :destroy]
   after_action  :publish_question,  only: :create
+  
+  authorize_resource
 
   respond_to  :json,  only: :create
   respond_to  :js,    only: :update    

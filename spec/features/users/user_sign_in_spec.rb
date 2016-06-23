@@ -36,7 +36,7 @@ feature 'User sign in', %q{
     click_on 'Sign in with Facebook'
 
     expect(page).to have_content 'Successfully authenticated from Facebook account.'
-    expect(page).to have_content 'Выйти'
+    expect(page).to have_content 'Sign Out'
   end
 
   scenario 'User try to sign in with Twitter account' do
@@ -46,7 +46,7 @@ feature 'User sign in', %q{
     mock_auth_twitter_hash
     click_on 'Sign in with Twitter'
    
-    expect(page).to have_content 'Войти'
+    expect(page).to have_content 'Sign In'
     expect(page).to have_content 'Please confirm your email address. No spam.'
     
     fill_in 'Email', with: 'really@email.com'
@@ -56,11 +56,11 @@ feature 'User sign in', %q{
     expect(current_email).to have_content "Click the following link to activate your account. Confirm email"
     current_email.click_link 'Confirm email'
     expect(page).to have_content 'Email successfully confirmed.'
-    expect(page).to have_content 'Выйти'
+    expect(page).to have_content 'Sign Out'
 
-    click_on 'Выйти'
+    click_on 'Sign Out'
     expect(page).to have_content 'Signed out successfully.'
-    click_on 'Войти'
+    click_on 'Sign In'
     click_on 'Sign in with Twitter'
     expect(page).to have_content 'Successfully authenticated from Twitter account.'
   end
@@ -72,7 +72,7 @@ feature 'User sign in', %q{
     mock_auth_twitter_hash
     click_on 'Sign in with Twitter'
    
-    expect(page).to have_content 'Войти'
+    expect(page).to have_content 'Sign In'
     expect(page).to have_content 'Please confirm your email address. No spam.'
     
     fill_in 'Email', with: 'invalid'

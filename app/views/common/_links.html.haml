@@ -1,7 +1,10 @@
 - if user_signed_in?
   %span.glyphicon.glyphicon-log-out
-  = link_to 'Выйти',
+  = link_to t('.sign_out'),
     destroy_user_session_path, method: :delete
 - else
   %span.glyphicon.glyphicon-log-in
-  = link_to 'Войти', new_user_session_path
+  = link_to t('.sign_in'), new_user_session_path
+
+= link_to t('.new_question'), new_question_path if can? :create, Question
+= link_to t('.questions_link'), questions_path

@@ -10,8 +10,8 @@ feature 'User sign out', %q{
 
   scenario 'Signed in user try to sign out' do
     sign_in(user)
-    click_on 'Выйти'
+    click_on 'Sign Out'
     expect(page).to have_content('Signed out successfully.')
-    expect(page).to have_content('Войти')
+    expect(page).to have_content('Sign In')
   end
 end

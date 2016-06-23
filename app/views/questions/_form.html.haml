@@ -1,15 +1,12 @@
 .question-errors
-= form_for @question, remote: true do |f|
+= form_for @question, remote: remote do |f|
   .field
-    = f.label :title, 'Заголовок'
+    = f.label :title
     = f.text_field :title
   .field
-    = f.label :body, 'Вопрос'
+    = f.label :body
     = f.text_area :body
-  .attachments
-    = f.fields_for :attachments, @question.attachments.build do |a|
-      = a.label :file, class: "hidden"
-      = a.text_field :file
-      = a.check_box :_destroy
+  = render 'attachments/fields_for', f: f, attachments: attachments
   .actions
-    = f.submit 'Сохранить', class: 'edit-question-button'
+    = f.submit t('.submit', action: @question.new_record? ? 'Ask' : 'Save'),
+      class: button_class

@@ -1,18 +1,14 @@
-- if user_signed_in?
-  = link_to "Новый вопрос", new_question_path
-
 .questions
   - @questions.each do |question|
-    %div{class: "question-#{question.id}"}
+    %div{class: "question question-#{question.id}"}
+      .title
       %h3= question.title
-      = link_to 'Открыть вопрос', question
-      -if user_signed_in? && (current_user.id == question.user_id)
-        = link_to 'Удалить вопрос', question, method: :delete
-        |
-        = link_to 'Редактировать вопрос'
       %p= question.body
-      = link_to 'Написать ответ',
-        new_question_answer_path(question)
+      = link_to t('.show_question'), question
+      = link_to t('.delete_question'), question, method: :delete if can? :destroy, question
+      = link_to t('.edit_question') if can? :update, question
+      = link_to t('.new_answer'),
+        new_question_answer_path(question) if can? :create, Answer
     %br
 
 = subscribe_to '/questions'

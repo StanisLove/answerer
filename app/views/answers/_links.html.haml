@@ -1,4 +1,4 @@
-- if user_signed_in? && (current_user.id == answer.user_id)
+- if can? :destroy, answer
   = link_to 'Удалить ответ', answer,
     method: :delete, remote: true
   |
@@ -6,7 +6,7 @@
     '#', class: 'edit-answer-link',
     data: { answer_id: answer.id }
 
-- if user_signed_in? && (current_user.id == @question.user_id)
+- if can? :choose_best, answer
   = link_to 'Выбрать лучшим ответом',
     choose_best_answer_path(answer), method: :patch,
     style: answer.is_best ? "display:none" : '',

@@ -3,15 +3,8 @@
     = f.label :body, 'Новый ответ'
     .answer-errors
     = f.text_area :body
-  .attachments
-    %b= "Можете добавить файлы:"
-
-    = f.fields_for :attachments, @answer.attachments.build do |a|
-      = link_to_add_association 'Добавить ещё один файл', f, :attachments,
-        'data-association-insertion-nod' => '.attachments',
-        'data-association-insertion-method' =>  'append',
-        partial: 'common/attachment_fields'
-      %br
+    = render 'attachments/fields_for', f: f,
+      attachments: @answer.attachments.build
 
   .actions
     = f.submit 'Отправить ответ'

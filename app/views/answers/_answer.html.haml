@@ -14,5 +14,4 @@
 
   = render 'common/comments', commentable: answer
 
-  - if !current_user.nil?
-    = render 'answers/comment_form', answer: answer
+  = render 'answers/comment_form', answer: answer if can? :create, Comment
