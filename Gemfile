@@ -66,6 +66,7 @@ end
 group :test do
   gem 'shoulda-matchers', require: false
   gem 'fuubar'
+  gem 'json_spec'
 end
 
 group :development do
