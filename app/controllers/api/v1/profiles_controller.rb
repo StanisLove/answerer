@@ -4,12 +4,12 @@ class Api::V1::ProfilesController < ApplicationController
 
   respond_to :json
 
-  def me
-    respond_with current_resource_owner
+  def index
+    respond_with other_users
   end
 
-  def all
-    respond_with other_users
+  def me
+    respond_with current_resource_owner
   end
 
   protected
@@ -19,6 +19,6 @@ class Api::V1::ProfilesController < ApplicationController
     end
 
     def other_users
-      User.all.where("id != ?", current_resource_owner.id)
+      User.all.where.not(id: current_resource_owner.id)
     end
 end
