@@ -89,4 +89,75 @@ describe 'Answers API' do
       end
     end
   end
+
+  describe 'POST /create' do
+    let!(:user) { create :user }
+    let!(:access_token) { create :access_token, resource_owner_id: user.id }
+
+    context 'unauthorized' do
+      context 'there is no acess_token' do
+        it 'does not create the answer' do
+          expect{
+            post "/api/v1/questions/#{question.id}/answers", format: :json, question_id: question,
+            answer: attributes_for(:answer)
+          }.to_not change(Answer, :count)
+        end
+
+        it 'returns 401 status' do
+          post "/api/v1/questions/#{question.id}/answers", format: :json, question_id: question,
+            question: attributes_for(:question)
+          expect(response.status).to eq 401
+        end
+      end
+
+      context 'acess_token is invalid' do
+        it 'does not create the question' do
+          expect{
+            post "/api/v1/questions/#{question.id}/answers", format: :json, question_id: question,
+            answer: attributes_for(:answer), access_token: '1234'
+          }.to_not change(Answer, :count)
+        end
+
+        it 'returns 401 status' do
+          post "/api/v1/questions/#{question.id}/answers", format: :json, question_id: question, 
+            answer: attributes_for(:answer), access_token: '1234'
+          expect(response.status).to eq 401
+        end
+      end
+    end
+
+    context 'authorized' do
+      context 'with valid params' do
+        it 'creates the answer' do
+          expect{
+            post "/api/v1/questions/#{question.id}/answers", format: :json, question_id: question,
+            answer: attributes_for(:answer), access_token: access_token.token
+          }.to change(user.answers, :count).by(1)
+              .and change(question.answers, :count).by(1)
+          
+        end
+
+        it 'returns 201 status' do
+          post "/api/v1/questions/#{question.id}/answers", format: :json,
+            answer: attributes_for(:answer), access_token: access_token.token, question_id: question
+          expect(response.status).to eq 201
+        end
+      end
+      
+      context 'with invalid params' do
+        it 'does not create the answer' do
+          expect{
+            post "/api/v1/questions/#{question.id}/answers", format: :json, question_id: question,
+            answer: attributes_for(:invalid_answer), access_token: access_token.token
+          }.to_not change(Answer, :count)
+        end
+
+        it 'returns 422 status' do
+          post "/api/v1/questions/#{question.id}/answers", format: :json, question_id: question,
+            answer: attributes_for(:invalid_answer), access_token: access_token.token
+          expect(response.status).to eq 422
+        end
+      end
+    end
+  end
 end

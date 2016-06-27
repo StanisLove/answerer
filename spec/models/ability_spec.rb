@@ -80,5 +80,10 @@ describe Ability do
     context "with comment" do
       it { should be_able_to :create, Comment }
     end
+
+    context "with profile" do
+      it { should be_able_to :me, :profile, user: user }
+      it { should be_able_to :index, :profile, user: user }
+    end
   end
 end
