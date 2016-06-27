@@ -40,7 +40,7 @@ describe 'Profile API' do
     end
   end
 
-  describe 'GET #index' do
+  describe 'GET /index' do
     context 'unauthorized' do
       it 'returns 401 status if there is no access_token' do
         get '/api/v1/profiles', format: :json
