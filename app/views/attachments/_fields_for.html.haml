@@ -1,6 +1,6 @@
 .attachments
   = f.fields_for :attachments, attachments do |a|
-    = link_to_add_association 'Добавить ещё один файл', f, :attachments,
-      'data-association-insertion-nod' => '.attachments',
-      'data-association-insertion-method' =>  'append',
+    = link_to_add_association t('.add_file_link'), f, :attachments,
+      'data-association-insertion-nod'    => '.attachments',
+      'data-association-insertion-method' => 'append',
       partial: 'attachments/attachment_fields'

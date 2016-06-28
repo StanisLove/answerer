@@ -2,14 +2,4 @@
 %p= "#{@question.body}"
 .vote
 
-.attachments
-  - if @question.attachments.any?
-    %b= "Файлы:"
-    %table
-      - @question.attachments.each do |attachment|
-        %tr
-          %td= link_to attachment.file.identifier, attachment.file.url
-          - if can? :update, @question
-            %td= link_to 'Удалить', question_path(@question,
-              question: { attachments_attributes: { id: attachment.id,
-              "_destroy" => true } }), remote: true, method: :patch
+= render 'attachments/attachments', object: @question if @question.attachments.any?

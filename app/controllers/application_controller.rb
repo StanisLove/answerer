@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
       format.js   { render nothing: true, status: :forbidden }
     end
   end
-  
 
   protected
     def not_found
@@ -30,5 +29,4 @@ class ApplicationController < ActionController::Base
     def do_not_check_authorization?
       respond_to?(:devise_controller?)
     end
-
 end

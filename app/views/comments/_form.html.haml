@@ -1,0 +1,12 @@
+.add-comment-link{ data: id}
+  = link_to t('.add_comment_link'), '#', data: id
+
+.comment-errors
+
+= form_for object, remote: true do |f|
+  .field
+    = f.label     :body
+    %br
+    = f.text_area :body
+  = f.submit t('.submit'), class: submit_class, data: id
+

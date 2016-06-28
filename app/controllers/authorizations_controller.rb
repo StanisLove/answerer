@@ -1,6 +1,6 @@
 class AuthorizationsController < ApplicationController
-  before_action :load_auth_and_email, only: :create
-  before_action :load_authorization, only: :confirm
+  before_action      :load_auth_and_email, only: :create
+  before_action      :load_authorization,  only: :confirm
   skip_before_action :authenticate_user!
 
   def new
@@ -9,7 +9,7 @@ class AuthorizationsController < ApplicationController
 
   def create
     User.find_for_oauth(@auth, @email)
-    redirect_to root_path 
+    redirect_to root_path
     flash[:notice] = "Confirmation email was sent to #{@email}"
   rescue ActiveRecord::RecordInvalid
     redirect_to new_user_registration_path
@@ -30,7 +30,7 @@ class AuthorizationsController < ApplicationController
 
     def load_auth_and_email
       @email = params[:authorization][:email]
-      @auth = OmniAuth::AuthHash.new(session["devise.provider_data"])
+      @auth  = OmniAuth::AuthHash.new(session["devise.provider_data"])
     end
 
     def load_authorization

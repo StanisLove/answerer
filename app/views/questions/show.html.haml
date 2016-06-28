@@ -1,14 +1,18 @@
 .question{data: {question_id: @question.id}, id: "question-#{@question.id}"}
   %h1=  "#{t('.question_number')} #{@question.id}"
   = render 'question'
-  = render 'common/comments', commentable: @question
+  = render 'comments/comments', commentable: @question
+  = render 'comments/form', id: '',
+                        object: [@question, @question.comments.build],
+                  submit_class: 'add-comment-button' if can? :create, Comment
 
-  = render 'questions/comment_form' if can? :create, Comment
-
-.answers{data: { question_id: @question.id } } 
+.answers{data: { question_id: @question.id } }
   = render 'answers'
 
-= render 'answers/form_new' if can? :create, Answer
+= render 'answers/form', object: [@question, @answer],
+                 edit_answer_id: nil,
+                         answer: @answer,
+                             id: nil if can? :create, Answer
 
 = subscribe_to "/questions/#{@question.id}/answer"
 = subscribe_to "/questions/#{@question.id}/comment"

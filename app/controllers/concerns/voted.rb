@@ -2,7 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_votable, only: [:vote_up, :vote_down, :vote_reset] 
+    before_action :set_votable, only: [:vote_up, :vote_down, :vote_reset]
   end
 
   def vote_up

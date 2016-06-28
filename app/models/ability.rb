@@ -7,7 +7,7 @@ class Ability
     @user = user
 
     alias_action :vote_up, :vote_down, :vote_reset, to: :vote
-    
+
     if user
       user.admin? ? admin_abilities : user_abilities
     else
@@ -16,7 +16,7 @@ class Ability
   end
 
   private
-    
+
     def guest_abilities
       can :read, :all
     end

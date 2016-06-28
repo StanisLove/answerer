@@ -26,7 +26,7 @@
       = link_to "Отменить", vote_reset_question_path(@question.id),
         class: 'reset-vote-link', style: 'display:none',
         remote: true, method: :patch
-  
+
   - else
 
     %b.voting_result= "#{@question.voting_result}"

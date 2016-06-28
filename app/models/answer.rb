@@ -12,7 +12,7 @@ class Answer < ActiveRecord::Base
 
   def make_best!
     Answer.transaction do
-      self.question.answers.update_all(is_best: false) 
+      self.question.answers.update_all(is_best: false)
       self.toggle!(:is_best)
     end
   end
