@@ -1,6 +1,8 @@
 class Api::V1::AnswersController < Api::V1::BaseController
   before_action :load_question
 
+  authorize_resource
+
   def index
     @answer = @question.answers.all
     respond_with @question
