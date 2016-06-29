@@ -1,15 +1,12 @@
 p #{@answer.body}
 - unless @answer.attachments == null
   .attachments
-    b Файлы:
+    b Files:
     table
       tr
         - for attachment in @answer.attachments
           td
             a href="#{attachment.url}" #{attachment.file_name}
           - if gon.current_user_id && (gon.current_user_id == @answer.user_id)
-              td 
+              td
                 == attachment.destroy_link
-                   
-
-  

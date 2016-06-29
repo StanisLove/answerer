@@ -1,15 +1,15 @@
 - if can? :destroy, answer
-  = link_to 'Удалить ответ', answer,
+  = link_to t('.delete_link'), answer,
     method: :delete, remote: true
-  |
-  = link_to 'Редактировать ответ',
-    '#', class: 'edit-answer-link',
-    data: { answer_id: answer.id }
+
+  = link_to t('.edit_link'), '#',
+    class: 'edit-answer-link',
+    data:  { answer_id: answer.id }
 
 - if can? :choose_best, answer
-  = link_to 'Выбрать лучшим ответом',
-    choose_best_answer_path(answer), method: :patch,
-    style: answer.is_best ? "display:none" : '',
-    class: 'best-answer-link',
-    data: { answer_id: answer.id },
+  = link_to t('.choose_best_link'), choose_best_answer_path(answer),
+    method: :patch,
+    style:  answer.is_best ? "display:none" : '',
+    class:  'best-answer-link',
+    data:   { answer_id: answer.id },
     remote: true

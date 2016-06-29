@@ -1,8 +1,0 @@
-= form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-  .field
-    = f.label :body, 'Ответ'
-    = f.text_area :body
-    = render 'attachments/fields_for', f: f,
-      attachments: answer.attachments.first || answer.attachments.build
-  .actions
-    = f.submit 'Сохранить', data: { answer_id: answer.id }

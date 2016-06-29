@@ -2,15 +2,15 @@ class QuestionsController < ApplicationController
   include PublicIndexAndShow
   include Voted
 
-  before_action :load_question, only: :show
-  before_action :build_answer_and_load_current_user_id, only: :show    
-  before_action :load_current_user_question, only: [:update, :destroy]
-  after_action  :publish_question,  only: :create
-  
+  before_action :load_question,                         only: :show
+  before_action :build_answer_and_load_current_user_id, only: :show
+  before_action :load_current_user_question,            only: [:update, :destroy]
+  after_action  :publish_question,                      only: :create
+
   authorize_resource
 
-  respond_to  :json,  only: :create
-  respond_to  :js,    only: :update    
+  respond_to :json, only: :create
+  respond_to :js,   only: :update
 
   def index
     respond_with(@questions = Question.all)

@@ -1,17 +1,22 @@
 %div.col-md-6{id: "answer-#{answer.id}"}
-  %h3= answer.is_best ? "Лучший ответ" : "Ответ"
+  %h3= t('.title', action: answer.is_best ?  'The Best ' : '')
 
-  = render 'answers/links', answer: answer
+  = render   'answers/links',        answer: answer
 
   .answer-errors
 
   .content
-    = render 'answers/content', answer: answer
+    = render 'answers/content',      answer: answer
 
-  = render 'answers/vote', answer: answer
+  = render   'answers/vote',         answer: answer
 
-  = render 'answers/form_edit', answer: answer
+  = render 'answers/form', object: answer,
+                   edit_answer_id: { id: "edit-answer-#{answer.id}" },
+                           answer: answer,
+                               id: { answer_id: answer.id } if can? :update, answer
 
-  = render 'common/comments', commentable: answer
+  = render   'comments/comments',    commentable: answer
 
-  = render 'answers/comment_form', answer: answer if can? :create, Comment
+  = render 'comments/form', id: { answer_id: answer.id },
+                        object: [answer, answer.comments.build],
+                  submit_class: 'add-comment-button' if can? :create, Comment

@@ -8,7 +8,7 @@ feature 'Remove files from answer', %q{
 
   given!(:question) { create(:question) }
   given!(:answer)   { create(:answer, question: question) }
-  
+
   background do
     sign_in(answer.user)
     visit question_path(question)
@@ -16,15 +16,15 @@ feature 'Remove files from answer', %q{
 
   scenario 'User remove file from the answer', js: true do
     within '.answers' do
-      expect(page).to have_content 'Файлы'
-      expect(page).to have_link 'spec_helper.rb',
+      expect(page).to have_content 'Files'
+      expect(page).to have_link    'spec_helper.rb',
         href: /^\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
-      expect(page).to have_content 'Удалить'
-      click_on 'Удалить'
+      expect(page).to have_content 'Delete'
+      click_on 'Delete'
       wait_for_ajax
 
-      expect(page).to_not have_content 'Файлы'
-      expect(page).to_not have_link 'spec_helper.rb'
+      expect(page).to_not have_content 'Files'
+      expect(page).to_not have_link    'spec_helper.rb'
     end
   end
 end

@@ -3,38 +3,32 @@
   %b Голосование:
 
   - if can? :vote, answer
-
     - if answer.votes.pluck(:user_id).include?(current_user.id)
-
       = link_to "+", vote_up_answer_path(answer),
-        class: 'vote-link up', style: 'display:none;', data: { answer_id: answer.id },
+        class:  'vote-link up', style: 'display:none;', data: { answer_id: answer.id },
         remote: true, method: :patch
 
       %b.voting_result= "#{answer.voting_result}"
 
       = link_to "&ndash;".html_safe, vote_down_answer_path(answer),
-        class: 'vote-link down', style: 'display:none;', data: { answer_id: answer.id },
+        class:  'vote-link down', style: 'display:none;', data: { answer_id: answer.id },
         remote: true, method: :patch
 
       = link_to "Отменить", vote_reset_answer_path(answer),
-        class: 'reset-vote-link', remote: true, method: :patch, data: { answer_id: answer.id }
-
+        class:  'reset-vote-link', remote: true, method: :patch, data: { answer_id: answer.id }
     - else
-
       = link_to "+", vote_up_answer_path(answer),
-        class: 'vote-link up', data: { answer_id: answer.id },
+        class:  'vote-link up', data: { answer_id: answer.id },
         remote: true, method: :patch
 
       %b.voting_result= "#{answer.voting_result}"
 
       = link_to "&ndash;".html_safe, vote_down_answer_path(answer),
-        class: 'vote-link down', data: { answer_id: answer.id },
+        class:  'vote-link down', data: { answer_id: answer.id },
         remote: true, method: :patch
 
       = link_to "Отменить", vote_reset_answer_path(answer),
-        class: 'reset-vote-link', style: 'display:none', data: { answer_id: answer.id },
+        class:  'reset-vote-link', style: 'display:none', data: { answer_id: answer.id },
         remote: true, method: :patch
-  
   - else
-
     %b.voting_result= "#{answer.voting_result}"

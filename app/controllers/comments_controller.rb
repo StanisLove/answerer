@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
-  before_action :load_commentable, only: :create
+  before_action :load_commentable,                  only: :create
   before_action :create_new_comment_to_commentable, only: :create
-  after_action  :publish_comment, only: :create
+  after_action  :publish_comment,                   only: :create
 
   authorize_resource
 
@@ -18,7 +18,7 @@ class CommentsController < ApplicationController
     end
 
     def load_commentable
-      name = request.fullpath.match(/\w+(?=\/\d+\/comments)/).to_s.singularize
+      name  = request.fullpath.match(/\w+(?=\/\d+\/comments)/).to_s.singularize
       model = name.capitalize.constantize
       @commentable = model.find(params["#{name}_id".to_sym])
     end

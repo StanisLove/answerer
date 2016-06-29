@@ -1,0 +1,11 @@
+.attachments
+  %b= t('.title')
+  %table
+    %tr
+      - object.attachments.each do |attachment|
+        %td= link_to attachment.file.identifier, attachment.file.url
+        - if can? :update, object
+          %td= link_to t('.delete'), send("#{object.model_name.singular}_path".to_sym,
+            object,
+            object.model_name.singular.to_sym => { attachments_attributes: { id: attachment.id, "_destroy" => true } }),
+            remote: true, method: :patch

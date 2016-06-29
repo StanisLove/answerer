@@ -1,13 +1,3 @@
 %p= answer.body
 
-- if answer.attachments.any?
-  .attachments
-    %b= "Файлы:" 
-    %table
-      %tr
-        - answer.attachments.each do |attachment|
-          %td= link_to attachment.file.identifier, attachment.file.url
-          - if can? :update, answer
-            %td= link_to 'Удалить', answer_path(answer,
-              answer: { attachments_attributes: { id: attachment.id,
-              "_destroy" => true, } }), remote: true, method: :patch 
+= render 'attachments/attachments', object: answer if answer.attachments.any?

@@ -6,16 +6,16 @@ As an author of question
 I want to be able to destroy answer
 } do
 
-  given!(:question) { create(:question) }
-  given!(:answer)   { create(:answer, question: question) }
-  given(:other_user){ create(:user) }
+  given!(:question)  { create(:question) }
+  given!(:answer)    { create(:answer, question: question) }
+  given(:other_user) { create(:user) }
 
   scenario 'Author of the answer try to delete the answer', js: true do
     sign_in(answer.user)
     visit question_path(question)
-    expect(page).to have_content(answer.body)
-    expect(page).to have_content('Удалить ответ')
-    click_on 'Удалить ответ'
+    expect(page).to have_content answer.body
+    expect(page).to have_content 'Delete Answer'
+    click_on 'Delete Answer'
     wait_for_ajax
     wait_for_ajax
 
@@ -25,10 +25,10 @@ I want to be able to destroy answer
 
   scenario "User try to delete someone's question" do
     visit question_path(question)
-    expect(page).to_not have_content('Удалить ответ')
+    expect(page).to_not have_content('Delete Answer')
 
     sign_in(other_user)
     visit question_path(question)
-    expect(page).to_not have_content('Удалить ответ')
+    expect(page).to_not have_content('Delete Answer')
   end
 end

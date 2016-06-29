@@ -1,29 +1,55 @@
 en:
-  common: 
+  common:
     links:
-      sign_in: 'Sign In'
-      sign_out: 'Sign Out'
-      new_question: 'New Question'
+      sign_in:        'Sign In'
+      sign_out:       'Sign Out'
+      new_question:   'New Question'
       questions_link: 'All Questions'
   questions:
     index:
-      edit_question: 'Edit Question'
-      show_question: 'Show Question and Answers'
+      edit_question:   'Edit Question'
+      show_question:   'Show Question and Answers'
       delete_question: 'Delete Question'
-      new_answer: 'Write the Answer'
+      new_answer:      'Write the Answer'
     show:
       question_number: 'Question #'
     new:
       ask_question_title: 'Ask your Question'
     form:
       edit_question: 'Edit Question'
-      submit: '%{action} Question'
+      submit:        '%{action} Question'
+  answers:
+    answer:
+      title: '%{action}Answer'
+    form:
+      body:   '%{action}Answer'
+      submit: '%{action} Answer'
+    links:
+      delete_link:      'Delete Answer'
+      edit_link:        'Edit Answer'
+      choose_best_link: 'Choose the Best'
+  comments:
+    form:
+      submit:           'Add Comment'
+      add_comment_link: 'Add Comment'
+  attachments:
+    attachment_fields:
+      delete_link: 'Delete File'
+    fields_for:
+      add_file_link: 'Add one more file'
+    attachments:
+      title:  'Files'
+      delete: 'Delete'
 
 
   activerecord:
     models:
       question: 'Question'
+      answer:   'Answer'
+      comment:  'Comment'
     attributes:
       question:
         title: 'Title'
-        body: 'Question'
+        body:  'Question'
+      comment:
+        body: 'Comment'

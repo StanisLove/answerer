@@ -7,29 +7,29 @@ feature 'User adds comment to the answer', %{
 } do
 
   given(:question) { create :question }
-  given!(:answer) { create :answer, question: question }
-  given(:user) { create :user }
-  given(:comment) { build :comment, commentable: answer }
+  given!(:answer)  { create :answer, question: question }
+  given(:user)     { create :user }
+  given(:comment)  { build :comment, commentable: answer }
 
   scenario "User leaves a comment to the answer", js: true do
     visit question_path(question)
 
-    expect(page).to_not have_content 'Добавить комментарий'
+    expect(page).to_not have_content 'Add Comment'
 
     sign_in(user)
     visit question_path(question)
 
     within "#answer-#{answer.id}" do
-      expect(page).to have_content 'Добавить комментарий'
+      expect(page).to     have_content 'Add Comment'
       expect(page).to_not have_selector('.answers .new_comment', visible: true)
-      click_on 'Добавить комментарий'
-      expect(page).to have_selector('.answers .new_comment', visible: true)
+      click_on 'Add Comment'
+      expect(page).to     have_selector('.answers .new_comment', visible: true)
 
-      fill_in 'Комментарий', with: comment.body
-      click_on 'Добавить'
-      expect(page).to have_content user.email
-      expect(page).to have_content comment.body
-      expect(page).to have_content 'Добавить комментарий'
+      fill_in  'Comment', with: comment.body
+      click_on 'Add Comment'
+      expect(page).to     have_content user.email
+      expect(page).to     have_content comment.body
+      expect(page).to     have_content 'Add Comment'
       expect(page).to_not have_selector('.answers .new_comment', visible: true)
     end
   end
@@ -37,16 +37,16 @@ feature 'User adds comment to the answer', %{
   scenario 'User try to leave invalid comment', js: true do
     sign_in(user)
     visit question_path(question)
-    
+
     within "#answer-#{answer.id}" do
-      click_on 'Добавить комментарий'
-      fill_in 'Комментарий', with: ' '
-      click_on 'Добавить'
-      expect(page).to have_content("Body can't be blank")
+      click_on 'Add Comment'
+      fill_in  'Comment', with: ' '
+      click_on 'Add Comment'
+      expect(page).to have_content("Comment can't be blank")
     end
   end
 
-  given!(:first_comment) { create :comment, commentable: answer }
+  given!(:first_comment)  { create :comment, commentable: answer }
   given!(:second_comment) { create :comment, commentable: answer }
 
   scenario "User browse question's comments in right order", js: true do
@@ -59,8 +59,3 @@ feature 'User adds comment to the answer', %{
     end
   end
 end
-
-
-    
-    
-  
