@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   concern :votable do
     member do
       patch :vote_up
@@ -25,6 +26,17 @@ Rails.application.routes.draw do
 
   resources :authorizations, only: [:new, :create] do
     get 'confirm/:token', action: :confirm, on: :member, as: :confirm
+  end
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
+      resources :questions, only: [:index, :show, :create] do
+        resources :answers, only: [:index, :show, :create]
+      end
+    end
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
