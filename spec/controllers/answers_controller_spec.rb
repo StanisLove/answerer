@@ -5,7 +5,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #show' do
     let(:answer) { create(:answer) }
-    before { get  :show, id: answer }
+    before { get :show, id: answer }
 
     it 'assigns the requested answer to @answer' do
       expect(assigns(:answer)).to eq answer
@@ -23,13 +23,18 @@ RSpec.describe AnswersController, type: :controller do
       it 'saves new answer into DB' do
         expect{
           post  :create, question_id: question, answer: attributes_for(:answer), format: :json
-        }.to  change(question.answers,  :count).by(1)
-              .and change(@user.answers,:count).by(1)
+        }.to  change(question.answers, :count).by(1)
+         .and change(@user.answers,    :count).by(1)
       end
 
       it 'renders template create' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :json
         expect(response).to render_template :create
+      end
+
+      it 'publishes answer to PrivatePub' do
+        expect(PrivatePub).to receive(:publish_to)
+        post :create, question_id: question, answer: attributes_for(:answer), format: :json
       end
     end
 
@@ -43,6 +48,11 @@ RSpec.describe AnswersController, type: :controller do
       it 're-renders new view' do
         post  :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
         expect(response).to render_template :create
+      end
+
+      it 'does not publish answer to PrivatePub' do
+        expect(PrivatePub).to_not receive(:publish_to)
+        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json
       end
     end
   end
@@ -129,9 +139,9 @@ RSpec.describe AnswersController, type: :controller do
 
     context "Authenticated user" do
       sign_in_user
-      let!(:own_question)   { create(:question, user: @user) }
-      let!(:some_answer_one){ create(:answer, question: own_question) }
-      let!(:some_answer_two){ create(:answer, question: own_question) }
+      let!(:own_question)    { create(:question, user: @user) }
+      let!(:some_answer_one) { create(:answer,   question: own_question) }
+      let!(:some_answer_two) { create(:answer,   question: own_question) }
 
       it "can't choose the best answer" do
         patch :choose_best, id: answer, format: :js

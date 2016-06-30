@@ -63,6 +63,11 @@ RSpec.describe QuestionsController, type: :controller do
         post  :create, question: attributes_for(:question), format: :json
         expect(response.status).to eq 201
       end
+
+      it 'publishes question to PrivatePub' do
+        expect(PrivatePub).to receive(:publish_to)
+        post  :create, question: attributes_for(:question), format: :json
+      end
     end
 
     context 'with invalid attributes' do
@@ -75,6 +80,11 @@ RSpec.describe QuestionsController, type: :controller do
       it 're-renders new view' do
         post  :create, question: attributes_for(:invalid_question)
         expect(response).to render_template :new
+      end
+
+      it ' does not publish question to PrivatePub' do
+        expect(PrivatePub).to_not receive(:publish_to)
+        post  :create, question: attributes_for(:invalid_question), format: :json
       end
     end
   end
