@@ -24,9 +24,9 @@ RSpec.describe AnswersController, type: :controller do
         expect{
           post  :create, question_id: question, answer: attributes_for(:answer), format: :json
         }.to  change(question.answers,  :count).by(1)
-              .and change(@user.answers,:count).by(1) 
+              .and change(@user.answers,:count).by(1)
       end
-      
+
       it 'renders template create' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :json
         expect(response).to render_template :create
@@ -53,7 +53,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'Signed in user' do
       sign_in_user
       let!(:answer) { create(:answer, user_id: @user.id) }
-      
+
       it 'deletes the own answer from DB...' do
         expect{
           delete :destroy, id: answer, format: :js
@@ -68,27 +68,25 @@ RSpec.describe AnswersController, type: :controller do
       it "not deletes someone's answer from DB..." do
         expect{
           delete :destroy, id: other_answer, format: :js
-        }.to_not change(Answer, :count) 
+        }.to_not change(Answer, :count)
       end
-      
+
       it '... and redirect to root path' do
         delete :destroy, id: other_answer, format: :js
         expect(response).to redirect_to root_path
       end
     end
 
-      
-
     context 'Not signed in user' do
       it "not deletes someone's answer from DB..." do
         expect{
           delete :destroy, id: other_answer, question_id: question, format: :js
-        }.to_not change(Answer, :count) 
+        }.to_not change(Answer, :count)
       end
-      
+
       it '...and gets 401' do
         delete :destroy, id: other_answer, question_id: question, format: :js
-        expect(response.status).to eq 401 
+        expect(response.status).to eq 401
       end
     end
   end
@@ -140,7 +138,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.is_best).to eq false
       end
 
-      it %q{is the author of the question and 
+      it %q{is the author of the question and
             can choose the best answer and
             the best answer is only one
       } do
@@ -166,61 +164,10 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'PATCH #vote_up' do
+  describe 'Voting' do
     sign_in_user
-    let(:answer) { create(:answer, question: question) }
+    let(:object) { create(:answer, question: question) }
 
-    it 'assigns the request to @answer' do
-      patch :vote_up, id: answer, format: :json
-      expect(assigns(:votable)).to eq answer
-    end
-
-    it "increase answer's votes only once" do
-      expect{
-        patch :vote_up, id: answer,
-        format: :json }.to change(answer, :voting_result).by(1)
-
-      expect{
-        patch :vote_up, id: answer,
-        format: :json }.to change(answer.votes, :count).by(0)
-    end
-  end
-  
-  describe 'PATCH #vote_down' do
-    sign_in_user
-    let(:answer) { create(:answer, question: question) }
-
-    it 'assigns the request to @answer' do
-      patch :vote_down, id: answer, format: :json
-      expect(assigns(:votable)).to eq answer
-    end
-
-    it "decrease answer's votes only once" do
-      expect{
-        patch :vote_down, id: answer,
-        format: :json }.to change(answer, :voting_result).by(-1)
-
-      expect{
-        patch :vote_down, id: answer,
-        format: :json }.to change(answer.votes, :count).by(0)
-    end
-  end
-
-  describe 'PATCH #vote_reset' do
-    sign_in_user
-    let(:answer) { create(:answer, question: question) }
-    let!(:vote)  { create(:vote_up, user_id: @user.id, votable: answer) }
-
-    it 'assigns the request to @answer' do
-      patch :vote_reset, id: answer, format: :json
-      expect(assigns(:votable)).to eq answer
-    end
-
-    it "cancel user vote for answer" do
-      expect(answer.voting_result).to eq 1
-      expect{
-        patch :vote_reset, id: answer,
-        format: :json }.to change(answer, :voting_result).by(-1)
-    end
+    it_behaves_like 'Voted'
   end
 end

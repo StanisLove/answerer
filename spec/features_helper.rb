@@ -4,7 +4,7 @@ require 'capybara/email/rspec'
 RSpec.configure do |config|
   Capybara.javascript_driver = :webkit
 
-  config.include AcceptanceHelper,    type: :feature 
+  config.include AcceptanceHelper,    type: :feature
   config.include WaitForAjax, type: :feature
   config.include OmniauthMacros, type: :feature
 
@@ -18,7 +18,7 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each, js: true) do 
+  config.before(:each, js: true) do
     DatabaseCleaner.strategy = :truncation
   end
 
