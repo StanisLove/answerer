@@ -5,43 +5,30 @@ describe Ability do
 
   describe "Guest abilities" do
     let(:user) { nil }
-
-    it { should be_able_to :read, :all }
-    it { should_not be_able_to :manage, :all }
+    it_behaves_like "Guestable"
   end
 
   describe "Admin abilities" do
     let(:user) { create :user, admin: true }
-
     it { should be_able_to :manage, :all }
   end
 
   describe "User abilities" do
     let(:user) { create :user }
 
-    it { should_not be_able_to :manage, :all }
-    it { should be_able_to :read, :all }
+    it_behaves_like "Guestable"
 
     context "with question" do
       it { should be_able_to :create, Question }
 
       context "when is an author" do
-        let(:question) { create :question, user: user }
-        it { should be_able_to :update, question, user: user }
-        it { should_not be_able_to :vote_up, question, user: user }
-        it { should_not be_able_to :vote_down, question, user: user }
-        it { should_not be_able_to :vote_reset, question, user: user }
-        it { should be_able_to :destroy, question, user: user }
+        let(:object) { create :question, user: user }
+        it_behaves_like "Author", true
       end
-      
 
       context "when is not an author" do
-        let(:question) { create :question }
-        it { should_not be_able_to :update, question, user: user }
-        it { should be_able_to :vote_up, question, user: user }
-        it { should be_able_to :vote_down, question, user: user }
-        it { should be_able_to :vote_reset, question, user: user }
-        it { should_not be_able_to :destroy, question, user: user }
+        let(:object) { create :question }
+        it_behaves_like "Author", false
       end
     end
 
@@ -49,21 +36,13 @@ describe Ability do
       it { should be_able_to :create, Answer }
 
       context "when is an author" do
-        let(:answer) { create :answer, user: user }
-        it { should be_able_to :update, answer, user: user }
-        it { should_not be_able_to :vote_up, answer, user: user }
-        it { should_not be_able_to :vote_down, answer, user: user }
-        it { should_not be_able_to :vote_reset, answer, user: user }
-        it { should be_able_to :destroy, answer, user: user }
+        let(:object) { create :answer, user: user }
+        it_behaves_like "Author", true
       end
 
       context "when is not an author" do
-        let(:answer) { create :answer }
-        it { should_not be_able_to :update, answer, user: user }
-        it { should be_able_to :vote_up, answer, user: user }
-        it { should be_able_to :vote_down, answer, user: user }
-        it { should be_able_to :vote_reset, answer, user: user }
-        it { should_not be_able_to :destroy, answer, user: user }
+        let(:object) { create :answer }
+        it_behaves_like "Author", false
       end
 
       context "when is an author of anser's question" do
@@ -82,7 +61,7 @@ describe Ability do
     end
 
     context "with profile" do
-      it { should be_able_to :me, :profile, user: user }
+      it { should be_able_to :me,    :profile, user: user }
       it { should be_able_to :index, :profile, user: user }
     end
   end

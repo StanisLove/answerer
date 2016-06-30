@@ -4,14 +4,14 @@ RSpec.describe Answer, type: :model do
   it_behaves_like "attachable"
   it_behaves_like "votable"
   it_behaves_like "commentable"
-  
-  it { should belong_to :question }
+
+  it { should belong_to     :question    }
   it { should have_db_index :question_id }
-  it { should belong_to :user }
-  it { should have_db_index :user_id }
+  it { should belong_to     :user        }
+  it { should have_db_index :user_id     }
   it { should have_db_column(:is_best).
-              of_type(:boolean).
-              with_options(default: false) }
+                     of_type(:boolean).
+         with_options(default: false) }
   it { should have_many(:attachments).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
 
@@ -22,21 +22,21 @@ RSpec.describe Answer, type: :model do
   it { should accept_nested_attributes_for :attachments }
 
   describe "make_best! method" do
-    let(:question)  { create(:question) }
-    let(:answer_one){ create(:answer, question: question) }
-    let(:answer_two){ create(:answer, question: question) }
+    let(:question)   { create(:question) }
+    let(:answer_one) { create(:answer, question: question) }
+    let(:answer_two) { create(:answer, question: question) }
 
     it { expect(answer_one.is_best).to eq false }
     it { expect(answer_two.is_best).to eq false }
 
-    it "makes answer the best" do 
+    it "makes answer the best" do
       answer_one.make_best!
       answer_one.reload
       expect(answer_one.is_best).to eq true
       expect(answer_two.is_best).to eq false
     end
 
-    it "changes the best answer" do 
+    it "changes the best answer" do
       answer_one.make_best!
       answer_two.make_best!
       answer_one.reload
