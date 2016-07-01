@@ -8,7 +8,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'fills the array of questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
-      
+
     it 'renders index view' do
       expect(response).to render_template :index
     end
@@ -63,6 +63,11 @@ RSpec.describe QuestionsController, type: :controller do
         post  :create, question: attributes_for(:question), format: :json
         expect(response.status).to eq 201
       end
+
+      it 'publishes question to PrivatePub' do
+        expect(PrivatePub).to receive(:publish_to)
+        post  :create, question: attributes_for(:question), format: :json
+      end
     end
 
     context 'with invalid attributes' do
@@ -75,6 +80,11 @@ RSpec.describe QuestionsController, type: :controller do
       it 're-renders new view' do
         post  :create, question: attributes_for(:invalid_question)
         expect(response).to render_template :new
+      end
+
+      it ' does not publish question to PrivatePub' do
+        expect(PrivatePub).to_not receive(:publish_to)
+        post  :create, question: attributes_for(:invalid_question), format: :json
       end
     end
   end
@@ -137,61 +147,10 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'PATCH #vote_up' do
+  describe 'Voting' do
     sign_in_user
-    let(:question) { create(:question) }
+    let(:object) { create(:question) }
 
-    it 'assigns the request to @question' do
-      patch :vote_up, id: question, format: :json
-      expect(assigns(:votable)).to eq question
-    end
-
-    it "increase question's votes only once" do
-      expect{
-        patch :vote_up, id: question,
-        format: :json }.to change(question, :voting_result).by(1)
-
-      expect{
-        patch :vote_up, id: question,
-        format: :json }.to change(question.votes, :count).by(0)
-    end
-  end
-
-  describe 'PATCH #vote_down' do
-    sign_in_user
-    let(:question) { create(:question) }
-
-    it 'assigns the request to @votable' do
-      patch :vote_down, id: question, format: :json
-      expect(assigns(:votable)).to eq question
-    end
-
-    it "decrease question's votes only once" do
-      expect{
-        patch :vote_down, id: question,
-        format: :json }.to change(question, :voting_result).by(-1)
-
-      expect{
-        patch :vote_down, id: question,
-        format: :json }.to change(question.votes, :count).by(0)
-    end
-  end
-
-  describe 'PATCH #vote_reset' do
-    sign_in_user
-    let(:question) { create(:question) }
-    let!(:vote)  { create(:vote_up, user_id: @user.id, votable: question) }
-
-    it 'assigns the request to @votable' do
-      patch :vote_reset, id: question, format: :json
-      expect(assigns(:votable)).to eq question
-    end
-
-    it "cancel user vote for question" do
-      expect(question.voting_result).to eq 1
-      expect{
-        patch :vote_reset, id: question,
-        format: :json }.to change(question, :voting_result).by(-1)
-    end
+    it_behaves_like 'Voted'
   end
 end
