@@ -9,11 +9,13 @@ describe 'Answers API' do
     let(:object)        { answers.first }
 
     it_behaves_like "API Authenticable"
-    it_behaves_like "API Successable"
-    it_behaves_like "API Sizable", 2, "question/answers"
     it_behaves_like "API Containable",
       %w(id body is_best created_at updated_at), "question/answers/0/"
 
+  before { do_request(access_token: access_token.token) }
+  it { expect(response).to be_success }
+  it { expect(response.body).to have_json_size(2).
+                                at_path("question/answers") }
     def do_request(options = {})
       get "/api/v1/questions/#{question.id}/answers",
         { format: :json }.merge(options)
@@ -29,10 +31,12 @@ describe 'Answers API' do
       let!(:access_token) { create :access_token }
       let(:object)  { answer }
 
-      it_behaves_like "API Successable"
-      it_behaves_like "API Sizable", 1
       it_behaves_like "API Containable",
         %w(id body is_best created_at updated_at), "answer/"
+
+      before { do_request(access_token: access_token.token) }
+      it { expect(response).to be_success }
+      it { expect(response.body).to have_json_size(1) }
 
       context 'comments' do
         let!(:object) { create :comment, commentable: answer }

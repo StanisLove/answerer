@@ -9,18 +9,24 @@ describe 'Questions API' do
       let!(:questions)      { create_list :question, 2 }
       let(:object) { questions.first }
 
-      it_behaves_like "API Successable"
-      it_behaves_like "API Sizable", 2, "questions"
       it_behaves_like "API Containable",
         %w(id title body created_at updated_at), "questions/0/"
+
+      before { do_request(access_token: access_token.token) }
+
+      it { expect(response).to be_success }
+      it { expect(response.body).to have_json_size(2).at_path("questions") }
 
       context 'answers' do
         let!(:object)  { create(:answer, question: questions.first) }
 
-        it_behaves_like "API Sizable", 1, "questions/0/answers"
         it_behaves_like "API Containable",
           %w(id body created_at updated_at),
           "questions/0/answers/0/"
+
+        before { do_request(access_token: access_token.token) }
+        it { expect(response.body).to have_json_size(1).
+                                      at_path("questions/0/answers") }
       end
     end
 
@@ -38,10 +44,13 @@ describe 'Questions API' do
     context 'authorized' do
       let!(:access_token) { create :access_token }
 
-      it_behaves_like "API Successable"
-      it_behaves_like "API Sizable", 1
       it_behaves_like "API Containable",
         %w(id title body created_at updated_at), "question/"
+
+      before { do_request(access_token: access_token.token) }
+
+      it { expect(response).to be_success }
+      it { expect(response.body).to have_json_size(1) }
 
       context 'comments' do
         let!(:object) { create :comment, commentable: question }

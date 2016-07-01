@@ -9,9 +9,11 @@ describe 'Profile API' do
       let(:object)        { me }
       let!(:access_token) { create :access_token, resource_owner_id: me.id }
 
-      it_behaves_like "API Successable"
       it_behaves_like "API Containable", %w(email id created_at updated_at admin),
         '', %w(password password_confirmation encrypted_password)
+
+      before { do_request(access_token: access_token.token) }
+      it { expect(response).to be_success }
     end
 
     def do_request(options = {})
@@ -28,13 +30,14 @@ describe 'Profile API' do
       let!(:me)           { create :user }
       let!(:access_token) { create :access_token, resource_owner_id: me.id }
 
-      it_behaves_like "API Successable"
-      it_behaves_like "API Sizable", 2, ''
       it_behaves_like "API Containable",
         %w(email id created_at updated_at admin),
         '0/', %w(password password_confirmation encrypted_password)
 
       before { do_request(access_token: access_token.token) }
+
+      it { expect(response).to      be_success }
+      it { expect(response.body).to have_json_size(2) }
 
       it "doesn't contain me" do
         expect(response.body).to_not include_json(me.to_json)
