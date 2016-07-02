@@ -41,7 +41,6 @@ en:
       title:  'Files'
       delete: 'Delete'
 
-
   activerecord:
     models:
       question: 'Question'
@@ -53,3 +52,13 @@ en:
         body:  'Question'
       comment:
         body: 'Comment'
+
+  daily_mailer:
+    digest:
+      subject: "Fresh questions"
+
+  time:
+    formats:
+      day: '%d %b. %Y'
+      time: '%H:%M'
+

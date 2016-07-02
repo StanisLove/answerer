@@ -6,8 +6,8 @@ feature 'User sign in', %q{
   I want to be able to sign in
 } do
 
-  given(:user) { create(:user) }
-  given(:unreg_user) { build(:user) }
+  given(:user)       { create :user }
+  given(:unreg_user) { build  :user }
 
   scenario 'Registered user try to sign in' do
     sign_in(user)
@@ -31,7 +31,7 @@ feature 'User sign in', %q{
   scenario 'User try to sign in with Facebook account' do
     visit new_user_session_path
     expect(page).to have_content 'Sign in with Facebook'
-    
+
     mock_auth_facebook_hash
     click_on 'Sign in with Facebook'
 
@@ -45,10 +45,10 @@ feature 'User sign in', %q{
 
     mock_auth_twitter_hash
     click_on 'Sign in with Twitter'
-   
+
     expect(page).to have_content 'Sign In'
     expect(page).to have_content 'Please confirm your email address. No spam.'
-    
+
     fill_in 'Email', with: 'really@email.com'
     click_on 'Continue'
 
@@ -71,22 +71,22 @@ feature 'User sign in', %q{
 
     mock_auth_twitter_hash
     click_on 'Sign in with Twitter'
-   
+
     expect(page).to have_content 'Sign In'
     expect(page).to have_content 'Please confirm your email address. No spam.'
-    
+
     fill_in 'Email', with: 'invalid'
     click_on 'Continue'
 
     expect(page).to have_content 'Authorization error.'
   end
-  
+
   scenario 'User try to sign in with invalid Facebook credentials' do
     visit new_user_session_path
 
     invalid_credentials
     click_on 'Sign in with Facebook'
-    
+
     expect(page).to have_content 'Could not authenticate you from Facebook'
   end
 end
