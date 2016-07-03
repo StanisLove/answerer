@@ -43,10 +43,4 @@ class User < ActiveRecord::Base
     end
     user
   end
-
-  def self.send_daily_digest
-    find_each.each do |user|
-      DailyMailer.delay.digest(user)
-    end
-  end
 end
