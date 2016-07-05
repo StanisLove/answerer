@@ -64,5 +64,15 @@ describe Ability do
       it { should be_able_to :me,    :profile, user: user }
       it { should be_able_to :index, :profile, user: user }
     end
+
+    context "with subscription" do
+      it { should be_able_to :create, Subscription }
+
+      context "when it was created" do
+        let(:subscription) { create :subscription, user: user }
+
+        it { should be_able_to :destroy, subscription, user: user }
+      end
+    end
   end
 end

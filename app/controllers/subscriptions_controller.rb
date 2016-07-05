@@ -3,6 +3,8 @@ class SubscriptionsController < ApplicationController
   before_action :set_subscription,  only: :create
   before_action :load_subscription, only: :destroy
 
+  authorize_resource
+
   respond_to :js
 
   def create
