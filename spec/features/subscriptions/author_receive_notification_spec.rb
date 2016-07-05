@@ -6,15 +6,17 @@ feature 'The author of question is notified when a new answer appears', %q{
   I want to be able to receive notifications by email
 } do
 
-  given!(:question) { create :question }
+  given!(:question)   { create :question }
+  given!(:answer)     { create :answer, question: question }
 
   before do
     clear_emails
-    create :answer, question: question
+    NewAnswerMailer.notification(question.subscribers.first, answer).deliver_now
     open_email question.user.email
   end
 
   scenario 'The author of question receive notification' do
+    expect(current_email.header('To')).to eq question.user.email
     expect(current_email).to have_content question.title
     expect(current_email).to have_content answer.user.email
     expect(current_email).to have_content answer.body
