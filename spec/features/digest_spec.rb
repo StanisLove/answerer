@@ -1,6 +1,11 @@
 require 'features_helper'
 
-feature 'User receive daily digest' do
+feature 'User receive daily digest', %q{
+  In order to watch out for new questions
+  As an user
+  I want to be able to receive daily digest
+} do
+
   given!(:questions) { create_list :question, 2 }
   given(:user)       { create      :user      }
 
@@ -17,6 +22,6 @@ feature 'User receive daily digest' do
     end
 
     current_email.click_link questions.first.title
-    expect(page).to have_current_path(question_path(questions.first))
+    expect(page).to have_current_path question_path(questions.first)
   end
 end

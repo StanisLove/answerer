@@ -29,6 +29,9 @@ Rails.application.routes.draw do
     resources :answers, concerns: [:votable, :commentable] do
       patch :choose_best, on: :member
     end
+
+    post   '/subscribe'   => 'subscriptions#create'
+    delete '/unsubscribe' => 'subscriptions#destroy'
   end
 
   resources :authorizations, only: [:new, :create] do
