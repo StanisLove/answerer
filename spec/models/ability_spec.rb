@@ -14,7 +14,7 @@ describe Ability do
   end
 
   describe "User abilities" do
-    let(:user) { create :user }
+    let!(:user) { create :user }
 
     it_behaves_like "Guestable"
 
@@ -66,12 +66,20 @@ describe Ability do
     end
 
     context "with subscription" do
-      it { should be_able_to :create, Subscription }
+      let!(:question) { create :question }
 
-      context "when it was created" do
-        let(:subscription) { create :subscription, user: user }
+      context "when user is not subscribed to question" do
+        let(:subscription) { build :subscription, user: user, question: question }
 
-        it { should be_able_to :destroy, subscription, user: user }
+        it { should     be_able_to :create,  subscription }
+        it { should_not be_able_to :destroy, subscription, user: user }
+      end
+
+      context "when user subscirbed to question" do
+        let!(:subscription) { create :subscription, user: user, question: question }
+
+        it { should     be_able_to :destroy, subscription, user: user }
+        it { should_not be_able_to :create,  subscription, user: user }
       end
     end
   end
