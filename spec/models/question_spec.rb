@@ -20,4 +20,12 @@ RSpec.describe Question, type: :model do
   it { should validate_presence_of  :user_id }
 
   it { should accept_nested_attributes_for :attachments }
+
+  describe '.subscribe_author' do
+    let(:question) { create :question }
+
+    it 'is called after creating' do
+      expect(Subscription.where(user: question.user, question: question)).to exist
+    end
+  end
 end
