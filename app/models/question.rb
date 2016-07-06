@@ -13,7 +13,7 @@ class Question < ActiveRecord::Base
 
   after_create :subscribe_author
 
-  scope :during_last, lambda { |time| where("created_at > ?", (Time.now - time)) }
+  scope :yesterday, lambda { where(created_at: Time.current.yesterday.all_day) }
 
   private
     def subscribe_author

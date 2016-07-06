@@ -4,7 +4,7 @@ RSpec.describe DailyDigestJob, type: :job do
   let!(:users) { create_list :user, 2 }
 
   context "fresh questions exist" do
-    before { create :question, user: users.first }
+    before { create :question, user: users.first, created_at: (Time.now - 24.hours) }
 
     it 'should send daily digest to all users' do
       users.each do |user|
