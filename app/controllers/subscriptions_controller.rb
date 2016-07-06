@@ -8,6 +8,7 @@ class SubscriptionsController < ApplicationController
   respond_to :js
 
   def create
+    @subscription.save
     respond_with @subscription
   end
 
@@ -22,7 +23,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def set_subscription
-    @subscription = @question.subscriptions.create(user_id: current_user.id)
+    @subscription = @question.subscriptions.new(user_id: current_user.id)
   end
 
   def load_subscription
