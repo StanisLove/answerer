@@ -8,6 +8,8 @@ class Answer < ActiveRecord::Base
 
   validates :body, :question_id, :user_id, presence: true
 
+  after_commit :sent_notification, on: :create
+
   scope :order_by_best, -> { order(is_best: :desc).order(created_at: :asc) }
 
   def make_best!
@@ -16,4 +18,9 @@ class Answer < ActiveRecord::Base
       self.toggle!(:is_best)
     end
   end
+
+  private
+    def sent_notification
+      NewAnswerNotificationJob.perform_now(self)
+    end
 end

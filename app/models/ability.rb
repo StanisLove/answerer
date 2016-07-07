@@ -27,14 +27,24 @@ class Ability
 
     def user_abilities
       guest_abilities
-      can :create, [Question, Answer, Comment]
+      can :create,             [Question, Answer, Comment]
       can [:update, :destroy], [Question, Answer], user: user
+
       can :choose_best, Answer do |answer|
         answer.question.user == user
       end
       can :vote, [Question, Answer] do |resource|
         resource.user != user
       end
+
       can :me, :profile
+
+      can :create, Subscription do |subscription|
+        !user.subscriptions.include?(subscription)
+      end
+
+      can :destroy, Subscription do |subscription|
+        user.subscriptions.include?(subscription)
+      end
     end
 end

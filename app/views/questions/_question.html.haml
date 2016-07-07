@@ -1,3 +1,11 @@
+- if can? :create, @subscription
+  .subscription
+    = link_to t('.subscribe'), question_subscribe_path(@question),
+      method: :post, remote: true
+- if can? :destroy, @subscription
+  .subscription
+    = link_to t('.unsubscribe'), question_unsubscribe_path(@question),
+      method: :delete, remote: true
 = render 'vote'
 .question-errors
 .question-content

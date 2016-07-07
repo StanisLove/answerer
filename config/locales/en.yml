@@ -6,6 +6,9 @@ en:
       new_question:   'New Question'
       questions_link: 'All Questions'
   questions:
+    question:
+      subscribe:   'Subscribe'
+      unsubscribe: 'Unsubscribe'
     index:
       edit_question:   'Edit Question'
       show_question:   'Show Question and Answers'
@@ -41,7 +44,6 @@ en:
       title:  'Files'
       delete: 'Delete'
 
-
   activerecord:
     models:
       question: 'Question'
@@ -53,3 +55,20 @@ en:
         body:  'Question'
       comment:
         body: 'Comment'
+
+  daily_mailer:
+    digest:
+      subject: "Fresh questions"
+
+  subscriptions:
+    destroy:
+      subscribe:   'Subscribe'
+    create:
+      unsubscribe: 'Unsubscribe'
+
+
+  time:
+    formats:
+      day:  '%d %b. %Y'
+      time: '%H:%M'
+

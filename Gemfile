@@ -49,6 +49,11 @@ gem 'omniauth-twitter'
 gem 'cancancan'
 gem 'doorkeeper'
 gem 'active_model_serializers'
+gem 'sidekiq'
+gem 'whenever'
+gem 'sinatra', '>= 1.3.0', require: nil
+#gem 'sidetiq'
+gem "celluloid", git: "https://github.com/celluloid/celluloid", submodules: true
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -77,7 +82,7 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'guard-rails', require: false
   gem 'guard-bundler', require: false
-  gem 'guard-spring', require: false   
+  gem 'guard-spring', require: false
   gem 'letter_opener'
 end
 
