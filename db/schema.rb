@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160703171318) do
+ActiveRecord::Schema.define(version: 20160708082425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20160703171318) do
     t.integer  "question_id"
     t.integer  "user_id"
     t.boolean  "is_best",     default: false
+    t.boolean  "delta",       default: true,  null: false
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
@@ -54,12 +55,13 @@ ActiveRecord::Schema.define(version: 20160703171318) do
   add_index "authorizations", ["user_id"], name: "index_authorizations_on_user_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
-    t.text     "body",             null: false
+    t.text     "body",                            null: false
     t.integer  "user_id"
     t.integer  "commentable_id"
     t.string   "commentable_type"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "delta",            default: true, null: false
   end
 
   add_index "comments", ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id", using: :btree
@@ -108,10 +110,11 @@ ActiveRecord::Schema.define(version: 20160703171318) do
   create_table "questions", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.integer  "user_id"
     t.integer  "best_answer_id"
+    t.boolean  "delta",          default: true, null: false
   end
 
   add_index "questions", ["user_id"], name: "index_questions_on_user_id", using: :btree
@@ -145,6 +148,7 @@ ActiveRecord::Schema.define(version: 20160703171318) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.boolean  "admin",                  default: false
+    t.boolean  "delta",                  default: true,  null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

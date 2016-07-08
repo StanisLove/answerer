@@ -1,6 +1,5 @@
-ThinkingSphinx::Index.define :question, with: :active_record, delta: true do
+ThinkingSphinx::Index.define :comment, with: :active_record, delta: true do
   #fields
-  indexes title, sortable: true
   indexes body
   indexes user.email, as: :author, sortable: true
 
