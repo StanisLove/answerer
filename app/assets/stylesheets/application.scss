@@ -20,6 +20,13 @@ input[type=submit] { @extend .btn; @extend .btn-primary }
 
 .header {
   @extend .container;
+  border-bottom: 2px solid #939393;
+  .links {
+    float: left;
+  }
+  .search {
+    float: right;
+  }
 }
 .attachments .field input {
   display: inline-block;
@@ -32,11 +39,11 @@ input[type=submit] { @extend .btn; @extend .btn-primary }
 .sign-in, .sign-up {
   @extend .col-lg-4;
   background-color: #d3d3d3;
-  margin: 0 auto;
-  padding: 5px 20px 20px;
-  border: 1px solid #939393;
-  border-radius: 3px;
-  float: none;
+            margin: 0 auto;
+           padding: 5px 20px 20px;
+            border: 1px solid #939393;
+     border-radius: 3px;
+             float: none;
   input[type=email], input[type=password] {
     @extend .form-control;
   }

@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     delete '/unsubscribe' => 'subscriptions#destroy'
   end
 
+  resources :search, only: :index
+
   resources :authorizations, only: [:new, :create] do
     get 'confirm/:token', action: :confirm, on: :member, as: :confirm
   end

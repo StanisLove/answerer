@@ -1,0 +1,6 @@
+%h1 Search results
+- if @results.present?
+  - @results.each do |result|
+    %p= result
+- else
+  %p There are no search results.
