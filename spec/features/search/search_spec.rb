@@ -10,7 +10,7 @@ feature 'User searches documents', %q{
   given!(:answer)   { create :answer,   user: user }
   given!(:comment)  { create :comment,  commentable: question, user: user }
 
-  scenario 'Guest try to find User' do
+  scenario 'Guest try to find User', sphinx: true do
     search(query: user.email, model: 'Users')
 
     expect(page).to     have_content "User #{user.email} registered at"
@@ -19,7 +19,7 @@ feature 'User searches documents', %q{
     expect(page).to_not have_content "commented"
   end
 
-  scenario 'Guest try to find Question' do
+  scenario 'Guest try to find Question', sphinx: true do
     search(query: user.email, model: 'Questions')
 
     expect(page).to     have_content "User #{user.email} asked"
@@ -28,7 +28,7 @@ feature 'User searches documents', %q{
     expect(page).to_not have_content "commented"
   end
 
-  scenario 'Guest try to find Answer' do
+  scenario 'Guest try to find Answer', sphinx: true do
     search(query: user.email, model: 'Answers')
 
     expect(page).to     have_content "User #{user.email} answered"
@@ -37,7 +37,7 @@ feature 'User searches documents', %q{
     expect(page).to_not have_content "commented"
   end
 
-  scenario 'Guest try to find Comments' do
+  scenario 'Guest try to find Comments', sphinx: true do
     search(query: user.email, model: 'Comments')
 
     expect(page).to     have_content "User #{user.email} commented"
@@ -46,8 +46,8 @@ feature 'User searches documents', %q{
     expect(page).to_not have_content "registered at"
   end
 
-  scenario 'Guest try to find Anywhere' do
-    search(query: user.email, model: 'Anywehere')
+  scenario 'Guest try to find Anywhere', sphinx: true do
+    search(query: user.email, model: 'Anywhere')
 
     expect(page).to  have_content "User #{user.email} registered at"
     expect(page).to  have_content "User #{user.email} asked"
