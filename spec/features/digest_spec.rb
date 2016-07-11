@@ -11,7 +11,7 @@ feature 'User receive daily digest', %q{
 
   before do
     clear_emails
-    DailyMailer.digest(user).deliver_now
+    DailyMailer.digest(user, questions).deliver_now
     open_email user.email
   end
 

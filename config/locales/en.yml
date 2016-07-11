@@ -21,6 +21,7 @@ en:
     form:
       edit_question: 'Edit Question'
       submit:        '%{action} Question'
+
   answers:
     answer:
       title: '%{action}Answer'
@@ -31,6 +32,7 @@ en:
       delete_link:      'Delete Answer'
       edit_link:        'Edit Answer'
       choose_best_link: 'Choose the Best'
+
   comments:
     form:
       submit:           'Add Comment'
@@ -43,6 +45,10 @@ en:
     attachments:
       title:  'Files'
       delete: 'Delete'
+
+  search:
+    line:
+      search: 'Search'
 
   activerecord:
     models:

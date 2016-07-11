@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :question do
     sequence(:title)  { |n| "Title #{n}" }
-    sequence(:body)   { |n| "Body #{n}" }   
+    sequence(:body)   { |n| "Body #{n}" }
     user
 
     after(:create) do |question|
