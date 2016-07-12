@@ -57,6 +57,7 @@ gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
+gem 'jquery-turbolinks'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -68,7 +69,6 @@ group :development, :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'capybara-webkit'
-  gem 'jquery-turbolinks'
   gem 'capybara-email'
 end
 
