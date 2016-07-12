@@ -55,6 +55,8 @@ gem 'sinatra', '>= 1.3.0', require: nil
 gem "celluloid", git: "https://github.com/celluloid/celluloid", submodules: true
 gem 'mysql2'
 gem 'thinking-sphinx'
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -80,10 +82,14 @@ group :development do
   gem 'erb2haml'
   gem 'web-console', '~> 2.0'
   gem 'spring'
-  gem 'guard-rspec', require: false
-  gem 'guard-rails', require: false
-  gem 'guard-bundler', require: false
-  gem 'guard-spring', require: false
+  gem 'guard-rspec',        require: false
+  gem 'guard-rails',        require: false
+  gem 'guard-bundler',      require: false
+  gem 'guard-spring',       require: false
   gem 'letter_opener'
+  gem 'capistrano',         require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails',   require: false
+  gem 'capistrano-rvm',     require: false
 end
 
