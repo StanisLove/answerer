@@ -58,6 +58,7 @@ gem 'thinking-sphinx'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'jquery-turbolinks'
+gem 'unicorn'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -82,15 +83,16 @@ group :development do
   gem 'erb2haml'
   gem 'web-console', '~> 2.0'
   gem 'spring'
-  gem 'guard-rspec',        require: false
-  gem 'guard-rails',        require: false
-  gem 'guard-bundler',      require: false
-  gem 'guard-spring',       require: false
+  gem 'guard-rspec',         require: false
+  gem 'guard-rails',         require: false
+  gem 'guard-bundler',       require: false
+  gem 'guard-spring',        require: false
   gem 'letter_opener'
-  gem 'capistrano',         require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rails',   require: false
-  gem 'capistrano-rvm',     require: false
-  gem 'capistrano-sidekiq', require: false
+  gem 'capistrano',          require: false
+  gem 'capistrano-bundler',  require: false
+  gem 'capistrano-rails',    require: false
+  gem 'capistrano-rvm',      require: false
+  gem 'capistrano-sidekiq',  require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
