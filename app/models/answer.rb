@@ -10,6 +10,7 @@ class Answer < ActiveRecord::Base
 
   after_commit :sent_notification, on: :create
 
+  default_scope { order(created_at: :asc) }
   scope :order_by_best, -> { order(is_best: :desc).order(created_at: :asc) }
 
   def make_best!
