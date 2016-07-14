@@ -1,14 +1,15 @@
 .questions
-  - @questions.each do |question|
-    %div{class: "question question-#{question.id}"}
-      .title
-      %h3= question.title
-      %p=  question.body
-      = link_to t('.show_question'),   question
-      = link_to t('.delete_question'), question, method: :delete if can? :destroy, question
-      = link_to t('.edit_question') if can? :update, question
-      = link_to t('.new_answer'),
-        new_question_answer_path(question) if can? :create, Answer
-    %br
+  - cache collection_cache_key_for :question do
+    - @questions.each do |question|
+      %div{class: "question question-#{question.id}"}
+        .title
+        %h3= question.title
+        %p=  question.body
+        = link_to t('.show_question'),   question
+        = link_to t('.delete_question'), question, method: :delete if can? :destroy, question
+        = link_to t('.edit_question') if can? :update, question
+        = link_to t('.new_answer'),
+          new_question_answer_path(question) if can? :create, Answer
+      %br
 
 = subscribe_to '/questions'
