@@ -1,4 +1,5 @@
 .comments
   - if commentable.comments.any?
     - commentable.comments.asc.each do |comment|
-      = render 'comments/comment_content', comment: comment
+      - cache [comment, current_user] do
+        = render 'comments/comment_content', comment: comment
