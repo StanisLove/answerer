@@ -3,6 +3,7 @@ require 'capybara/email/rspec'
 
 RSpec.configure do |config|
   Capybara.javascript_driver = :webkit
+  Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
 
   config.include AcceptanceHelper, type: :feature
   config.include WaitForAjax,      type: :feature

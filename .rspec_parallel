@@ -1,0 +1,2 @@
+-f progress
+-f ParallelTests::RSpec::RuntimeLogger -o tmp/prspec.log

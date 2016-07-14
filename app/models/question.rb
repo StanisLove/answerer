@@ -13,7 +13,7 @@ class Question < ActiveRecord::Base
 
   after_create :subscribe_author
 
-  default_scope { order(created_at: :asc) }
+	default_scope { order(created_at: :asc) }
   scope :yesterday, lambda { where(created_at: Time.current.yesterday.all_day) }
 
   private
