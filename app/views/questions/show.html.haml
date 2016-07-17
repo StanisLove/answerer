@@ -7,8 +7,8 @@
                           object: [@question, @question.comments.build],
                     submit_class: 'add-comment-button' if can? :create, Comment
 
-  .answers{data: { question_id: @question.id } }
-    = render 'answers'
+.answers{data: { question_id: @question.id } }
+  = render 'answers'
 
 - cache ['answer_form', @question] do
   = render 'answers/form', object: [@question, @answer],
