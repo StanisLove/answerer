@@ -46,104 +46,122 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     sign_in_user
+    let(:form_params) { Hash.new }
+    let(:format) { Hash[format: :json] }
+    let(:params) { Hash[question: attributes_for(:question).merge(form_params)].merge(format) }
+
+    subject { post :create, params }
 
     context 'with valid attributes' do
       it 'saves the new question into DB' do
-        expect{
-          post  :create, question: attributes_for(:question), format: :json
-        }.to change(@user.questions, :count).by(1)
-      end
-
-      it 'redirects to show view' do
-        post  :create, question: attributes_for(:question)
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect{ subject }.to change(@user.questions, :count).by(1)
       end
 
       it 'status is 201' do
-        post  :create, question: attributes_for(:question), format: :json
+        subject
         expect(response.status).to eq 201
       end
 
       it 'publishes question to PrivatePub' do
         expect(PrivatePub).to receive(:publish_to)
-        post  :create, question: attributes_for(:question), format: :json
+        subject
       end
     end
 
     context 'with invalid attributes' do
+      let(:form_params) { attributes_for :invalid_question }
+      let(:format)      { Hash[format: :html] }
+
       it 'does not save the new question into DB' do
-        expect{
-          post  :create, question: attributes_for(:invalid_question)
-        }.to_not change(Question, :count)
+        expect{ subject }.to_not change(Question, :count)
       end
 
       it 're-renders new view' do
-        post  :create, question: attributes_for(:invalid_question)
+        subject
         expect(response).to render_template :new
       end
 
       it ' does not publish question to PrivatePub' do
         expect(PrivatePub).to_not receive(:publish_to)
-        post  :create, question: attributes_for(:invalid_question), format: :json
+        subject
       end
     end
   end
 
   describe 'PATCH #update' do
     sign_in_user
-    let(:question) { create(:question, user: @user) }
-    let(:other_question) { create(:question) }
+    let(:question)    { create(:question, user: @user) }
+    let(:form_params) { Hash[title: 'new title', body: 'new body'] }
+    let(:params)      { Hash[format: :js, id: question,
+                        question: attributes_for(:question).merge(form_params)] }
+
+    subject { patch :update, params }
 
     it 'assigns the request question to @question' do
-      patch :update, id: question, question: attributes_for(:question), format: :js
+      subject
       expect(assigns(:question)).to eq question
     end
 
     it 'changes question attributes' do
-      patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
+      subject
       question.reload
       expect(question.title).to eq 'new title'
-      expect(question.body).to eq 'new body'
-    end
-
-    it "doesn't change someone's question attribures" do
-      patch :update, id: other_question, question: { title: 'new title', body: 'new body' }, format: :js
-      other_question.reload
-      expect(other_question.title).to_not eq 'new title'
-      expect(other_question.body).to_not eq 'new body'
+      expect(question.body).to  eq 'new body'
     end
 
     it 'renders update template' do
-      patch :update, id: question, question: attributes_for(:question), format: :js
+      subject
       expect(response).to render_template :update
     end
+
+    context "someone's question" do
+      let(:question) { create(:question) }
+
+      it "doesn't change attribures" do
+        subject
+        question.reload
+        expect(question.title).to_not eq 'new title'
+        expect(question.body).to_not  eq 'new body'
+      end
+    end
+
+    context "invalid attributes" do
+      let(:form_params) { attributes_for :invalid_question }
+
+      it "doesn't update attributes" do
+        expect{ subject }.to not_change(question, :body).
+                         and not_change(question, :title)
+      end
+    end
+
   end
 
   describe 'DELETE #destroy' do
     sign_in_user
-    let!(:question) { create(:question, user_id: @user.id) }
-    let!(:other_question) { create(:question) }
+    let!(:question) { create :question, user: @user }
+
+    subject { delete :destroy, id: question }
 
     it 'deletes the question from DB...' do
-      expect{
-        delete :destroy, id: question
-      }.to change(@user.questions, :count).by(-1)
+      expect{ subject }.to change(@user.questions, :count).by(-1)
     end
 
     it '...and redirects to index view' do
-      delete :destroy, id: question
+      subject
       expect(response).to redirect_to questions_path
     end
 
-    it "doesn't delete the someone's question from DB..." do
-      expect{
-        delete :destroy, id: other_question
-      }.not_to change(Question, :count)
-    end
+    context "someone's quesiton" do
+      let!(:question) { create :question }
 
-    it "...and redirects to root path" do
-      delete :destroy, id: other_question
-      expect(response).to redirect_to root_path
+      it "doesn't delete the someone's question from DB..." do
+        expect{ subject }.not_to change(Question, :count)
+      end
+
+      it "...and redirects to root path" do
+        subject
+        expect(response).to redirect_to root_path
+      end
     end
   end
 

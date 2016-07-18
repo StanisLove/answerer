@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let!(:question) { create(:question) }
+  let(:question) { create(:question) }
 
   describe 'GET #show' do
     let(:answer) { create(:answer) }
@@ -17,85 +17,87 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    let(:form_params) { Hash.new }
+    let(:format)      { Hash[format: :json] }
+    let(:params)      { Hash[answer: attributes_for(:answer).merge(form_params),
+                        question_id: question].merge(format) }
+    subject { post :create, params }
     sign_in_user
 
-    context 'with valid attributes' do
-      it 'saves new answer into DB' do
-        expect{
-          post  :create, question_id: question, answer: attributes_for(:answer), format: :json
-        }.to  change(question.answers, :count).by(1)
-         .and change(@user.answers,    :count).by(1)
-      end
+    it 'saves new answer into DB' do
+      expect{ subject }.to  change(question.answers, :count).by(1)
+                       .and change(@user.answers,    :count).by(1)
+    end
 
-      it 'renders template create' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :json
-        expect(response).to render_template :create
-      end
+    it 'renders template create' do
+      subject
+      expect(response).to render_template :create
+    end
 
-      it 'publishes answer to PrivatePub' do
-        expect(PrivatePub).to receive(:publish_to)
-        post :create, question_id: question, answer: attributes_for(:answer), format: :json
-      end
+    it 'publishes answer to PrivatePub' do
+      expect(PrivatePub).to receive(:publish_to)
+      subject
     end
 
     context 'with invalid attributes' do
+      let(:form_params) { attributes_for :invalid_answer }
+      let(:format)      { Hash[format: :js] }
+
       it 'does not save the new answer into DB' do
-        expect{
-          post  :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
-        }.to  not_change(Answer,  :count)
+        expect{ subject }.to not_change(Answer, :count)
       end
 
       it 're-renders new view' do
-        post  :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
+        subject
         expect(response).to render_template :create
       end
 
       it 'does not publish answer to PrivatePub' do
         expect(PrivatePub).to_not receive(:publish_to)
-        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json
+        subject
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    let!(:other_answer) { create(:answer) }
+    subject { delete :destroy, id: answer, format: :js }
 
     context 'Signed in user' do
       sign_in_user
       let!(:answer) { create(:answer, user_id: @user.id) }
 
       it 'deletes the own answer from DB...' do
-        expect{
-          delete :destroy, id: answer, format: :js
-        }.to change(Answer, :count).by(-1)
+        expect{ subject }.to change(Answer, :count).by(-1)
       end
 
       it '...and renders template destroy' do
-        delete :destroy, id: answer, format: :js
+        subject
         expect(response).to render_template :destroy
       end
 
-      it "not deletes someone's answer from DB..." do
-        expect{
-          delete :destroy, id: other_answer, format: :js
-        }.to_not change(Answer, :count)
-      end
+      context "someone's answer" do
+        let!(:answer) { create :answer }
 
-      it '... and redirect to root path' do
-        delete :destroy, id: other_answer, format: :js
-        expect(response).to redirect_to root_path
+        it "cann't delete from DB..." do
+          expect{ subject }.to_not change(Answer, :count)
+        end
+
+        it '... and redirect to root path' do
+          subject
+          expect(response).to redirect_to root_path
+        end
       end
     end
 
     context 'Not signed in user' do
-      it "not deletes someone's answer from DB..." do
-        expect{
-          delete :destroy, id: other_answer, question_id: question, format: :js
-        }.to_not change(Answer, :count)
+      let!(:answer) { create :answer }
+
+      it "cann't delete someone's answer from DB..." do
+        expect{ subject }.to_not change(Answer, :count)
       end
 
       it '...and gets 401' do
-        delete :destroy, id: other_answer, question_id: question, format: :js
+        subject
         expect(response.status).to eq 401
       end
     end
@@ -103,73 +105,82 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     sign_in_user
-    let(:answer) { create(:answer, question: question, user: @user) }
-    let(:other_answer) { create(:answer, question: question) }
+    let(:answer)      { create(:answer, question: question, user: @user) }
+    let(:form_params) { Hash[body: 'new body'] }
+    let(:params)      { Hash[format: :js, id: answer,
+                             answer: attributes_for(:answer).merge(form_params)] }
+    subject { patch :update, params }
 
     it 'assigns the requested answer to @answer' do
-      patch :update, id: answer, answer: attributes_for(:answer), format: :js
+      subject
       expect(assigns(:answer)).to eq answer
     end
 
     it 'changes the own answer attributes' do
-      patch :update, id: answer, answer: { body: 'new body' }, format: :js
+      subject
       answer.reload
       expect(answer.body).to eq 'new body'
     end
 
-    it "not changes the someone's answer attributes" do
-      patch :update, id: other_answer, answer: { body: 'new body' }, format: :js
-      other_answer.reload
-      expect(other_answer.body).to_not eq 'new body'
-    end
-
     it 'render update template' do
-      patch :update, id: answer, answer: attributes_for(:answer), format: :js
+      subject
       expect(response).to render_template :update
     end
+
+    context "invalid params" do
+      let(:form_params) { attributes_for :invalid_answer }
+
+      it "doesn't update attributes" do
+        expect{ subject }.to_not change(answer, :body)
+      end
+    end
+
+    context "someones's answer" do
+      let!(:answer) { create :answer, question: question }
+
+      it "not changes the someone's answer attributes" do
+        subject
+        answer.reload
+        expect(answer.body).to_not eq 'new body'
+      end
+    end
+
   end
 
   describe 'PATCH #choose_best' do
-    let!(:answer) { create(:answer, question: question) }
+    let(:answer) { create(:answer, question: question) }
+
+    subject { patch :choose_best, id: answer, format: :js }
 
     it "user can't choose the best answer" do
-      patch :choose_best, id: answer, answer: { is_best: true }, format: :js
+      subject
       expect(answer.is_best).to eq false
     end
 
     context "Authenticated user" do
       sign_in_user
-      let!(:own_question)    { create(:question, user: @user) }
-      let!(:some_answer_one) { create(:answer,   question: own_question) }
-      let!(:some_answer_two) { create(:answer,   question: own_question) }
 
-      it "can't choose the best answer" do
-        patch :choose_best, id: answer, format: :js
+      it "can't choose the best answer someone's question" do
+        subject
         expect(answer.is_best).to eq false
       end
 
-      it %q{is the author of the question and
-            can choose the best answer and
-            the best answer is only one
-      } do
-        expect(some_answer_one.is_best).to eq false
-        expect(some_answer_two.is_best).to eq false
+      context "is the author of the question" do
+        let(:question)    { create(:question, user: @user) }
+        let(:answer)      { create(:answer,   question: question) }
+        let(:best_answer) { create(:answer,   question: question, is_best: true) }
 
-        patch :choose_best, id: some_answer_one, format: :js
-        some_answer_one.reload
+        it "can choose the best answer" do
+          subject
+          answer.reload
+          expect(answer.is_best).to eq true
+        end
 
-        expect(some_answer_one.is_best).to eq true
-        expect(some_answer_two.is_best).to eq false
-
-        patch :choose_best, id: some_answer_two, format: :js
-
-        expect(assigns(:question)).to eq own_question
-        expect(assigns(:answer)).to   eq some_answer_two
-
-        some_answer_two.reload
-        expect(some_answer_two.is_best).to eq true
-        some_answer_one.reload
-        expect(some_answer_one.is_best).to eq false
+        it "changes the the best answer" do
+          expect{ subject && answer.reload && best_answer.reload }.
+            to  change(answer, :is_best).from(false).to(true).
+            and change(best_answer, :is_best).from(true).to(false)
+        end
       end
     end
   end
