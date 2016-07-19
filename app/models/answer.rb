@@ -3,18 +3,19 @@ class Answer < ActiveRecord::Base
   include Concerns::Votable
   include Concerns::Commentable
 
-  belongs_to  :question
+  belongs_to  :question, touch: true
   belongs_to  :user
 
   validates :body, :question_id, :user_id, presence: true
 
   after_commit :sent_notification, on: :create
 
+  default_scope { order(created_at: :asc) }
   scope :order_by_best, -> { order(is_best: :desc).order(created_at: :asc) }
 
   def make_best!
     Answer.transaction do
-      self.question.answers.update_all(is_best: false)
+      self.question.answers.update_all(is_best: false, updated_at: Time.now)
       self.toggle!(:is_best)
     end
   end

@@ -1,3 +1,4 @@
 - @question.answers.order_by_best.each do |answer|
   - if answer.persisted?
-    = render 'answers/answer', answer: answer
+    - cache [answer, current_user] do
+      = render 'answers/answer', answer: answer
