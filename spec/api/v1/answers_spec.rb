@@ -46,8 +46,7 @@ describe 'Answers API' do
       end
 
       context 'attachments' do
-        let!(:attachment) { create :attachment, attachable: answer }
-        let(:object)      { attachment.file }
+        let(:object)      { answer.attachments.first.file }
 
         it_behaves_like "API Containable",
           %w(url), "answer/attachments/0/"

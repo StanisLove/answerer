@@ -1,5 +1,4 @@
 shared_examples_for "API Containable" do |attributes, path, not_present = []|
-  let(:name) { model.model_name.singular }
 
   before { do_request(access_token: access_token.token) }
 

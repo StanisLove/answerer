@@ -5,9 +5,9 @@ describe 'Questions API' do
     it_behaves_like "API Authenticable"
 
     context 'authorized' do
-      let!(:access_token)  { create :access_token }
-      let!(:questions)      { create_list :question, 2 }
-      let(:object) { questions.first }
+      let!(:access_token) { create :access_token }
+      let!(:questions)    { create_list :question, 2 }
+      let(:object)        { questions.first }
 
       it_behaves_like "API Containable",
         %w(id title body created_at updated_at), "questions/0/"
@@ -61,10 +61,9 @@ describe 'Questions API' do
       end
 
       context 'attachments' do
-        let!(:attachment) { create :attachment, attachable: question }
-        let(:object)      { attachment.file }
+        let(:object)      { question.attachments.first.file }
 
-        it_behaves_like "API Containable", %w(url), "question/attachments/0/"
+        include_examples "API Containable", %w(url), "question/attachments/0/"
       end
     end
 

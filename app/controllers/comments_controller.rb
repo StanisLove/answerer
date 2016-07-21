@@ -24,13 +24,13 @@ class CommentsController < ApplicationController
     end
 
     def create_new_comment_to_commentable
-      @comment = @commentable.comments
-      .create(comment_params.merge(user_id: current_user.id))
+      @comment = @commentable.comments.
+      create(comment_params.merge(user_id: current_user.id))
     end
 
     def publish_comment
       id = @commentable.try(:question_id) || @commentable.id
       PrivatePub.publish_to "/questions/#{id}/comment",
-      comment: render_to_string(template: 'comments/create.json.jbuilder')
+      comment: render_to_string(template: 'comments/create.json.jbuilder') if @comment.valid?
     end
 end

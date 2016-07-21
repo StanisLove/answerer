@@ -10,4 +10,10 @@ FactoryGirl.define do
     user
     association :commentable
   end
+
+  factory :updated_comment, class: "Comment" do
+    body "new body"
+    user
+    association :commentable
+  end
 end

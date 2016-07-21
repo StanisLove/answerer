@@ -16,10 +16,10 @@ ready = ->
   $('.best-answer-link').click (e) ->
     e.preventDefault();
     $('.best-answer-link').show();
-    $('.answers > div > h3').html("Ответ");
+    $('.answers > div > h3').html("Answer");
     $(this).hide();
     answer_id = $(this).data('answerId')
-    $('#answer-' + answer_id + ' > h3').html("Лучший ответ");
+    $('#answer-' + answer_id + ' > h3').html("The Best Answer");
 
   $('.answers .add-comment-link').click (e) ->
     e.preventDefault();

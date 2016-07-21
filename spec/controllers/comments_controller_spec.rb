@@ -5,65 +5,63 @@ RSpec.describe CommentsController, type: :controller do
   let(:question)  { create(:question) }
   let(:answer)    { create(:answer, question: question) }
 
-  sign_in_user
+  describe 'POST #create', :auth, :valid_attrs do
+    let(:parent) { Hash[question_id: question] }
 
-  describe 'POST #create' do
+    subject { post :create, params }
 
     context 'with valid attributes' do
       it "creates question's comment in DB" do
-        expect{
-          post :create, question_id: question,
-          comment: attributes_for(:comment), format: :json
-        }.to change(question.comments, :count).by(1)
+        expect{ subject }.to change(question.comments, :count).by(1)
       end
 
-      it "creates answer's comment in DB" do
-        expect{
-          post :create, answer_id: answer,
-          comment: attributes_for(:comment), format: :json
-        }.to change(answer.comments, :count).by(1)
+      context "for answer" do
+        let(:parent) { Hash[answer_id: answer] }
+
+        it "creates comment in DB" do
+          expect{ subject }.to change(answer.comments, :count).by(1)
+        end
       end
 
       it "renders template create" do
-        post :create, question_id: question, answer_id: answer,
-                          comment: attributes_for(:comment), format: :json
+        subject
         expect(response).to render_template :create
       end
 
       it "re-renders new view" do
-        post :create, question_id: question, answer_id: answer,
-                          comment: attributes_for(:invalid_comment), format: :js
+        subject
         expect(response).to render_template :create
       end
 
-      it 'publishes comment to PrivatePub' do
-        expect(PrivatePub).to receive(:publish_to)
-        post :create, question_id: question, answer_id: answer,
-                          comment: attributes_for(:comment), format: :json
-      end
+      include_examples "publishable"
     end
 
     context 'with invalid attributes' do
-      it " doesn't create question's comment in DB" do
-        expect{
-          post :create, question_id: question,
-          comment: attributes_for(:invalid_comment), format: :js
-        }.to_not change(Comment, :count)
-      end
+      let(:form_params) { attributes_for :invalid_comment }
+      let(:format) { Hash[format: :js] }
 
-      it "doesn't create answer's comment in DB" do
-        expect{
-          post :create, question_id: question, answer_id: answer,
-          comment: attributes_for(:invalid_comment), format: :js
-        }.to_not change(Comment, :count)
-      end
+      include_examples "invalid params", Comment
+      include_examples "unpublishable",  Comment
 
-      it 'does not publish comment to PrivatePub' do
-        expect(PrivatePub).to receive(:publish_to)
-        post :create, question_id: question, answer_id: answer,
-                          comment: attributes_for(:invalid_comment), format: :json
+      context "for answer" do
+        let(:parent) { Hash[answer_id: answer] }
+
+        include_examples "invalid params", Comment
+        include_examples "unpublishable",  Comment
       end
     end
 
+    context 'Unauthenticated user', :unauth do
+
+      include_examples "invalid params", Comment
+      include_examples "unpublishable",  Comment
+
+      context "for answer" do
+        let(:parent) { Hash[answer_id: answer] }
+
+        include_examples "invalid params", Comment
+        include_examples "unpublishable",  Comment
+      end
+    end
   end
 end

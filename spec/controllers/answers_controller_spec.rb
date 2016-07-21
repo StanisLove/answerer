@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe AnswersController, type: :controller do
+RSpec.describe AnswersController, :auth, type: :controller do
   let(:question) { create(:question) }
 
-  describe 'GET #show' do
+  describe 'GET #show', :unauth do
     let(:answer) { create(:answer) }
     before { get :show, id: answer }
 
@@ -16,17 +16,14 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'POST #create' do
-    let(:form_params) { Hash.new }
-    let(:format)      { Hash[format: :json] }
-    let(:params)      { Hash[answer: attributes_for(:answer).merge(form_params),
-                        question_id: question].merge(format) }
+  describe 'POST #create', :valid_attrs do
+		let(:parent) { Hash[question_id: question] }
+
     subject { post :create, params }
-    sign_in_user
 
     it 'saves new answer into DB' do
       expect{ subject }.to  change(question.answers, :count).by(1)
-                       .and change(@user.answers,    :count).by(1)
+                       .and change(user.answers,     :count).by(1)
     end
 
     it 'renders template create' do
@@ -34,67 +31,52 @@ RSpec.describe AnswersController, type: :controller do
       expect(response).to render_template :create
     end
 
-    it 'publishes answer to PrivatePub' do
-      expect(PrivatePub).to receive(:publish_to)
-      subject
-    end
+		include_examples "publishable", Answer
 
     context 'with invalid attributes' do
-      let(:form_params) { attributes_for :invalid_answer }
+			let(:form_params) { attributes_for :invalid_answer }
       let(:format)      { Hash[format: :js] }
 
-      it 'does not save the new answer into DB' do
-        expect{ subject }.to not_change(Answer, :count)
-      end
+			include_examples "invalid params", Answer
+			include_examples "unpublishable",  Answer
 
       it 're-renders new view' do
         subject
         expect(response).to render_template :create
       end
 
-      it 'does not publish answer to PrivatePub' do
-        expect(PrivatePub).to_not receive(:publish_to)
-        subject
-      end
     end
   end
 
   describe 'DELETE #destroy' do
     subject { delete :destroy, id: answer, format: :js }
 
-    context 'Signed in user' do
-      sign_in_user
-      let!(:answer) { create(:answer, user_id: @user.id) }
+    let!(:answer) { create(:answer, user: user) }
 
-      it 'deletes the own answer from DB...' do
-        expect{ subject }.to change(Answer, :count).by(-1)
-      end
+    it 'deletes the own answer from DB...' do
+      expect{ subject }.to change(Answer, :count).by(-1)
+    end
 
-      it '...and renders template destroy' do
+    it '...and renders template destroy' do
+      subject
+      expect(response).to render_template :destroy
+    end
+
+    context "someone's answer" do
+      let!(:answer) { create :answer, user: john }
+
+			include_examples "invalid params", Answer
+
+      it '... and redirect to root path' do
         subject
-        expect(response).to render_template :destroy
-      end
-
-      context "someone's answer" do
-        let!(:answer) { create :answer }
-
-        it "cann't delete from DB..." do
-          expect{ subject }.to_not change(Answer, :count)
-        end
-
-        it '... and redirect to root path' do
-          subject
-          expect(response).to redirect_to root_path
-        end
+        expect(response).to redirect_to root_path
       end
     end
 
-    context 'Not signed in user' do
+    context 'Not signed in user', :unauth do
       let!(:answer) { create :answer }
 
-      it "cann't delete someone's answer from DB..." do
-        expect{ subject }.to_not change(Answer, :count)
-      end
+			include_examples "invalid params", Answer
 
       it '...and gets 401' do
         subject
@@ -103,12 +85,11 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'PATCH #update' do
-    sign_in_user
-    let(:answer)      { create(:answer, question: question, user: @user) }
-    let(:form_params) { Hash[body: 'new body'] }
+  describe 'PATCH #update', :updated_attrs do
+    let(:answer)      { create(:answer, question: question, user: user) }
     let(:params)      { Hash[format: :js, id: answer,
                              answer: attributes_for(:answer).merge(form_params)] }
+
     subject { patch :update, params }
 
     it 'assigns the requested answer to @answer' do
@@ -136,7 +117,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context "someones's answer" do
-      let!(:answer) { create :answer, question: question }
+      let!(:answer) { create :answer, question: question, user: john }
 
       it "not changes the someone's answer attributes" do
         subject
@@ -152,21 +133,21 @@ RSpec.describe AnswersController, type: :controller do
 
     subject { patch :choose_best, id: answer, format: :js }
 
-    it "user can't choose the best answer" do
-      subject
-      expect(answer.is_best).to eq false
-    end
+		context "Unauthenticated user", :unauth do
+			it "can't choose the best answer" do
+				subject
+				expect(answer.is_best).to eq false
+			end
+		end
 
     context "Authenticated user" do
-      sign_in_user
-
       it "can't choose the best answer someone's question" do
         subject
         expect(answer.is_best).to eq false
       end
 
       context "is the author of the question" do
-        let(:question)    { create(:question, user: @user) }
+        let(:question)    { create(:question, user: user) }
         let(:answer)      { create(:answer,   question: question) }
         let(:best_answer) { create(:answer,   question: question, is_best: true) }
 
@@ -186,7 +167,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'Voting' do
-    sign_in_user
     let(:object) { create(:answer, question: question) }
 
     it_behaves_like 'Voted'

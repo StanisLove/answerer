@@ -1,7 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe QuestionsController, type: :controller do
-  describe 'GET #index' do
+RSpec.describe QuestionsController, :auth, type: :controller do
+
+  describe 'GET #index', :unauth do
     let(:questions) { create_list(:question, 2) }
     before { get  :index }
 
@@ -15,7 +16,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    sign_in_user
     before { get  :new }
 
     it 'assigns a new Question to @question' do
@@ -27,7 +27,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #show' do
+  describe 'GET #show', :unauth do
     let(:question) { create(:question) }
     before { get  :show, id: question }
 
@@ -44,54 +44,37 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'POST #create' do
-    sign_in_user
-    let(:form_params) { Hash.new }
-    let(:format) { Hash[format: :json] }
-    let(:params) { Hash[question: attributes_for(:question).merge(form_params)].merge(format) }
-
+  describe 'POST #create', :valid_attrs do
     subject { post :create, params }
 
-    context 'with valid attributes' do
-      it 'saves the new question into DB' do
-        expect{ subject }.to change(@user.questions, :count).by(1)
-      end
-
-      it 'status is 201' do
-        subject
-        expect(response.status).to eq 201
-      end
-
-      it 'publishes question to PrivatePub' do
-        expect(PrivatePub).to receive(:publish_to)
-        subject
-      end
+    it 'saves the new question into DB' do
+      expect{ subject }.to change(user.questions, :count).by(1)
     end
 
-    context 'with invalid attributes' do
-      let(:form_params) { attributes_for :invalid_question }
-      let(:format)      { Hash[format: :html] }
+    it 'status is 201' do
+      subject
+      expect(response.status).to eq 201
+    end
 
-      it 'does not save the new question into DB' do
-        expect{ subject }.to_not change(Question, :count)
-      end
+		include_examples "publishable", Question
+
+    context 'with invalid attributes', :invalid_attrs do
+			include_examples "invalid params", Question
+			include_examples "unpublishable",  Question
 
       it 're-renders new view' do
         subject
         expect(response).to render_template :new
       end
-
-      it ' does not publish question to PrivatePub' do
-        expect(PrivatePub).to_not receive(:publish_to)
-        subject
-      end
     end
+
+		context "Unauthenticated user", :unauth do
+			include_examples "invalid params", Question
+		end
   end
 
-  describe 'PATCH #update' do
-    sign_in_user
-    let(:question)    { create(:question, user: @user) }
-    let(:form_params) { Hash[title: 'new title', body: 'new body'] }
+  describe 'PATCH #update', :updated_attrs do
+    let(:question)    { create(:question, user: user) }
     let(:params)      { Hash[format: :js, id: question,
                         question: attributes_for(:question).merge(form_params)] }
 
@@ -115,7 +98,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context "someone's question" do
-      let(:question) { create(:question) }
+      let(:question) { create(:question, user: john) }
 
       it "doesn't change attribures" do
         subject
@@ -137,13 +120,12 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
-    let!(:question) { create :question, user: @user }
+    let!(:question) { create :question, user: user }
 
     subject { delete :destroy, id: question }
 
     it 'deletes the question from DB...' do
-      expect{ subject }.to change(@user.questions, :count).by(-1)
+      expect{ subject }.to change(user.questions, :count).by(-1)
     end
 
     it '...and redirects to index view' do
@@ -152,11 +134,9 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context "someone's quesiton" do
-      let!(:question) { create :question }
+      let!(:question) { create :question, user: john }
 
-      it "doesn't delete the someone's question from DB..." do
-        expect{ subject }.not_to change(Question, :count)
-      end
+			include_examples "invalid params", Question
 
       it "...and redirects to root path" do
         subject
@@ -166,7 +146,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'Voting' do
-    sign_in_user
     let(:object) { create(:question) }
 
     it_behaves_like 'Voted'

@@ -21,7 +21,7 @@ shared_examples_for 'Voted' do
   end
 
   describe 'PATCH #vote_reset' do
-    let!(:vote)  { create(:vote_up, user_id: @user.id, votable: object) }
+    let!(:vote)  { create(:vote_up, user_id: user.id, votable: object) }
 
     it_behaves_like 'Assignable', :vote_reset
 
