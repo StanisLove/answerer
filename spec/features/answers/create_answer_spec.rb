@@ -6,12 +6,12 @@ feature 'User creates answer', %q{
   I want to be able to create answer
 } do
 
-  given!(:question)  { create :question }
-  given(:answer)     { build  :answer }
-  given(:other_user) { create :user }
+  given!(:question) { create :question }
+  given(:answer)    { build  :answer }
+  given(:user)      { create :user }
 
   scenario 'Authenticated user try to create answer', js: true do
-    sign_in(other_user)
+    sign_in user
     visit question_path(question)
     fill_in  'New Answer',  with: answer.body
     click_on 'Publish Answer'
@@ -24,8 +24,8 @@ feature 'User creates answer', %q{
     end
   end
 
-  scenario 'User try to create invalid answer', js: true do
-    sign_in(other_user)
+  scenario 'User try to create invalid answer', :js do
+    sign_in user
     visit question_path(question)
     click_on 'Publish Answer'
     expect(page).to have_content "Body can't be blank"
@@ -33,5 +33,35 @@ feature 'User creates answer', %q{
     fill_in  'New Answer', with: answer.body
     click_on 'Publish Answer'
     expect(page).to_not have_content "Body can't be blank"
+  end
+
+  context "multiple sessions", :js do
+    scenario "all users see new answer in real-time" do
+      Capybara.using_session "author" do
+        sign_in user
+        visit question_path(question)
+      end
+
+      Capybara.using_session "guest" do
+        visit question_path(question)
+      end
+
+      Capybara.using_session "author" do
+        fill_in  'New Answer',  with: answer.body
+        click_on 'Publish Answer'
+        wait_for_ajax
+        expect(page).to have_content 'Answer was successfully created.'
+        expect(page).to have_content "#{answer.body}"
+        within '.new_answer' do
+          expect(page).to_not have_content "#{answer.body}"
+        end
+      end
+
+      Capybara.using_session "guest" do
+        wait_for_ajax
+        expect(page).to_not have_content 'Answer was successfully created.'
+        expect(page).to     have_content "#{answer.body}"
+      end
+    end
   end
 end
