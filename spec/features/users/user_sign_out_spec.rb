@@ -9,7 +9,7 @@ feature 'User sign out', %q{
   given(:user) { create(:user) }
 
   scenario 'Signed in user try to sign out' do
-    sign_in(user)
+    manual_entry(user)
     click_on 'Sign Out'
     expect(page).to have_content('Signed out successfully.')
     expect(page).to have_content('Sign In')

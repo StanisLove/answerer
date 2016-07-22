@@ -326,6 +326,9 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack_session_access (0.1.1)
+      builder (>= 2.0.0)
+      rack (>= 1.0.0)
     rails (4.2.6)
       actionmailer (= 4.2.6)
       actionpack (= 4.2.6)
@@ -542,6 +545,7 @@ DEPENDENCIES
   parallel_tests
   pg (~> 0.15)
   private_pub
+  rack_session_access
   rails (= 4.2.6)
   redis-rails
   remotipart
