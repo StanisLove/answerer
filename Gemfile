@@ -60,7 +60,6 @@ gem 'redis-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'spring-commands-rspec'
@@ -70,6 +69,11 @@ group :development, :test do
   gem 'capybara-webkit'
   gem 'capybara-email'
   gem 'parallel_tests'
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
+  gem 'dev_log_in'
 end
 
 group :test do

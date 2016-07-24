@@ -19,4 +19,20 @@ module AcceptanceHelper
       click_on 'Search'
     end
   end
+
+  def visit_server(user: nil, wait: 2)
+    url = "http://#{Capybara.server_host}:#{Capybara.server_port}"
+
+    url += "/dev/log_in/#{user.id}" if user.present?
+
+    p "Visit server on #{url}"
+    Launchy.open("http://#{Capybara.server_host}:#{Capybara.server_port}/dev/log_in/#{user.id}?redirect_to='")
+
+    if wait.zero?
+      p 'Type any key to continue...'
+      $stdin.gets
+    else
+      sleep wait
+    end
+  end
 end

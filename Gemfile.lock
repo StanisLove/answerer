@@ -67,7 +67,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     builder (3.2.2)
-    byebug (9.0.0)
+    byebug (9.0.5)
     cancancan (1.15.0)
     capistrano (3.5.0)
       airbrussh (>= 1.0.0)
@@ -135,6 +135,8 @@ GEM
     daemons (1.2.3)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    dev_log_in (1.1.0)
+      rails (>= 3.0.0)
     devise (3.5.10)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -234,6 +236,7 @@ GEM
     http_parser.rb (0.6.0)
     i18n (0.7.0)
     innertube (1.1.0)
+    interception (0.5)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -321,6 +324,17 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
+    pry-rescue (1.4.4)
+      interception (>= 0.5)
+      pry
+    pry-stack_explorer (0.4.9.2)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -503,7 +517,6 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   bootstrap-sass
-  byebug
   cancancan
   capistrano
   capistrano-bundler
@@ -519,6 +532,7 @@ DEPENDENCIES
   cocoon
   coffee-rails (~> 4.1.0)
   database_cleaner
+  dev_log_in
   devise (~> 3.5.10)
   doorkeeper
   dotenv
@@ -545,6 +559,10 @@ DEPENDENCIES
   parallel_tests
   pg (~> 0.15)
   private_pub
+  pry-byebug
+  pry-rails
+  pry-rescue
+  pry-stack_explorer
   rack_session_access
   rails (= 4.2.6)
   redis-rails

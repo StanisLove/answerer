@@ -46,6 +46,7 @@ feature 'User creates answer', %q{
         visit question_path(question)
       end
 
+
       Capybara.using_session "author" do
         fill_in  'New Answer',  with: answer.body
         click_on 'Publish Answer'

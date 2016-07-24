@@ -1,9 +1,14 @@
 require_relative 'rails_helper'
 require 'capybara/email/rspec'
 
+Capybara::Webkit.configure do |config|
+  config.allow_url("0.0.0.0")
+end
+
 RSpec.configure do |config|
   Capybara.javascript_driver = :webkit
   Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
+  Capybara.server_host = "0.0.0.0"
 
   config.include AcceptanceHelper, type: :feature
   config.include WaitForAjax,      type: :feature
