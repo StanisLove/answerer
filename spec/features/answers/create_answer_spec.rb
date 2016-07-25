@@ -50,7 +50,6 @@ feature 'User creates answer', %q{
         visit question_path(question)
       end
 
-
       Capybara.using_session "author" do
         fill_in  'New Answer',  with: answer.body
         click_on 'Publish Answer'
@@ -68,7 +67,7 @@ feature 'User creates answer', %q{
 
       Capybara.using_session "guest" do
         wait_for_ajax
-        expect(page).to_not have_content 'Answer was successfully created.'
+        expect(page).to have_content 'Answer was successfully created.'
         expect(page).to     have_content "#{answer.body}"
         expect(page).to_not have_link    "Delete Answer"
         expect(page).to_not have_link    "Edit Answer"

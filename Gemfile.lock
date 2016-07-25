@@ -553,6 +553,7 @@ DEPENDENCIES
   launchy
   letter_opener
   mysql2
+  nenv
   omniauth
   omniauth-facebook
   omniauth-twitter
