@@ -4,7 +4,6 @@ json.edit_url         edit_answer_path(@answer)
 json.best_url         choose_best_answer_path(@answer)
 json.question_user_id @answer.question.user_id
 json.voting_result    @answer.voting_result
-json.flash_notice     "Ответ успешно создан"
 
 if @answer.attachments.any?
   json.attachments @answer.attachments do |attachment|

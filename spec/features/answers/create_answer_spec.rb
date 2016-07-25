@@ -18,7 +18,11 @@ feature 'User creates answer', %q{
     expect(page).to have_content 'Answer was successfully created.'
     expect(page).to have_content "#{question.title}"
     expect(page).to have_content "#{question.body}"
-    expect(page).to have_content "#{answer.body}"
+    within ".answers" do
+      expect(page).to have_content "#{answer.body}"
+      expect(page).to have_link    "Delete Answer"
+      expect(page).to have_link    "Edit Answer"
+    end
     within '.new_answer' do
       expect(page).to_not have_content "#{answer.body}"
     end
@@ -52,7 +56,11 @@ feature 'User creates answer', %q{
         click_on 'Publish Answer'
         wait_for_ajax
         expect(page).to have_content 'Answer was successfully created.'
-        expect(page).to have_content "#{answer.body}"
+        within ".answers" do
+          expect(page).to have_content "#{answer.body}"
+          expect(page).to have_link    "Delete Answer"
+          expect(page).to have_link    "Edit Answer"
+        end
         within '.new_answer' do
           expect(page).to_not have_content "#{answer.body}"
         end
@@ -62,6 +70,8 @@ feature 'User creates answer', %q{
         wait_for_ajax
         expect(page).to_not have_content 'Answer was successfully created.'
         expect(page).to     have_content "#{answer.body}"
+        expect(page).to_not have_link    "Delete Answer"
+        expect(page).to_not have_link    "Edit Answer"
       end
     end
   end
