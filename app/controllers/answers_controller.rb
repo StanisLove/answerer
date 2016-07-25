@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   include PublicIndexAndShow
   include Voted
 
-  before_action :load_question,                 only: [:index, :new, :create]
+  before_action :load_question,                 only: [:index, :show, :new, :create]
   before_action :create_new_answer_to_question, only: :create
   before_action :load_answer,                   only: [:show, :choose_best]
   before_action :load_current_user_answer,      only: [:update, :destroy]

@@ -16,7 +16,7 @@ feature 'Remove files from question', %q{
   scenario 'User remove file from the question', js: true do
     expect(page).to have_content 'Files'
     expect(page).to have_link    'spec_helper.rb',
-        href: /^\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+        href: /\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
     expect(page).to have_content 'Delete'
     click_on 'Delete'
     wait_for_ajax

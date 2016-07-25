@@ -1,14 +1,22 @@
 require_relative 'rails_helper'
 require 'capybara/email/rspec'
-
-Capybara::Webkit.configure do |config|
-  config.allow_url("0.0.0.0")
-end
+require 'rack_session_access/capybara'
+require 'capybara/poltergeist'
+#require 'rspec/page-regression'
 
 RSpec.configure do |config|
-  Capybara.javascript_driver = :webkit
   Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
   Capybara.server_host = "0.0.0.0"
+
+	Capybara.register_driver :poltergeist do |app|
+		Capybara::Poltergeist::Driver.new(
+			app,
+			timeout: 90, js_errors: true,
+			phantomjs_logger: Logger.new(STDOUT),
+			window_size: [1020, 740])
+	end
+
+	Capybara.javascript_driver = :poltergeist
 
   config.include AcceptanceHelper, type: :feature
   config.include WaitForAjax,      type: :feature

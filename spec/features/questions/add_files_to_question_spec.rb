@@ -30,9 +30,9 @@ feature 'Add files to question', %q{
 
     expect(page).to have_content 'Files'
     expect(page).to have_link    'spec_helper.rb',
-        href: /^\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+        href: /\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
     expect(page).to have_link 'rails_helper.rb',
-        href: /^\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
+        href: /\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
   end
 
   scenario 'User can add and then revmove file while creating an answer', js: true do

@@ -39,13 +39,13 @@ feature 'Add files to answer', %q{
     within '.answers' do
       expect(page).to     have_content 'Files'
       expect(page).to     have_link 'spec_helper.rb',
-        href: /^\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+        href: /\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
       expect(page).to     have_link 'rails_helper.rb',
-        href: /^\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
+        href: /\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
     end
   end
 
-  scenario 'User can add and then revmove file while creating an answer', js: true do
+  scenario 'User can add and then revmove file while creating an answer', :js do
     fill_in     'New Answer',  with: answer.body
     click_on    'Add one more file'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"

@@ -67,7 +67,6 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
-  gem 'capybara-webkit'
   gem 'capybara-email'
   gem 'parallel_tests'
   gem 'pry-byebug'
@@ -75,6 +74,7 @@ group :development, :test do
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
   gem 'dev_log_in'
+	gem 'poltergeist'
 end
 
 group :test do

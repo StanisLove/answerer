@@ -8,7 +8,6 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'cancan/matchers'
 require 'sidekiq/testing'
-require 'rack_session_access/capybara'
 
 Sidekiq::Testing.fake!
 

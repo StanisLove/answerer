@@ -1,6 +1,7 @@
 // Place all the styles related to the questions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$icon-font-path: "bootstrap/";
 @import "bootstrap";
 .question > .edit_question,
 .new_comment { 
