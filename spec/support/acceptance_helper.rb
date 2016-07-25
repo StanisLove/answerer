@@ -26,7 +26,7 @@ module AcceptanceHelper
     url += "/dev/log_in/#{user.id}" if user.present?
 
     p "Visit server on #{url}"
-    Launchy.open("http://#{Capybara.server_host}:#{Capybara.server_port}/dev/log_in/#{user.id}?redirect_to='")
+    Launchy.open(url)
 
     if wait.zero?
       p 'Type any key to continue...'

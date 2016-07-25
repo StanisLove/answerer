@@ -18,7 +18,7 @@ feature 'User adds comment to the answer', %{
 
     sign_in(user)
     visit question_path(question)
-
+    visit_server
     within "#answer-#{answer.id}" do
       expect(page).to     have_content 'Add Comment'
       expect(page).to_not have_selector('.answers .new_comment', visible: true)
