@@ -4,8 +4,8 @@ RSpec.describe AnswersController, :auth, type: :controller do
   let(:question) { create(:question) }
 
   describe 'GET #show', :unauth do
-    let(:answer) { create(:answer) }
-    before { get :show, id: answer }
+    let(:answer) { create :answer, question: question }
+    before { get :show, id: answer, question_id: question }
 
     it 'assigns the requested answer to @answer' do
       expect(assigns(:answer)).to eq answer

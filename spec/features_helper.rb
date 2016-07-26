@@ -3,6 +3,7 @@ require 'capybara/email/rspec'
 require 'rack_session_access/capybara'
 require 'capybara/poltergeist'
 require 'rspec/page-regression'
+require 'bg_helper' unless Nenv.skip_bg?
 
 RSpec.configure do |config|
   Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
