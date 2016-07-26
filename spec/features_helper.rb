@@ -2,7 +2,7 @@ require_relative 'rails_helper'
 require 'capybara/email/rspec'
 require 'rack_session_access/capybara'
 require 'capybara/poltergeist'
-#require 'rspec/page-regression'
+require 'rspec/page-regression'
 
 RSpec.configure do |config|
   Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
@@ -17,6 +17,10 @@ RSpec.configure do |config|
 	end
 
 	Capybara.javascript_driver = :poltergeist
+
+	RSpec::PageRegression.configure do |c|
+		c.threshold = 0.01
+	end
 
   config.include AcceptanceHelper, type: :feature
   config.include WaitForAjax,      type: :feature

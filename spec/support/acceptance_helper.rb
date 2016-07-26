@@ -50,4 +50,9 @@ module AcceptanceHelper
 
     count.zero? ? FileUtils.rm_rf(Dir.glob(path)) : FileUtils.rm_rf(files[0...-count])
   end
+
+  def switch_subdomain(name)
+    host = "#{name}.#{Capybara.server_host}.xip.io:#{Capybara.server_port}"
+    Capybara.app_host = "http://#{host}"
+  end
 end

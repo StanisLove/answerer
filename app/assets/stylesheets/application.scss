@@ -29,6 +29,16 @@ input[type=submit] { @extend .btn; @extend .btn-primary }
     float: right;
   }
 }
+
+.night {
+  background-color: black;
+  color: white;
+  .links > a { color: white; }
+  .search {
+    select, textarea { background-color: black; }
+  }
+}
+
 .attachments .field input {
   display: inline-block;
 }

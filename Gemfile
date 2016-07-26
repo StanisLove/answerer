@@ -82,6 +82,7 @@ group :test do
   gem 'fuubar'
   gem 'json_spec'
   gem 'rack_session_access'
+	gem 'rspec-page-regression', github: 'teachbase/rspec-page-regression', branch: 'use-imatcher'
 end
 
 group :development do
