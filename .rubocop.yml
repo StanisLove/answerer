@@ -1,0 +1,153 @@
+require: rubocop-rspec
+
+AllCops:
+  # Include gemspec and Rakefile
+  Include:
+    - 'app/**/*.rb'
+    - 'config/**/*.rb'
+    - 'lib/**/*.rb'
+    - 'lib/**/*.rake'
+    - 'spec/**/*.rb'
+  Exclude:
+    - 'vendor/**/*'
+    - 'db/**/*.rb'
+    - 'bin/**/*'
+    - 'lib/**/*.rake'
+    - 'public/uploads/**/*'
+  DisplayCopNames: true
+
+Metrics/LineLength:
+  Max: 100
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'config/**/*.rb'
+
+Lint/Debugger:
+  Exclude:
+    - 'spec/shared_contexts/shared_features.rb'
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/api/**/*.rb'
+
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'app/controllers/api/**/*.rb'
+    - 'app/models/concerns/**/*.rb'
+    - 'config/spring.rb'
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 100
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'config/**/*.rb'
+    - 'app/controllers/authorizations_controller.rb'
+    - 'app/controllers/omniauth_callbacks_controller.rb'
+
+Metrics/AbcSize:
+  Max: 20
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 15
+  Enabled: false
+  Exclude:
+    - 'spec/**/*.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/models/user.rb'
+
+Lint/HandleExceptions:
+  Exclude:
+    - 'config/unicorn/production.rb'
+
+##################### Rails ##################################
+
+Rails/ActionFilter:
+  EnforcedStyle: action
+  SupportedStyles:
+    - action
+    - filter
+  Include:
+    - app/controllers/**/*.rb
+
+Rails/Date:
+  # The value `strict` disallows usage of `Date.today`, `Date.current`,
+  # `Date#to_time` etc.
+  # The value `flexible` allows usage of `Date.current`, `Date.yesterday`, etc
+  # (but not `Date.today`) which are overridden by ActiveSupport to handle current
+  # time zone.
+  EnforcedStyle: flexible
+  SupportedStyles:
+    - strict
+    - flexible
+
+Rails/Exit:
+  Include:
+    - app/**/*.rb
+    - config/**/*.rb
+    - lib/**/*.rb
+  Exclude:
+    - lib/**/*.rake
+
+Rails/FindBy:
+  Include:
+    - app/models/**/*.rb
+
+Rails/FindEach:
+  Include:
+    - app/models/**/*.rb
+
+Rails/HasAndBelongsToMany:
+  Include:
+    - app/models/**/*.rb
+
+Rails/Output:
+  Include:
+    - app/**/*.rb
+    - config/**/*.rb
+    - db/**/*.rb
+    - lib/**/*.rb
+
+Rails/ReadWriteAttribute:
+  Include:
+    - app/models/**/*.rb
+
+Rails/RequestReferer:
+  EnforcedStyle: referer
+  SupportedStyles:
+    - referer
+    - referrer
+
+Rails/ScopeArgs:
+  Include:
+    - app/models/**/*.rb
+
+Rails/TimeZone:
+  # The value `strict` means that `Time` should be used with `zone`.
+  # The value `flexible` allows usage of `in_time_zone` instead of `zone`.
+  EnforcedStyle: flexible
+  SupportedStyles:
+    - strict
+    - flexible
+
+Rails/UniqBeforePluck:
+  EnforcedMode: conservative
+  SupportedModes:
+    - conservative
+    - aggressive
+  AutoCorrect: false
+
+Rails/Validation:
+  Include:
+    - app/models/**/*.rb

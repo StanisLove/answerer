@@ -10,15 +10,17 @@ describe 'Answers API' do
 
     it_behaves_like "API Authenticable"
     it_behaves_like "API Containable",
-      %w(id body is_best created_at updated_at), "question/answers/0/"
+                    %w(id body is_best created_at updated_at), "question/answers/0/"
 
-  before { do_request(access_token: access_token.token) }
-  it { expect(response).to be_success }
-  it { expect(response.body).to have_json_size(2).
-                                at_path("question/answers") }
+    before { do_request(access_token: access_token.token) }
+    it { expect(response).to be_success }
+    it do
+      expect(response.body).to have_json_size(2)
+        .at_path("question/answers")
+    end
     def do_request(options = {})
       get "/api/v1/questions/#{question.id}/answers",
-        { format: :json }.merge(options)
+          { format: :json }.merge(options)
     end
   end
 
@@ -29,10 +31,10 @@ describe 'Answers API' do
 
     context 'authorized' do
       let!(:access_token) { create :access_token }
-      let(:object)  { answer }
+      let(:object) { answer }
 
       it_behaves_like "API Containable",
-        %w(id body is_best created_at updated_at), "answer/"
+                      %w(id body is_best created_at updated_at), "answer/"
 
       before { do_request(access_token: access_token.token) }
       it { expect(response).to be_success }
@@ -42,20 +44,20 @@ describe 'Answers API' do
         let!(:object) { create :comment, commentable: answer }
 
         it_behaves_like "API Containable",
-          %w(id body created_at updated_at), "answer/comments/0/"
+                        %w(id body created_at updated_at), "answer/comments/0/"
       end
 
       context 'attachments' do
-        let(:object)      { answer.attachments.first.file }
+        let(:object) { answer.attachments.first.file }
 
         it_behaves_like "API Containable",
-          %w(url), "answer/attachments/0/"
+                        %w(url), "answer/attachments/0/"
       end
     end
 
     def do_request(options = {})
       get "/api/v1/questions/#{question.id}/answers/#{answer.id}",
-        { format: :json }.merge(options)
+          { format: :json }.merge(options)
     end
   end
 
@@ -70,17 +72,17 @@ describe 'Answers API' do
     context 'authorized' do
       context 'with valid params' do
         it 'creates the answer to question' do
-          expect{
+          expect do
             do_request(access_token: access_token.token)
-          }.to  change(question.answers, :count).by(1)
+          end.to change(question.answers, :count).by(1)
         end
       end
     end
 
     def do_request(options = {})
       post "/api/v1/questions/#{question.id}/answers",
-        { format: :json, question_id: question,
-          answer: attributes_for(:answer) }.merge(options)
+           { format: :json, question_id: question,
+             answer: attributes_for(:answer) }.merge(options)
     end
   end
 end

@@ -1,6 +1,6 @@
 shared_examples_for "may be authorized" do
   it "doesn't create new user" do
-    expect { User.find_for_oauth(auth, user) }.to_not change(User, :count)
+    expect { User.find_for_oauth(auth, user) }.not_to change(User, :count)
   end
 
   it 'returns the user' do
@@ -8,13 +8,13 @@ shared_examples_for "may be authorized" do
   end
 
   it 'creates authorization for user' do
-    expect {
+    expect do
       User.find_for_oauth(auth, user)
-    }.to change(user.authorizations, :count).by(1)
+    end.to change(user.authorizations, :count).by(1)
   end
 
   it 'creates authorization with provider and uid' do
-             user = User.find_for_oauth(auth, user)
+    user = User.find_for_oauth(auth, user)
     authorization = user.authorizations.first
     expect(authorization.provider).to eq auth.provider
     expect(authorization.uid).to      eq auth.uid

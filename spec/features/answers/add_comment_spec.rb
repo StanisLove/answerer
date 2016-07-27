@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'User adds comment to the answer', %{
+feature 'User adds comment to the answer', %(
   In order to discuss the answer
   As an user
   I'd like to be able to comment the answer
-} do
+) do
 
   given(:question) { create :question }
   given!(:answer)  { create :answer, question: question }
@@ -14,14 +14,14 @@ feature 'User adds comment to the answer', %{
   scenario "User leaves a comment to the answer", js: true do
     visit question_path(question)
 
-    expect(page).to_not have_content 'Add Comment'
+    expect(page).not_to have_content 'Add Comment'
 
     sign_in(user)
     visit question_path(question)
 
     within "#answer-#{answer.id}" do
       expect(page).to     have_content 'Add Comment'
-      expect(page).to_not have_selector('.answers .new_comment', visible: true)
+      expect(page).not_to have_selector('.answers .new_comment', visible: true)
       click_on 'Add Comment'
       expect(page).to     have_selector('.answers .new_comment', visible: true)
 
@@ -30,7 +30,7 @@ feature 'User adds comment to the answer', %{
       expect(page).to     have_content user.email
       expect(page).to     have_content comment.body
       expect(page).to     have_content 'Add Comment'
-      expect(page).to_not have_selector('.answers .new_comment', visible: true)
+      expect(page).not_to have_selector('.answers .new_comment', visible: true)
     end
   end
 

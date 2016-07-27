@@ -1,4 +1,4 @@
-require "application_responder"
+require 'application_responder'
 
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
@@ -22,11 +22,12 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-    def not_found
-      redirect_to root_url, flash: { error: "Запись не найдена" }
-    end
 
-    def do_not_check_authorization?
-      respond_to?(:devise_controller?)
-    end
+  def not_found
+    redirect_to root_url, flash: { error: 'Запись не найдена' }
+  end
+
+  def do_not_check_authorization?
+    respond_to?(:devise_controller?)
+  end
 end

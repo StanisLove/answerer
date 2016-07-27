@@ -17,13 +17,13 @@ RSpec.describe AnswersController, :auth, type: :controller do
   end
 
   describe 'POST #create', :valid_attrs do
-		let(:parent) { Hash[question_id: question] }
+    let(:parent) { Hash[question_id: question] }
 
     subject { post :create, params }
 
     it 'saves new answer into DB' do
-      expect{ subject }.to  change(question.answers, :count).by(1)
-                       .and change(user.answers,     :count).by(1)
+      expect { subject }.to change(question.answers, :count).by(1)
+        .and change(user.answers, :count).by(1)
     end
 
     it 'renders template create' do
@@ -31,20 +31,19 @@ RSpec.describe AnswersController, :auth, type: :controller do
       expect(response).to render_template :create
     end
 
-		include_examples "publishable", Answer
+    include_examples "publishable", Answer
 
     context 'with invalid attributes' do
-			let(:form_params) { attributes_for :invalid_answer }
-      let(:format)      { Hash[format: :js] }
+      let(:form_params) { attributes_for :invalid_answer }
+      let(:format) { Hash[format: :js] }
 
-			include_examples "invalid params", Answer
-			include_examples "unpublishable",  Answer
+      include_examples "invalid params", Answer
+      include_examples "unpublishable",  Answer
 
       it 're-renders new view' do
         subject
         expect(response).to render_template :create
       end
-
     end
   end
 
@@ -54,7 +53,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
     let!(:answer) { create(:answer, user: user) }
 
     it 'deletes the own answer from DB...' do
-      expect{ subject }.to change(Answer, :count).by(-1)
+      expect { subject }.to change(Answer, :count).by(-1)
     end
 
     it '...and renders template destroy' do
@@ -65,7 +64,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
     context "someone's answer" do
       let!(:answer) { create :answer, user: john }
 
-			include_examples "invalid params", Answer
+      include_examples "invalid params", Answer
 
       it '... and redirect to root path' do
         subject
@@ -76,7 +75,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
     context 'Not signed in user', :unauth do
       let!(:answer) { create :answer }
 
-			include_examples "invalid params", Answer
+      include_examples "invalid params", Answer
 
       it '...and gets 401' do
         subject
@@ -87,8 +86,10 @@ RSpec.describe AnswersController, :auth, type: :controller do
 
   describe 'PATCH #update', :updated_attrs do
     let(:answer)      { create(:answer, question: question, user: user) }
-    let(:params)      { Hash[format: :js, id: answer,
-                             answer: attributes_for(:answer).merge(form_params)] }
+    let(:params)      do
+      Hash[format: :js, id: answer,
+           answer: attributes_for(:answer).merge(form_params)]
+    end
 
     subject { patch :update, params }
 
@@ -112,7 +113,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
       let(:form_params) { attributes_for :invalid_answer }
 
       it "doesn't update attributes" do
-        expect{ subject }.to_not change(answer, :body)
+        expect { subject }.not_to change(answer, :body)
       end
     end
 
@@ -122,10 +123,9 @@ RSpec.describe AnswersController, :auth, type: :controller do
       it "not changes the someone's answer attributes" do
         subject
         answer.reload
-        expect(answer.body).to_not eq 'new body'
+        expect(answer.body).not_to eq 'new body'
       end
     end
-
   end
 
   describe 'PATCH #choose_best' do
@@ -133,12 +133,12 @@ RSpec.describe AnswersController, :auth, type: :controller do
 
     subject { patch :choose_best, id: answer, format: :js }
 
-		context "Unauthenticated user", :unauth do
-			it "can't choose the best answer" do
-				subject
-				expect(answer.is_best).to eq false
-			end
-		end
+    context "Unauthenticated user", :unauth do
+      it "can't choose the best answer" do
+        subject
+        expect(answer.is_best).to eq false
+      end
+    end
 
     context "Authenticated user" do
       it "can't choose the best answer someone's question" do
@@ -158,9 +158,9 @@ RSpec.describe AnswersController, :auth, type: :controller do
         end
 
         it "changes the the best answer" do
-          expect{ subject && answer.reload && best_answer.reload }.
-            to  change(answer, :is_best).from(false).to(true).
-            and change(best_answer, :is_best).from(true).to(false)
+          expect { subject && answer.reload && best_answer.reload }
+            .to  change(answer, :is_best).from(false).to(true)
+            .and change(best_answer, :is_best).from(true).to(false)
         end
       end
     end

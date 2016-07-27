@@ -5,8 +5,8 @@ class QuestionsController < ApplicationController
   before_action :load_question,                         only: :show
   before_action :build_answer_and_load_current_user_id, only: :show
   before_action :set_subscription,                      only: :show
-  before_action :load_current_user_question,            only: [:update, :destroy]
-  after_action  :publish_question,                      only: :create
+  before_action :load_current_user_question, only: [:update, :destroy]
+  after_action  :publish_question, only: :create
 
   authorize_resource
 
@@ -39,30 +39,34 @@ class QuestionsController < ApplicationController
   end
 
   private
-    def question_params
-      params.require(:question).permit(:title, :body,
-        attachments_attributes: [:id, :file, :_destroy])
-    end
 
-    def publish_question
-      PrivatePub.publish_to '/questions', question: @question.to_json if @question.valid?
-    end
+  def question_params
+    params.require(:question).permit(:title, :body,
+                                     attachments_attributes: [:id, :file, :_destroy])
+  end
 
-    def load_question
-      @question = Question.find(params[:id])
-    end
+  def publish_question
+    PrivatePub.publish_to '/questions', question: @question.to_json if @question.valid?
+  end
 
-    def load_current_user_question
-      @question = current_user.questions.find(params[:id])
-    end
+  def load_question
+    @question = Question.find(params[:id])
+  end
 
-    def build_answer_and_load_current_user_id
-      @answer = @question.answers.build
-      gon.current_user_id = current_user.try(:id)
-    end
+  def load_current_user_question
+    @question = current_user.questions.find(params[:id])
+  end
 
-    def set_subscription
-      @subscription = Subscription.find_by(user: current_user, question: @question)
-      @subscription ||= Subscription.new(user: current_user, question: @question)
-    end
+  def build_answer_and_load_current_user_id
+    @answer = @question.answers.build
+    gon.current_user_id = current_user.try(:id)
+  end
+
+  def set_subscription
+    @subscription = Subscription.find_by(user: current_user,
+                                         question: @question)
+
+    @subscription ||= Subscription.new(user: current_user,
+                                       question: @question)
+  end
 end

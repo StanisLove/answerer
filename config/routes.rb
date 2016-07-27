@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  authenticate :user, lambda { |u| u.admin? } do
+  authenticate :user, ->(u) { u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
 
@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   end
 
   concern :commentable do
-    resource  :comments, only: [:create]
+    resource :comments, only: [:create]
   end
 
   devise_for :users, controllers: {

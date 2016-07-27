@@ -9,19 +9,20 @@ RSpec.configure do |config|
   Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
   Capybara.server_host = "0.0.0.0"
 
-	Capybara.register_driver :poltergeist do |app|
-		Capybara::Poltergeist::Driver.new(
-			app,
-			timeout: 90, js_errors: true,
-			phantomjs_logger: Logger.new(STDOUT),
-			window_size: [1020, 740])
-	end
+  Capybara.register_driver :poltergeist do |app|
+    Capybara::Poltergeist::Driver.new(
+      app,
+      timeout: 90, js_errors: true,
+      phantomjs_logger: Logger.new(STDOUT),
+      window_size: [1020, 740]
+    )
+  end
 
-	Capybara.javascript_driver = :poltergeist
+  Capybara.javascript_driver = :poltergeist
 
-	RSpec::PageRegression.configure do |c|
-		c.threshold = 0.01
-	end
+  RSpec::PageRegression.configure do |c|
+    c.threshold = 0.01
+  end
 
   config.include AcceptanceHelper, type: :feature
   config.include WaitForAjax,      type: :feature
@@ -45,7 +46,7 @@ RSpec.configure do |config|
 
   config.before(:each, sphinx: true) do
     DatabaseCleaner.strategy = :truncation
-  # Sphinx Index data when running an acceptance spec.
+    # Sphinx Index data when running an acceptance spec.
     index
   end
 

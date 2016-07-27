@@ -13,11 +13,12 @@ class Question < ActiveRecord::Base
 
   after_create :subscribe_author
 
-	default_scope { order(created_at: :asc) }
-  scope :yesterday, lambda { where(created_at: Time.current.yesterday.all_day) }
+  default_scope { order(created_at: :asc) }
+  scope :yesterday, -> { where(created_at: Time.current.yesterday.all_day) }
 
   private
-    def subscribe_author
-      subscriptions.create(user_id: self.user_id)
-    end
+
+  def subscribe_author
+    subscriptions.create(user_id: user_id)
+  end
 end

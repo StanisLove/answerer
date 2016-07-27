@@ -9,9 +9,11 @@ RSpec.describe Answer, type: :model do
   it { should have_db_index :question_id }
   it { should belong_to     :user        }
   it { should have_db_index :user_id     }
-  it { should have_db_column(:is_best).
-                     of_type(:boolean).
-         with_options(default: false) }
+  it do
+    should have_db_column(:is_best)
+      .of_type(:boolean)
+      .with_options(default: false)
+  end
   it { should have_many(:attachments).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
 
@@ -38,21 +40,18 @@ RSpec.describe Answer, type: :model do
     end
 
     it "changes the best answer" do
-      answer_one.make_best!
-      answer_two.make_best!
-      answer_one.reload
-      answer_two.reload
+      answer_one.make_best! && answer_two.make_best!
+      answer_one.reload     && answer_two.reload
       expect(answer_one.is_best).to eq false
       expect(answer_two.is_best).to eq true
     end
 
     it "changes updated_at attribute of answers" do
-      answer_one.make_best!
-      answer_one.reload
-      expect{
+      answer_one.make_best! && answer_one.reload
+      expect do
         answer_two.make_best! && answer_two.reload && answer_one.reload
-      }.to change(answer_one, :updated_at).
-       and change(answer_two, :updated_at)
+      end.to change(answer_one, :updated_at)
+        .and change(answer_two, :updated_at)
     end
   end
 end

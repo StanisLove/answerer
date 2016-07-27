@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'User sign out', %q{
+feature 'User sign out', '
   In order to be able to protect the account
   As an user
   I want to be able to sign out
-} do
+' do
 
   given(:user) { create(:user) }
 

@@ -7,7 +7,7 @@ end
 
 shared_examples "unpublishable" do |model|
   it "does not publish #{model} to PrivatePub" do
-    expect(PrivatePub).to_not receive(:publish_to)
+    expect(PrivatePub).not_to receive(:publish_to)
     subject
   end
 end

@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, :auth, type: :controller do
-
   describe 'GET #index', :unauth do
     let(:questions) { create_list(:question, 2) }
     before { get  :index }
@@ -29,7 +28,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
 
   describe 'GET #show', :unauth do
     let(:question) { create(:question) }
-    before { get  :show, id: question }
+    before { get :show, id: question }
 
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
@@ -48,7 +47,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
     subject { post :create, params }
 
     it 'saves the new question into DB' do
-      expect{ subject }.to change(user.questions, :count).by(1)
+      expect { subject }.to change(user.questions, :count).by(1)
     end
 
     it 'status is 201' do
@@ -56,11 +55,11 @@ RSpec.describe QuestionsController, :auth, type: :controller do
       expect(response.status).to eq 201
     end
 
-		include_examples "publishable", Question
+    include_examples "publishable", Question
 
     context 'with invalid attributes', :invalid_attrs do
-			include_examples "invalid params", Question
-			include_examples "unpublishable",  Question
+      include_examples "invalid params", Question
+      include_examples "unpublishable", Question
 
       it 're-renders new view' do
         subject
@@ -68,15 +67,17 @@ RSpec.describe QuestionsController, :auth, type: :controller do
       end
     end
 
-		context "Unauthenticated user", :unauth do
-			include_examples "invalid params", Question
-		end
+    context "Unauthenticated user", :unauth do
+      include_examples "invalid params", Question
+    end
   end
 
   describe 'PATCH #update', :updated_attrs do
     let(:question)    { create(:question, user: user) }
-    let(:params)      { Hash[format: :js, id: question,
-                        question: attributes_for(:question).merge(form_params)] }
+    let(:params)      do
+      Hash[format: :js, id: question,
+           question: attributes_for(:question).merge(form_params)]
+    end
 
     subject { patch :update, params }
 
@@ -103,8 +104,8 @@ RSpec.describe QuestionsController, :auth, type: :controller do
       it "doesn't change attribures" do
         subject
         question.reload
-        expect(question.title).to_not eq 'new title'
-        expect(question.body).to_not  eq 'new body'
+        expect(question.title).not_to eq 'new title'
+        expect(question.body).not_to  eq 'new body'
       end
     end
 
@@ -112,11 +113,10 @@ RSpec.describe QuestionsController, :auth, type: :controller do
       let(:form_params) { attributes_for :invalid_question }
 
       it "doesn't update attributes" do
-        expect{ subject }.to not_change(question, :body).
-                         and not_change(question, :title)
+        expect { subject }.to not_change(question, :body)
+          .and not_change(question, :title)
       end
     end
-
   end
 
   describe 'DELETE #destroy' do
@@ -125,7 +125,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
     subject { delete :destroy, id: question }
 
     it 'deletes the question from DB...' do
-      expect{ subject }.to change(user.questions, :count).by(-1)
+      expect { subject }.to change(user.questions, :count).by(-1)
     end
 
     it '...and redirects to index view' do
@@ -136,7 +136,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
     context "someone's quesiton" do
       let!(:question) { create :question, user: john }
 
-			include_examples "invalid params", Question
+      include_examples "invalid params", Question
 
       it "...and redirects to root path" do
         subject

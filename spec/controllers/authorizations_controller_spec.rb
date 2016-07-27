@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AuthorizationsController, type: :controller do
-
   describe 'GET #confirm' do
     let!(:authorization) { create(:authorization) }
 
@@ -27,9 +26,9 @@ RSpec.describe AuthorizationsController, type: :controller do
       before { session["devise.provider_data"] = { provider: 'twitter', uid: '123456' } }
 
       it "sends email confirmation" do
-        expect {
+        expect do
           post :create, authorization: { email: "user@email.com" }
-        }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        end.to change(ActionMailer::Base.deliveries, :count).by(1)
       end
     end
 
@@ -37,9 +36,9 @@ RSpec.describe AuthorizationsController, type: :controller do
       before { session["devise.provider_data"] = { provider: nil, uid: nil } }
 
       it "doesn't send email confirmation" do
-        expect {
+        expect do
           post :create, authorization: { email: "user@email.com" }
-        }.to_not change(ActionMailer::Base.deliveries, :count)
+        end.not_to change(ActionMailer::Base.deliveries, :count)
       end
     end
 
@@ -47,9 +46,9 @@ RSpec.describe AuthorizationsController, type: :controller do
       before { session["devise.provider_data"] = { provider: 'twitter', uid: '123456' } }
 
       it "doesn't send email confirmation" do
-        expect {
+        expect do
           post :create, authorization: { email: "invalid" }
-        }.to_not change(ActionMailer::Base.deliveries, :count)
+        end.not_to change(ActionMailer::Base.deliveries, :count)
       end
     end
   end

@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
-
   let(:question)  { create(:question) }
   let(:answer)    { create(:answer, question: question) }
 
@@ -12,14 +11,14 @@ RSpec.describe CommentsController, type: :controller do
 
     context 'with valid attributes' do
       it "creates question's comment in DB" do
-        expect{ subject }.to change(question.comments, :count).by(1)
+        expect { subject }.to change(question.comments, :count).by(1)
       end
 
       context "for answer" do
         let(:parent) { Hash[answer_id: answer] }
 
         it "creates comment in DB" do
-          expect{ subject }.to change(answer.comments, :count).by(1)
+          expect { subject }.to change(answer.comments, :count).by(1)
         end
       end
 
@@ -52,7 +51,6 @@ RSpec.describe CommentsController, type: :controller do
     end
 
     context 'Unauthenticated user', :unauth do
-
       include_examples "invalid params", Comment
       include_examples "unpublishable",  Comment
 

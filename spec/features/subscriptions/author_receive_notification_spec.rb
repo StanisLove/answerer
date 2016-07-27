@@ -1,27 +1,26 @@
 require 'features_helper'
 
-feature 'The author of question is notified when a new answer appears', %q{
+feature 'The author of question is notified when a new answer appears', '
   In order to watch out for new answers
   As an author of question
   I want to be able to receive notifications by email
-} do
+' do
 
   given!(:question)   { create :question }
   given!(:answer)     { create :answer, question: question }
-
 
   scenario 'The author of quesiton subscribed and can unsubscribe', js: true do
     sign_in question.user
     visit question_path(question)
 
-    expect(page).to_not have_content 'Subscribe'
+    expect(page).not_to have_content 'Subscribe'
     expect(page).to     have_content 'Unsubscribe'
     expect(question.subscribers).to include question.user
 
     click_on 'Unsubscribe'
     expect(page).to     have_content 'Subscribe'
-    expect(page).to_not have_content 'Unsubscribe'
-    expect(question.subscribers).to_not include question.user
+    expect(page).not_to have_content 'Unsubscribe'
+    expect(question.subscribers).not_to include question.user
   end
 
   scenario 'The author of question receive notification' do

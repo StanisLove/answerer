@@ -12,8 +12,12 @@ class SearchController < ApplicationController
 
   def load_results
     models = %w(Questions Answers Users Comments)
-    klass_model = models.include?(params[:model]) ?
-              params[:model].classify.constantize : ThinkingSphinx
+    klass_model =
+      if models.include?(params[:model])
+        params[:model].classify.constantize
+      else
+        ThinkingSphinx
+      end
     @results = klass_model.search(ThinkingSphinx::Query.escape(params[:query]))
   end
 end

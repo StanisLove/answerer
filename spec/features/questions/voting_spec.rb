@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'Vote for the question', %{
+feature 'Vote for the question', %(
   In order to choose good or bad questions
   As an user
   I'd like to be able to vote for the question
-} do
+) do
 
   given!(:question) { create(:question) }
   given(:user)      { create(:user) }

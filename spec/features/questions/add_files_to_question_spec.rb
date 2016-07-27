@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'Add files to question', %q{
+feature 'Add files to question', "
   In order to illustrate my question
   As an author of the question
   I'd like to be able to attach files
-} do
+" do
 
   given(:user)     { create :user }
   given(:question) { build  :question }
@@ -30,9 +30,9 @@ feature 'Add files to question', %q{
 
     expect(page).to have_content 'Files'
     expect(page).to have_link    'spec_helper.rb',
-        href: /\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+                                 href: %r{/uploads\/attachment\/file\/\d+\/spec_helper\.rb$}
     expect(page).to have_link 'rails_helper.rb',
-        href: /\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
+                              href: %r{/uploads\/attachment\/file\/\d+\/rails_helper\.rb$}
   end
 
   scenario 'User can add and then revmove file while creating an answer', js: true do
@@ -48,8 +48,8 @@ feature 'Add files to question', %q{
     wait_for_ajax
 
     within '.question' do
-      expect(page).to_not have_link    'spec_helper.rb'
-      expect(page).to_not have_content 'Files'
+      expect(page).not_to have_link    'spec_helper.rb'
+      expect(page).not_to have_content 'Files'
     end
   end
 
@@ -57,6 +57,6 @@ feature 'Add files to question', %q{
     fill_in  'Title',    with: question.title
     fill_in  'Question', with: question.body
     click_on 'Ask Question'
-    expect(page).to_not have_content 'Files'
+    expect(page).not_to have_content 'Files'
   end
 end

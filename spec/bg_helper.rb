@@ -6,7 +6,7 @@ hive_pid = Process.spawn('hivemind Procfile.spec', out: wout)
 Timeout.timeout(10) do
   loop do
     output = rout.readline
-    break if output = ~/Listening on localhost\:9292/
+    break if output =~ /Listening on localhost\:9292/
   end
 end
 

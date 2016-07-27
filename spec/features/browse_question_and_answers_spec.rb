@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'User browse question and answers', %q{
+feature 'User browse question and answers', '
   In order to find correct answer
   As an user
   I want to be able to browse answers the question
-} do
+' do
 
   given!(:question)                 { create      :question }
   given!(:answers)                  { create_list :answer,  2, question_id: question.id }
@@ -24,6 +24,6 @@ feature 'User browse question and answers', %q{
     visit question_path question_with_out_answer
     expect(page).to have_content question_with_out_answer.title
     expect(page).to have_content question_with_out_answer.body
-    expect(page).to_not have_css "div.answers > div"
+    expect(page).not_to have_css "div.answers > div"
   end
 end

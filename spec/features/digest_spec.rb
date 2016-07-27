@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'User receive daily digest', %q{
+feature 'User receive daily digest', '
   In order to watch out for new questions
   As an user
   I want to be able to receive daily digest
-} do
+' do
 
   given!(:questions) { create_list :question, 2 }
   given(:user)       { create      :user      }

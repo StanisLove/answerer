@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'User sign up', %q{
+feature 'User sign up', '
   In order to be able to sign in
   As an user
   I want to be able to sign up
-} do
+' do
 
   given(:user)      { build(:user) }
   given(:reg_user)  { create(:user) }
@@ -29,12 +29,13 @@ feature 'User sign up', %q{
   end
 
   private
-    def sign_up(user)
-      visit new_user_registration_path
-      fill_in 'Email',      with: user.email
-      fill_in 'Password',   with: user.password
-      fill_in 'Password confirmation',
-        with: user.password_confirmation
-      click_on 'Sign up'
-    end
+
+  def sign_up(user)
+    visit new_user_registration_path
+    fill_in 'Email',      with: user.email
+    fill_in 'Password',   with: user.password
+    fill_in 'Password confirmation',
+            with: user.password_confirmation
+    click_on 'Sign up'
+  end
 end

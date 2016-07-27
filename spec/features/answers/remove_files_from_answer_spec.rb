@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'Remove files from answer', %q{
+feature 'Remove files from answer', "
   In order to delete unnecessary files from answer
   As an author of the answer
   I'd like to be able to remove files
-} do
+" do
 
   given!(:question) { create(:question) }
   given!(:answer)   { create(:answer, question: question) }
@@ -18,13 +18,13 @@ feature 'Remove files from answer', %q{
     within '.answers' do
       expect(page).to have_content 'Files'
       expect(page).to have_link    'spec_helper.rb',
-        href: /\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+                                   href: %r{/uploads\/attachment\/file\/\d+\/spec_helper\.rb$}
       expect(page).to have_content 'Delete'
       click_on 'Delete'
       wait_for_ajax
 
-      expect(page).to_not have_content 'Files'
-      expect(page).to_not have_link    'spec_helper.rb'
+      expect(page).not_to have_content 'Files'
+      expect(page).not_to have_link    'spec_helper.rb'
     end
   end
 end

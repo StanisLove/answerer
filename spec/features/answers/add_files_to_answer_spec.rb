@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'Add files to answer', %q{
+feature 'Add files to answer', "
   In order to illustrate my answer
   As author of the answer
   I'd like to be able to attach files
-} do
+" do
 
   given(:user)     { create(:user) }
   given(:question) { create(:question) }
@@ -17,10 +17,10 @@ feature 'Add files to answer', %q{
 
   scenario 'User adds files when create answer', js: true do
     within '.answers' do
-      expect(page).to_not have_content 'Files'
+      expect(page).not_to have_content 'Files'
     end
 
-    fill_in     'New Answer',  with: answer.body
+    fill_in     'New Answer', with: answer.body
     click_on    'Add one more file'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     click_on    'Add one more file'
@@ -33,20 +33,20 @@ feature 'Add files to answer', %q{
     wait_for_ajax
 
     within '.new_answer' do
-      expect(page).to_not have_content("#{answer.body}")
+      expect(page).not_to have_content(answer.body.to_s)
     end
 
     within '.answers' do
       expect(page).to     have_content 'Files'
       expect(page).to     have_link 'spec_helper.rb',
-        href: /\/uploads\/attachment\/file\/\d+\/spec_helper\.rb$/
+                                    href: %r{/uploads\/attachment\/file\/\d+\/spec_helper\.rb$}
       expect(page).to     have_link 'rails_helper.rb',
-        href: /\/uploads\/attachment\/file\/\d+\/rails_helper\.rb$/
+                                    href: %r{/uploads\/attachment\/file\/\d+\/rails_helper\.rb$}
     end
   end
 
   scenario 'User can add and then revmove file while creating an answer', :js do
-    fill_in     'New Answer',  with: answer.body
+    fill_in     'New Answer', with: answer.body
     click_on    'Add one more file'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     expect(page).to have_content 'Delete File'
@@ -56,8 +56,8 @@ feature 'Add files to answer', %q{
     wait_for_ajax
 
     within '.answers' do
-      expect(page).to_not have_link    'spec_helper.rb'
-      expect(page).to_not have_content 'Files'
+      expect(page).not_to have_link    'spec_helper.rb'
+      expect(page).not_to have_content 'Files'
     end
   end
 end

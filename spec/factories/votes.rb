@@ -6,7 +6,7 @@ FactoryGirl.define do
   end
 
   factory :vote_down, class: "Vote" do
-    voice -1
+    voice(-1)
     user
     association :votable
   end

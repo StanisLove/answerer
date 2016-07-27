@@ -10,7 +10,7 @@ describe 'Questions API' do
       let(:object)        { questions.first }
 
       it_behaves_like "API Containable",
-        %w(id title body created_at updated_at), "questions/0/"
+                      %w(id title body created_at updated_at), "questions/0/"
 
       before { do_request(access_token: access_token.token) }
 
@@ -18,15 +18,17 @@ describe 'Questions API' do
       it { expect(response.body).to have_json_size(2).at_path("questions") }
 
       context 'answers' do
-        let!(:object)  { create(:answer, question: questions.first) }
+        let!(:object) { create(:answer, question: questions.first) }
 
         it_behaves_like "API Containable",
-          %w(id body created_at updated_at),
-          "questions/0/answers/0/"
+                        %w(id body created_at updated_at),
+                        "questions/0/answers/0/"
 
         before { do_request(access_token: access_token.token) }
-        it { expect(response.body).to have_json_size(1).
-                                      at_path("questions/0/answers") }
+        it do
+          expect(response.body).to have_json_size(1)
+            .at_path("questions/0/answers")
+        end
       end
     end
 
@@ -45,7 +47,7 @@ describe 'Questions API' do
       let!(:access_token) { create :access_token }
 
       it_behaves_like "API Containable",
-        %w(id title body created_at updated_at), "question/"
+                      %w(id title body created_at updated_at), "question/"
 
       before { do_request(access_token: access_token.token) }
 
@@ -56,18 +58,18 @@ describe 'Questions API' do
         let!(:object) { create :comment, commentable: question }
 
         it_behaves_like "API Containable",
-          %w(id body created_at updated_at),
-          "question/comments/0/"
+                        %w(id body created_at updated_at),
+                        "question/comments/0/"
       end
 
       context 'attachments' do
-        let(:object)      { question.attachments.first.file }
+        let(:object) { question.attachments.first.file }
 
         include_examples "API Containable", %w(url), "question/attachments/0/"
       end
     end
 
-    def do_request(options = {} )
+    def do_request(options = {})
       get "/api/v1/questions/#{question.id}", { format: :json }.merge(options)
     end
   end
@@ -82,7 +84,7 @@ describe 'Questions API' do
 
     def do_request(options = {})
       post '/api/v1/questions',
-        { format: :json, question: attributes_for(:question) }.merge(options)
+           { format: :json, question: attributes_for(:question) }.merge(options)
     end
   end
 end

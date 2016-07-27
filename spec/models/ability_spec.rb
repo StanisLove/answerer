@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Ability do
-  subject(:ability) { Ability.new(user) }
+  subject(:ability) { described_class.new(user) }
 
   describe "Guest abilities" do
     let(:user) { nil }

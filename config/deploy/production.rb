@@ -7,8 +7,6 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
-
-
 # role-based syntax
 # ==================
 
@@ -17,9 +15,9 @@
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
-role :app, %w{deployer@146.185.132.25}
-role :web, %w{deployer@146.185.132.25}
-role :db,  %w{deployer@146.185.132.25}
+role :app, %w(deployer@146.185.132.25)
+role :web, %w(deployer@146.185.132.25)
+role :db,  %w(deployer@146.185.132.25)
 
 set :rails_env, :production
 set :stage,     :production
@@ -32,8 +30,6 @@ set :stage,     :production
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-
-
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
@@ -42,9 +38,7 @@ set :stage,     :production
 #
 # Global options
 # --------------
-  set :ssh_options, {
-             keys: %w(~/.ssh/id_rsa),
-    forward_agent: true,
-     auth_methods: %w(publickey password),
-             port: 4301
-  }
+set :ssh_options, keys: %w(~/.ssh/id_rsa),
+                  forward_agent: true,
+                  auth_methods: %w(publickey password),
+                  port: 4301

@@ -10,17 +10,18 @@ class Answer < ActiveRecord::Base
 
   after_commit :sent_notification, on: :create
 
-	default_scope { order(is_best: :desc).order(created_at: :asc) }
+  default_scope { order(is_best: :desc).order(created_at: :asc) }
 
   def make_best!
     Answer.transaction do
-      self.question.answers.update_all(is_best: false, updated_at: Time.now)
-      self.toggle!(:is_best)
+      question.answers.update_all(is_best: false, updated_at: Time.now)
+      toggle!(:is_best)
     end
   end
 
   private
-    def sent_notification
-      NewAnswerNotificationJob.perform_now(self)
-    end
+
+  def sent_notification
+    NewAnswerNotificationJob.perform_now(self)
+  end
 end

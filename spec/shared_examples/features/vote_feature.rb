@@ -4,30 +4,30 @@ shared_examples "vote feature" do
     visit question_path(question)
 
     within votable_selector do
-      expect(page).to  have_content('+')
-                  .and have_content('–')
-                  .and have_content('0')
+      expect(page).to have_content('+')
+        .and have_content('–')
+        .and have_content('0')
 
       click_on '+'
 
-      expect(page).to  have_no_content('+')
-                  .and have_no_content('–')
-                  .and have_content('1')
-                  .and have_content('Отменить')
+      expect(page).to have_no_content('+')
+        .and have_no_content('–')
+        .and have_content('1')
+        .and have_content('Отменить')
 
       click_on 'Отменить'
 
-      expect(page).to  have_content('+')
-                  .and have_content('–')
-                  .and have_content('0')
-                  .and have_no_content('Отменить')
+      expect(page).to have_content('+')
+        .and have_content('–')
+        .and have_content('0')
+        .and have_no_content('Отменить')
 
       click_on '–'
 
-      expect(page).to  have_no_content('+')
-                  .and have_no_content('–')
-                  .and have_content('-1')
-                  .and have_content('Отменить')
+      expect(page).to have_no_content('+')
+        .and have_no_content('–')
+        .and have_content('-1')
+        .and have_content('Отменить')
     end
   end
 
@@ -39,10 +39,10 @@ shared_examples "vote feature" do
       visit question_path(question)
 
       within votable_selector do
-        expect(page).to  have_no_content('+')
-                    .and have_no_content('–')
-                    .and have_content('1')
-                    .and have_content('Отменить')
+        expect(page).to have_no_content('+')
+          .and have_no_content('–')
+          .and have_content('1')
+          .and have_content('Отменить')
       end
     end
   end
@@ -65,10 +65,10 @@ end
 shared_examples "cannot vote for" do
   scenario "sees no links", js: true do
     within votable_selector do
-      expect(page).to  have_no_content('+')
-                  .and have_no_content('–')
-                  .and have_content('0')
-                  .and have_no_content('Отменить')
+      expect(page).to have_no_content('+')
+        .and have_no_content('–')
+        .and have_content('0')
+        .and have_no_content('Отменить')
     end
   end
 end
