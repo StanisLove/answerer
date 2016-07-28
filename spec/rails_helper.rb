@@ -8,6 +8,7 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'cancan/matchers'
 require 'sidekiq/testing'
+require 'bg_helper' unless Nenv.skip_bg?
 
 Sidekiq::Testing.fake!
 

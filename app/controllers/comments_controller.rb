@@ -31,7 +31,7 @@ class CommentsController < ApplicationController
   def publish_comment
     id = @commentable.try(:question_id) || @commentable.id
 
-    if @coment.valid?
+    if @comment.valid?
       PrivatePub.publish_to "/questions/#{id}/comment",
                             comment: render_to_string(template: 'comments/create.json.jbuilder')
     end

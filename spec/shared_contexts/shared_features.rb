@@ -1,7 +1,5 @@
 shared_context "feature", type: :feature do
   if Nenv.scr_shot?
-    before(:all) { leave_last_screenshots(5) }
-
     after(:each) do |example|
       next unless example.exception
       meta = example.metadata

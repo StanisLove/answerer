@@ -62,8 +62,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
       include_examples "unpublishable", Question
 
       it 're-renders new view' do
-        subject
-        expect(response).to render_template :new
+        expect(subject).to render_template :new
       end
     end
 
@@ -73,11 +72,10 @@ RSpec.describe QuestionsController, :auth, type: :controller do
   end
 
   describe 'PATCH #update', :updated_attrs do
-    let(:question)    { create(:question, user: user) }
-    let(:params)      do
-      Hash[format: :js, id: question,
-           question: attributes_for(:question).merge(form_params)]
-    end
+    let(:question) { create(:question, user: user) }
+    let(:params)   { { format: :js, id: question,
+                     question: attributes_for(:question).merge(form_params) }
+    }
 
     subject { patch :update, params }
 
@@ -94,8 +92,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
     end
 
     it 'renders update template' do
-      subject
-      expect(response).to render_template :update
+      expect(subject).to render_template :update
     end
 
     context "someone's question" do
@@ -129,8 +126,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
     end
 
     it '...and redirects to index view' do
-      subject
-      expect(response).to redirect_to questions_path
+      expect(subject).to redirect_to questions_path
     end
 
     context "someone's quesiton" do
@@ -139,8 +135,7 @@ RSpec.describe QuestionsController, :auth, type: :controller do
       include_examples "invalid params", Question
 
       it "...and redirects to root path" do
-        subject
-        expect(response).to redirect_to root_path
+        expect(subject).to redirect_to root_path
       end
     end
   end

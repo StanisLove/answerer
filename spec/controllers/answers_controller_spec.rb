@@ -17,7 +17,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
   end
 
   describe 'POST #create', :valid_attrs do
-    let(:parent) { Hash[question_id: question] }
+    let(:parent) { { question_id: question } }
 
     subject { post :create, params }
 
@@ -27,22 +27,20 @@ RSpec.describe AnswersController, :auth, type: :controller do
     end
 
     it 'renders template create' do
-      subject
-      expect(response).to render_template :create
+      expect(subject).to render_template :create
     end
 
     include_examples "publishable", Answer
 
     context 'with invalid attributes' do
       let(:form_params) { attributes_for :invalid_answer }
-      let(:format) { Hash[format: :js] }
+      let(:format) { { format: :js } }
 
       include_examples "invalid params", Answer
       include_examples "unpublishable",  Answer
 
       it 're-renders new view' do
-        subject
-        expect(response).to render_template :create
+        expect(subject).to render_template :create
       end
     end
   end
@@ -57,8 +55,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
     end
 
     it '...and renders template destroy' do
-      subject
-      expect(response).to render_template :destroy
+      expect(subject).to render_template :destroy
     end
 
     context "someone's answer" do
@@ -67,8 +64,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
       include_examples "invalid params", Answer
 
       it '... and redirect to root path' do
-        subject
-        expect(response).to redirect_to root_path
+        expect(subject).to redirect_to root_path
       end
     end
 
@@ -85,11 +81,10 @@ RSpec.describe AnswersController, :auth, type: :controller do
   end
 
   describe 'PATCH #update', :updated_attrs do
-    let(:answer)      { create(:answer, question: question, user: user) }
-    let(:params)      do
-      Hash[format: :js, id: answer,
-           answer: attributes_for(:answer).merge(form_params)]
-    end
+    let(:answer) { create(:answer, question: question, user: user) }
+    let(:params) { { format: :js, id: answer,
+										 answer: attributes_for(:answer).merge(form_params) }
+		}
 
     subject { patch :update, params }
 
@@ -105,8 +100,7 @@ RSpec.describe AnswersController, :auth, type: :controller do
     end
 
     it 'render update template' do
-      subject
-      expect(response).to render_template :update
+      expect(subject).to render_template :update
     end
 
     context "invalid params" do
@@ -168,7 +162,6 @@ RSpec.describe AnswersController, :auth, type: :controller do
 
   describe 'Voting' do
     let(:object) { create(:answer, question: question) }
-
     it_behaves_like 'Voted'
   end
 end

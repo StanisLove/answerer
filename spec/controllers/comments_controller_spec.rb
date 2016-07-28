@@ -5,7 +5,7 @@ RSpec.describe CommentsController, type: :controller do
   let(:answer)    { create(:answer, question: question) }
 
   describe 'POST #create', :auth, :valid_attrs do
-    let(:parent) { Hash[question_id: question] }
+    let(:parent) { { question_id: question } }
 
     subject { post :create, params }
 
@@ -15,7 +15,7 @@ RSpec.describe CommentsController, type: :controller do
       end
 
       context "for answer" do
-        let(:parent) { Hash[answer_id: answer] }
+        let(:parent) { { answer_id: answer } }
 
         it "creates comment in DB" do
           expect { subject }.to change(answer.comments, :count).by(1)
@@ -23,13 +23,11 @@ RSpec.describe CommentsController, type: :controller do
       end
 
       it "renders template create" do
-        subject
-        expect(response).to render_template :create
+        expect(subject).to render_template :create
       end
 
       it "re-renders new view" do
-        subject
-        expect(response).to render_template :create
+        expect(subject).to render_template :create
       end
 
       include_examples "publishable"
@@ -37,13 +35,13 @@ RSpec.describe CommentsController, type: :controller do
 
     context 'with invalid attributes' do
       let(:form_params) { attributes_for :invalid_comment }
-      let(:format) { Hash[format: :js] }
+      let(:format) { { format: :js } }
 
       include_examples "invalid params", Comment
       include_examples "unpublishable",  Comment
 
       context "for answer" do
-        let(:parent) { Hash[answer_id: answer] }
+        let(:parent) { { answer_id: answer } }
 
         include_examples "invalid params", Comment
         include_examples "unpublishable",  Comment
@@ -55,7 +53,7 @@ RSpec.describe CommentsController, type: :controller do
       include_examples "unpublishable",  Comment
 
       context "for answer" do
-        let(:parent) { Hash[answer_id: answer] }
+        let(:parent) { { answer_id: answer } }
 
         include_examples "invalid params", Comment
         include_examples "unpublishable",  Comment
