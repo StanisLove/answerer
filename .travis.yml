@@ -21,12 +21,13 @@ before_script:
   - psql -c 'create database ans_test;' -U postgres
   - cp config/database.travis.yml config/database.yml
   - cp config/secrets.travis.yml config/secrets.yml
+  - cp config/private_pub.travis.yml config/private_pub.yml
   - bundle exec rake db:setup
   - 'bundle exec rackup -s thin -E production private_pub.ru &'
   - sleep 5
 
 script:
-  - SKIP_BG=1 bundle exec rspec --tag ~visual
+  - SKIP_BG=1 bundle exec rspec --tag ~visual --tag ~sphinx
 
 gemfile:
   - Gemfile
