@@ -48,7 +48,7 @@ gem 'active_model_serializers'
 gem 'sidekiq'
 gem 'whenever'
 gem 'sinatra', '>= 1.3.0', require: nil
-gem 'celluloid', git: 'https://github.com/celluloid/celluloid', submodules: true
+gem 'celluloid', '~> 0.16.0'#, git: 'https://github.com/celluloid/celluloid', submodules: true
 gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'dotenv'
