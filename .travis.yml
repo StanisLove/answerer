@@ -23,10 +23,10 @@ before_script:
   - cp config/secrets.travis.yml config/secrets.yml
   - bundle exec rake db:setup
   - 'bundle exec rackup -s thin -E production private_pub.ru &'
-  - sleep 3
+  - sleep 5
 
 script:
-  - bundle exec rspec --tag ~visual
+	- SKIP_BG=1 bundle exec rspec --tag ~visual --tag ~sphinx
 
 gemfile:
   - Gemfile
