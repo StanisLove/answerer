@@ -13,7 +13,7 @@ class AuthorizationsController < ApplicationController
     flash[:notice] = "Confirmation email was sent to #{@email}"
   rescue ActiveRecord::RecordInvalid
     redirect_to new_user_registration_path
-    flash[:notice] = "Authorization error."
+    flash[:notice] = 'Authorization error.'
   end
 
   def confirm
@@ -28,12 +28,12 @@ class AuthorizationsController < ApplicationController
 
   private
 
-    def load_auth_and_email
-      @email = params[:authorization][:email]
-      @auth  = OmniAuth::AuthHash.new(session["devise.provider_data"])
-    end
+  def load_auth_and_email
+    @email = params[:authorization][:email]
+    @auth  = OmniAuth::AuthHash.new(session['devise.provider_data'])
+  end
 
-    def load_authorization
-      @authorization = Authorization.find(params[:id])
-    end
+  def load_authorization
+    @authorization = Authorization.find(params[:id])
+  end
 end

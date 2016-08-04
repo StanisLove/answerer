@@ -13,4 +13,9 @@ FactoryGirl.define do
     body nil
     question
   end
+
+  factory :updated_answer, class: "Answer" do
+    body "new body"
+    question
+  end
 end

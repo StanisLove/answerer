@@ -4,6 +4,7 @@ class AuthorizationMailer < ActionMailer::Base
   def send_confirmation(authorization)
     @authorization = authorization
     mail(to: authorization.user.email,
-         subject: "#{authorization.provider.capitalize} authorization. Email confirmaion")
+         subject: %(#{authorization.provider.capitalize} authorization.
+				 Email confirmation).tr("\n", " "))
   end
 end

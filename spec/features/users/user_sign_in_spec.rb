@@ -1,22 +1,22 @@
 require 'features_helper'
 
-feature 'User sign in', %q{
+feature 'User sign in', '
   In order to be able to create questions and answers
   As an user
   I want to be able to sign in
-} do
+' do
 
   given(:user)       { create :user }
   given(:unreg_user) { build  :user }
 
   scenario 'Registered user try to sign in' do
-    sign_in(user)
+    manual_entry(user)
     expect(page).to have_content 'Signed in successfully.'
     expect(current_path).to eq root_path
   end
 
   scenario 'Unregistered user try to sign in' do
-    sign_in(unreg_user)
+    manual_entry(unreg_user)
     expect(page).to have_content 'Invalid email or password.'
     expect(current_path).to eq new_user_session_path
   end
@@ -90,4 +90,3 @@ feature 'User sign in', %q{
     expect(page).to have_content 'Could not authenticate you from Facebook'
   end
 end
-

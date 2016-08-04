@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/teachbase/rspec-page-regression.git
+  revision: 3c9696f4cd624b3647c4e60d41285b5719a4416e
+  branch: use-imatcher
+  specs:
+    rspec-page-regression (0.4.2)
+      activesupport
+      imatcher (~> 0.1.5)
+      rspec (~> 3.0)
+      which_works
+
+GIT
   remote: https://github.com/celluloid/celluloid
   revision: 8b94bc5dadf342810b36faa310ba96fd0df9c8d0
   submodules: true
@@ -58,6 +69,7 @@ GEM
     airbrussh (1.0.2)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (6.0.3)
+    ast (2.3.0)
     autoprefixer-rails (6.3.6.1)
       execjs
     bcrypt (3.1.11)
@@ -67,7 +79,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     builder (3.2.2)
-    byebug (9.0.0)
+    byebug (9.0.5)
     cancancan (1.15.0)
     capistrano (3.5.0)
       airbrussh (>= 1.0.0)
@@ -100,9 +112,6 @@ GEM
     capybara-email (2.5.0)
       capybara (~> 2.4)
       mail
-    capybara-webkit (1.11.1)
-      capybara (>= 2.3.0, < 2.8.0)
-      json
     carrierwave (0.11.2)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -120,6 +129,8 @@ GEM
     celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
     chronic (0.10.2)
+    chunky_png (1.3.6)
+    cliver (0.3.2)
     cocoon (1.2.9)
     coderay (1.1.1)
     coffee-rails (4.1.1)
@@ -135,6 +146,8 @@ GEM
     daemons (1.2.3)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    dev_log_in (1.1.0)
+      rails (>= 3.0.0)
     devise (3.5.10)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -218,12 +231,19 @@ GEM
       spring
     haml (4.0.7)
       tilt
+    haml-lint (0.999.999)
+      haml_lint
     haml-rails (0.9.0)
       actionpack (>= 4.0.1)
       activesupport (>= 4.0.1)
       haml (>= 4.0.6, < 5.0)
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
+    haml_lint (0.18.1)
+      haml (~> 4.0)
+      rake (>= 10, < 12)
+      rubocop (>= 0.36.0)
+      sysexits (~> 1.1)
     hashie (3.4.4)
     hitimes (1.2.4)
     html2haml (2.0.0)
@@ -233,7 +253,10 @@ GEM
       ruby_parser (~> 3.5)
     http_parser.rb (0.6.0)
     i18n (0.7.0)
+    imatcher (0.1.5)
+      oily_png (~> 1.2)
     innertube (1.1.0)
+    interception (0.5)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -296,6 +319,8 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+    oily_png (1.2.0)
+      chunky_png (~> 1.3.1)
     omniauth (1.3.1)
       hashie (>= 1.2, < 4)
       rack (>= 1.0, < 3)
@@ -311,18 +336,42 @@ GEM
       json (~> 1.3)
       omniauth-oauth (~> 1.1)
     orm_adapter (0.5.0)
+    parallel (1.9.0)
+    parallel_tests (2.7.0)
+      parallel
+    parser (2.3.1.2)
+      ast (~> 2.2)
     pg (0.18.4)
+    poltergeist (1.10.0)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      websocket-driver (>= 0.2.0)
+    powerpack (0.1.1)
     private_pub (1.0.3)
       faye
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
+    pry-rescue (1.4.4)
+      interception (>= 0.5)
+      pry
+    pry-stack_explorer (0.4.9.2)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack_session_access (0.1.1)
+      builder (>= 2.0.0)
+      rack (>= 1.0.0)
     rails (4.2.6)
       actionmailer (= 4.2.6)
       actionpack (= 4.2.6)
@@ -347,6 +396,7 @@ GEM
       activesupport (= 4.2.6)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    rainbow (2.1.0)
     raindrops (0.16.0)
     rake (11.1.2)
     rb-fsevent (0.9.7)
@@ -398,6 +448,14 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    rubocop (0.42.0)
+      parser (>= 2.3.1.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    rubocop-rspec (1.5.1)
+      rubocop (>= 0.41.2)
     ruby-progressbar (1.8.0)
     ruby_dep (1.3.1)
     ruby_parser (3.8.2)
@@ -447,6 +505,7 @@ GEM
     sshkit (1.11.1)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    sysexits (1.2.0)
     temple (0.7.7)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
@@ -473,6 +532,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
+    unicode-display_width (1.1.0)
     unicorn (5.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -488,6 +548,7 @@ GEM
     websocket-extensions (0.1.2)
     whenever (0.9.7)
       chronic (>= 0.6.3)
+    which_works (1.0.2)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -497,7 +558,6 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   bootstrap-sass
-  byebug
   cancancan
   capistrano
   capistrano-bundler
@@ -507,12 +567,12 @@ DEPENDENCIES
   capistrano3-unicorn
   capybara
   capybara-email
-  capybara-webkit
   carrierwave
   celluloid!
   cocoon
   coffee-rails (~> 4.1.0)
   database_cleaner
+  dev_log_in
   devise (~> 3.5.10)
   doorkeeper
   dotenv
@@ -525,6 +585,7 @@ DEPENDENCIES
   guard-rails
   guard-rspec
   guard-spring
+  haml-lint
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails
@@ -533,16 +594,27 @@ DEPENDENCIES
   launchy
   letter_opener
   mysql2
+  nenv
   omniauth
   omniauth-facebook
   omniauth-twitter
+  parallel_tests
   pg (~> 0.15)
+  poltergeist
   private_pub
+  pry-byebug
+  pry-rails
+  pry-rescue
+  pry-stack_explorer
+  rack_session_access
   rails (= 4.2.6)
   redis-rails
   remotipart
   responders
+  rspec-page-regression!
   rspec-rails
+  rubocop
+  rubocop-rspec
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   shoulda-matchers

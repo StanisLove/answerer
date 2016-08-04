@@ -8,6 +8,7 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'cancan/matchers'
 require 'sidekiq/testing'
+require 'bg_helper' unless Nenv.skip_bg?
 
 Sidekiq::Testing.fake!
 
@@ -33,8 +34,10 @@ end
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec/support/**/*.rb')].each  { |f| require f }
-Dir[Rails.root.join('spec/**/concerns/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each         { |f| require f }
+Dir[Rails.root.join('spec/**/concerns/*.rb')].each        { |f| require f }
+Dir[Rails.root.join('spec/shared_contexts/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/shared_examples/**/*.rb')].each { |f| require f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.

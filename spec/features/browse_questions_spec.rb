@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'User browse questions', %q{
+feature 'User browse questions', '
   In order to find needed question
   As an user
   I want to be able to browse questions
-} do
+' do
 
   given!(:questions) { create_list :question, 2 }
   given(:user)       { create      :user      }
@@ -18,4 +18,3 @@ feature 'User browse questions', %q{
     expect(current_path).to eq questions_path
   end
 end
-

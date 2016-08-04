@@ -1,8 +1,27 @@
 require_relative 'rails_helper'
 require 'capybara/email/rspec'
+require 'rack_session_access/capybara'
+require 'capybara/poltergeist'
+require 'rspec/page-regression'
 
 RSpec.configure do |config|
-  Capybara.javascript_driver = :webkit
+  Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
+  Capybara.server_host = "0.0.0.0"
+
+  Capybara.register_driver :poltergeist do |app|
+    Capybara::Poltergeist::Driver.new(
+      app,
+      timeout: 90, js_errors: true,
+      phantomjs_logger: Logger.new(STDOUT),
+      window_size: [1020, 740]
+    )
+  end
+
+  Capybara.javascript_driver = :poltergeist
+
+  RSpec::PageRegression.configure do |c|
+    c.threshold = 0.01
+  end
 
   config.include AcceptanceHelper, type: :feature
   config.include WaitForAjax,      type: :feature
@@ -13,6 +32,7 @@ RSpec.configure do |config|
   # Database Cleaner config
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    leave_last_screenshots(5)
     # Ensure sphinx directories exist for the test environment
     ThinkingSphinx::Test.init
     # Configure and start Sphinx, and automatically
@@ -26,7 +46,7 @@ RSpec.configure do |config|
 
   config.before(:each, sphinx: true) do
     DatabaseCleaner.strategy = :truncation
-  # Sphinx Index data when running an acceptance spec.
+    # Sphinx Index data when running an acceptance spec.
     index
   end
 

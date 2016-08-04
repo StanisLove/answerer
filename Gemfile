@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
 # Use postgresql as the database for Active Record
@@ -26,9 +25,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use Unicorn as the app server
-# gem 'unicorn'
-
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -52,7 +48,7 @@ gem 'active_model_serializers'
 gem 'sidekiq'
 gem 'whenever'
 gem 'sinatra', '>= 1.3.0', require: nil
-gem "celluloid", git: "https://github.com/celluloid/celluloid", submodules: true
+gem 'celluloid', git: 'https://github.com/celluloid/celluloid', submodules: true
 gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'dotenv'
@@ -60,24 +56,32 @@ gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'jquery-turbolinks'
 gem 'unicorn'
 gem 'redis-rails'
+gem 'nenv'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'spring-commands-rspec'
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
-  gem 'capybara-webkit'
   gem 'capybara-email'
+  gem 'parallel_tests'
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
+  gem 'dev_log_in'
+  gem 'poltergeist'
 end
 
 group :test do
   gem 'shoulda-matchers', require: false
   gem 'fuubar'
   gem 'json_spec'
+  gem 'rack_session_access'
+  gem 'rspec-page-regression', github: 'teachbase/rspec-page-regression', branch: 'use-imatcher'
 end
 
 group :development do
@@ -95,5 +99,7 @@ group :development do
   gem 'capistrano-rvm',      require: false
   gem 'capistrano-sidekiq',  require: false
   gem 'capistrano3-unicorn', require: false
+  gem 'rubocop',             require: false
+  gem 'rubocop-rspec',       require: false
+  gem 'haml-lint',           require: false
 end
-

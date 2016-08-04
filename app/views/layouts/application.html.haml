@@ -10,7 +10,7 @@
   %body.container
     %p.notice#notice= notice
     %p.alert#alert= alert
-    .header
+    .header{class: "#{request.subdomains.first == 'night' ? 'night' : 'default'}"}
       = render 'common/links'
       = render 'search/line'
     = yield

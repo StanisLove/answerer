@@ -27,6 +27,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def load_subscription
-    @subscription = Subscription.find_by(question_id: @question.id, user_id: current_user.id)
+    @subscription = Subscription.find_by(question_id: @question.id,
+                                         user_id: current_user.id)
   end
 end

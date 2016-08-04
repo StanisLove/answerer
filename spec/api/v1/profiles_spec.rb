@@ -10,7 +10,7 @@ describe 'Profile API' do
       let!(:access_token) { create :access_token, resource_owner_id: me.id }
 
       it_behaves_like "API Containable", %w(email id created_at updated_at admin),
-        '', %w(password password_confirmation encrypted_password)
+                      '', %w(password password_confirmation encrypted_password)
 
       before { do_request(access_token: access_token.token) }
       it { expect(response).to be_success }
@@ -31,8 +31,8 @@ describe 'Profile API' do
       let!(:access_token) { create :access_token, resource_owner_id: me.id }
 
       it_behaves_like "API Containable",
-        %w(email id created_at updated_at admin),
-        '0/', %w(password password_confirmation encrypted_password)
+                      %w(email id created_at updated_at admin),
+                      '0/', %w(password password_confirmation encrypted_password)
 
       before { do_request(access_token: access_token.token) }
 
@@ -40,7 +40,7 @@ describe 'Profile API' do
       it { expect(response.body).to have_json_size(2) }
 
       it "doesn't contain me" do
-        expect(response.body).to_not include_json(me.to_json)
+        expect(response.body).not_to include_json(me.to_json)
       end
 
       it { expect(response.body).to have_json_path('0/email') }

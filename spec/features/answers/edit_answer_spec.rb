@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'Answer editing', %q{
+feature 'Answer editing', "
   In order to fix mistake
   As an author of the answer
   I'd like to be able to edit my answer
-} do
+" do
 
   given!(:question)     { create :question }
   given!(:answer)       { create :answer, question: question }
@@ -12,7 +12,7 @@ feature 'Answer editing', %q{
 
   scenario 'Unauthenticated user try to edit answer' do
     visit question_path(question)
-    expect(page).to_not have_content 'Edit Answer'
+    expect(page).not_to have_content 'Edit Answer'
   end
 
   describe 'Authenticated user' do
@@ -29,16 +29,16 @@ feature 'Answer editing', %q{
 
     scenario 'try to edit his answer', js: true do
       within "#answer-#{answer.id}" do
-        expect(page).to_not have_selector 'textarea'
+        expect(page).not_to have_selector 'textarea'
         click_on 'Edit Answer'
-        expect(page).to     have_selector 'textarea'
+        expect(page).to have_selector 'textarea'
 
         fill_in  'Answer', with: 'edited answer'
         click_on 'Save Answer'
 
         expect(page).to     have_content  'edited answer'
-        expect(page).to_not have_content  answer.body
-        expect(page).to_not have_selector 'textarea'
+        expect(page).not_to have_content  answer.body
+        expect(page).not_to have_selector 'textarea'
         expect(find_link('Edit Answer').visible?).to eq true
 
         click_on 'Edit Answer'
@@ -56,7 +56,7 @@ feature 'Answer editing', %q{
         click_on 'Edit Answer'
         fill_in  'Answer', with: 'some content'
         click_on 'Save Answer'
-        expect(page).to_not have_content "Body can't be blank"
+        expect(page).not_to have_content "Body can't be blank"
       end
     end
 

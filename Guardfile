@@ -1,8 +1,8 @@
 scope groups: ['spec']
 
 group 'specs' do
-  guard :rspec, cmd: "bundle exec spring rspec" do
-    require "guard/rspec/dsl"
+  guard :rspec, cmd: 'bundle exec spring rspec' do
+    require 'guard/rspec/dsl'
     dsl = Guard::RSpec::Dsl.new(self)
 
     # Feel free to open issues for suggestions and improvements
@@ -23,7 +23,7 @@ group 'specs' do
     dsl.watch_spec_files_for(rails.views)
 
     watch(rails.controllers) do |m|
-      rspec.spec.("controllers/#{m[1]}_controller")
+      rspec.spec.call("controllers/#{m[1]}_controller")
     end
 
     # Rails config changes

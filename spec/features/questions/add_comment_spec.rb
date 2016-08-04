@@ -1,10 +1,10 @@
 require 'features_helper'
 
-feature 'User adds comment to the question', %{
+feature 'User adds comment to the question', %(
   In order to discuss the question
   As an user
   I'd like to be able to comment the question
-} do
+) do
 
   given(:question) { create :question }
   given(:user)     { create :user }
@@ -13,13 +13,13 @@ feature 'User adds comment to the question', %{
   scenario "User leaves a comment to the question", js: true do
     visit question_path(question)
 
-    expect(page).to_not have_content 'Add Comment'
+    expect(page).not_to have_content 'Add Comment'
 
     sign_in(user)
     visit question_path(question)
 
     expect(page).to     have_content 'Add Comment'
-    expect(page).to_not have_selector('.question > .new_comment', visible: true)
+    expect(page).not_to have_selector('.question > .new_comment', visible: true)
     click_on 'Add Comment'
     expect(page).to     have_selector('.question .new_comment', visible: true)
 
@@ -30,7 +30,7 @@ feature 'User adds comment to the question', %{
     expect(page).to     have_content user.email
     expect(page).to     have_content comment.body
     expect(page).to     have_content 'Add Comment'
-    expect(page).to_not have_selector('.question .new_comment', visible: true)
+    expect(page).not_to have_selector('.question .new_comment', visible: true)
   end
 
   scenario 'User try to leave invalid comment', js: true do

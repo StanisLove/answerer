@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class FileUploader < CarrierWave::Uploader::Base
-  delegate  :identifier, to: :file
+  delegate :identifier, to: :file
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
@@ -20,7 +20,8 @@ class FileUploader < CarrierWave::Uploader::Base
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:
-  #   # ActionController::Base.helpers.asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
+  #   # ActionController::Base.helpers.asset_path("fallback/"
+  #   + [version_name, "default.png"].compact.join('_'))
   #
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
@@ -48,5 +49,4 @@ class FileUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
-
 end

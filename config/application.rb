@@ -22,11 +22,11 @@ module Answerer
 
     config.generators do |g|
       g.test_framwork :rspec,
-                             fixtures: true,
-                            view_spec: false,
-                         helper_specs: false,
-                        routing_specs: false,
-                        request_specs: false,
+                      fixtures: true,
+                      view_spec: false,
+                      helper_specs: false,
+                      routing_specs: false,
+                      request_specs: false,
                       controller_spec: true
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
     end
@@ -47,6 +47,6 @@ module Answerer
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.cache_store = :redis_store, 'redis://localhost:6379/0/cache',
-      { expires_in: 90.minutes }
+                         { expires_in: 90.minutes }
   end
 end
