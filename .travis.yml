@@ -26,7 +26,7 @@ before_script:
   - sleep 3
 
 script:
-  - bundle exec rspec --tag ~visual
+  - SKIP_BG=1 bundle exec rspec --tag ~visual
 
 gemfile:
   - Gemfile
