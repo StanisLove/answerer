@@ -81,7 +81,7 @@ feature 'User sign in', '
     expect(page).to have_content 'Authorization error.'
   end
 
-  fscenario 'User try to sign in with invalid Facebook credentials' do
+  scenario 'User try to sign in with invalid Facebook credentials' do
     visit new_user_session_path
 
     invalid_credentials
